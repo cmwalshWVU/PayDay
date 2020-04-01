@@ -1,0 +1,7 @@
+{
+  "name": "Crypto Watch",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}
