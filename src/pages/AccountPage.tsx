@@ -37,7 +37,7 @@ const AccountPage: React.FC<OwnProps> = () => {
 
     useEffect(() => {
         getAccounts()
-      }, [getAccounts])
+      }, [])
 
     const updateEmail = async (e: React.FormEvent) => {
       if (updatedEmail === "" || updatedEmailConfirmed === "") {
