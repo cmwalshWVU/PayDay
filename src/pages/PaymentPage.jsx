@@ -50,7 +50,7 @@ const PaymentPage = () => {
   
   const openTransak = (address) => {
     let transak = new transakSDK({
-        apiKey: process.env.TRANSAK_API_KEY ? process.env.TRANSAK_API_KEY : 'DEFUALT_TRANSAK_API_KEY',  // Your API Key
+        apiKey: process.env.REACT_APP_TRANSAK_API_KEY ? process.env.REACT_APP_TRANSAK_API_KEY : 'DEFULT_TRANSAK_KEY',  // Your API Key
         environment: 'STAGING', // STAGING/PRODUCTION
         defaultCryptoCurrency: 'ETH',
         walletAddress: address, // Your customer's wallet address
