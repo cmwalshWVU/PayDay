@@ -1,6 +1,6 @@
 import { RouteComponentProps, withRouter } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import { IonPage, IonContent, IonHeader, IonTitle, IonToolbar, IonButton, IonCard, IonItem, IonList, IonInput, IonLabel, IonRow, IonCol, IonToggle } from "@ionic/react";
 // import "./AccountsPage.scss"
 import { toast } from "../components/toast";
@@ -29,11 +29,11 @@ const AccountPage: React.FC<OwnProps> = () => {
       console.log(`Clicked ${text}`);
     }
 
-    const getAccounts = useCallback(() => async () => {
+    const getAccounts = async () => {
         web3.eth.getAccounts().then(accounts => {
           setAccount(accounts[0])
         })
-    }, [])
+    }
 
     useEffect(() => {
         getAccounts()

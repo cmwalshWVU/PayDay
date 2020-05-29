@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 import { IonItem, IonAvatar, IonLabel, IonItemSliding, IonItemOptions, IonItemOption, IonIcon } from "@ionic/react";
 import Identicon from 'react-identicons';
 import { trash, pencil } from 'ionicons/icons';
@@ -9,20 +9,20 @@ const AccountItem = ({ownersAccount, account, openTransak, web3}) => {
 
   const [balance, setBalance] = useState("0")
 
-  const getBalance = useCallback(() => async (address) => {
+  const getBalance = async (address) => {
     const amount = await web3.eth.getBalance(address)
     if (amount) {
       return amount.toString()
     } else {
       return "0"
     }
-  }, [web3.eth])
+  }
 
   useEffect(() => {
     getBalance(account.address).then((res) => {
       setBalance(res)
     })
-  }, [account, getBalance])
+  }, [account])
 
   
   return (
