@@ -1,0 +1,34 @@
+ion-content ion-toolbar {
+  --background: translucent;
+}
+
+.home-page {
+  text-align: center;
+
+}
+
+.accounts-title {
+  padding: 0px
+}
+
+.accounts-card {
+  max-width: 500px;
+  margin: auto;
+}
+
+.avatar {
+  cursor: pointer;
+}
+
+.account {
+  text-align: left;
+  direction: rtl;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.login {
+  width: fit-content;
+  margin: auto;
+}
