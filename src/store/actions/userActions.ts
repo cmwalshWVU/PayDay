@@ -8,3 +8,17 @@ export function setUseDarkMode(useDarkMode: boolean) {
         useDarkMode
     }
 }
+
+export function setPortis(portis: any) {
+    return {
+        type: 'SET_PORTIS',
+        portis
+    }
+}
+
+export function setWeb3(web3: any) {
+    return {
+        type: 'SET_WEB3',
+        web3
+    }
+}

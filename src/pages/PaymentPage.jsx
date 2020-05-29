@@ -8,20 +8,26 @@ import AccountItem from '../components/accountItem';
 import NewAccountItem from '../components/NewAccountItem';
 import Firebase from '../firebase';
 import PortisClient from '../portis';
-import web3 from '../web3';
 
 const PaymentPage = () => {
   const [accounts, setaccounts] = useState([])
   const [account, setAccount] = useState([])
+  
+  const portis = useSelector((state) => state.user.portis)
+  const web3 = useSelector((state) => state.user.web3)
+
   const [dependentAccounts, setDependentAccounts] = useState([])
-  const [portisLoggedIn, setPortisLoggedIn] = useState(PortisClient.isLoggedIn())
+  const [portisLoggedIn, setPortisLoggedIn] = useState(portis ? portis.isLoggedIn() : false)
   const [addNewUser, setAddNewUser] = useState(false)
 
   const user = useSelector((state) => state.user.user)
 
+  // const web3 = new Web3(portis.provider);
+
+
   useEffect(() => {
-    if (user) {
-      PortisClient.setDefaultEmail(user.email)
+    if (user && portis) {
+      portis.setDefaultEmail(user.email)
       getAccounts().then((resp) => {
         if (resp) {
           setDependentAccounts(resp)
@@ -43,10 +49,10 @@ const PaymentPage = () => {
   }, [user]);
 
   useEffect(() => {
-    if (portisLoggedIn !== PortisClient.isLoggedIn()) {
-      setPortisLoggedIn(PortisClient.isLoggedIn())
+    if (portisLoggedIn !== portis.isLoggedIn()) {
+      setPortisLoggedIn(portis.isLoggedIn())
     }
-  }, [portisLoggedIn])
+  }, [])
   
   const openTransak = (address) => {
     let transak = new transakSDK({
@@ -115,18 +121,18 @@ const PaymentPage = () => {
               <>
                 <IonList>
                   {accounts.map((account) => 
-                    <AccountItem web3={web3} ownersAccount={true} openTransak={openTransak} account={{name: "", address: account}} />
+                    <AccountItem ownersAccount={true} openTransak={openTransak} account={{name: "", address: account}} />
                   )}
                 </IonList>
                 <IonButton onClick={() => openTransak(account)}>
                   Add Funds
                 </IonButton>
-                <IonButton onClick={() => PortisClient.showBitcoinWallet()}>
+                <IonButton onClick={() => portis.showBitcoinWallet()}>
                   Open Wallets
                 </IonButton>
               </>
               : 
-                <IonButton onClick={() => PortisClient.showPortis()}>
+                <IonButton onClick={() => portis.showPortis()}>
                   Login To Portis Wallet
                 </IonButton>
               }
@@ -143,7 +149,7 @@ const PaymentPage = () => {
               </IonListHeader>
               {user !== null ? 
                 <>
-                  <IonButton onClick={() => PortisClient.showPortis()}>
+                  <IonButton onClick={() => portis.showPortis()}>
                     Transfer Funds
                   </IonButton>
                   {addNewUser && <NewAccountItem setAddNewUser={setAddNewUser} />}

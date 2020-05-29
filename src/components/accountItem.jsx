@@ -3,11 +3,13 @@ import { IonItem, IonAvatar, IonLabel, IonItemSliding, IonItemOptions, IonItemOp
 import Identicon from 'react-identicons';
 import { trash, pencil } from 'ionicons/icons';
 import { deleteAccount } from '../firebase';
+import { useSelector } from 'react-redux';
 
 
-const AccountItem = ({ownersAccount, account, openTransak, web3}) => {
+const AccountItem = ({ownersAccount, account, openTransak}) => {
 
   const [balance, setBalance] = useState("0")
+  const web3 = useSelector((state) => state.user.web3)
 
   const getBalance = async (address) => {
     const amount = await web3.eth.getBalance(address)

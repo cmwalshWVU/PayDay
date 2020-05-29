@@ -7,7 +7,7 @@ import { toast } from "../components/toast";
 import Firebase, { updateUsersEmail, updateUsersPassword, signout } from "../firebase";
 import { setUser, setUseDarkMode } from "../store/actions/userActions";
 import ProfileIdenticon from "../components/indenticton";
-import web3 from "../web3";
+import Portis from "@portis/web3";
 
 interface OwnProps extends RouteComponentProps {}
 
@@ -15,6 +15,8 @@ const AccountPage: React.FC<OwnProps> = () => {
   
     const dispatch = useDispatch()
     const useDarkMode = useSelector((state: any) => state.user.useDarkMode)
+    const web3 = useSelector((state: any) => state.user.web3)
+    const portis = useSelector((state: any) => state.user.portis)
 
     const [showEditPassword, setShowEditPassword] = useState(false);
     const [updatedPassword, setUpdatedPassword] = useState("")
@@ -30,14 +32,14 @@ const AccountPage: React.FC<OwnProps> = () => {
     }
 
     const getAccounts = async () => {
-        web3.eth.getAccounts().then(accounts => {
+        web3.eth.getAccounts().then((accounts: any) => {
           setAccount(accounts[0])
         })
     }
 
     useEffect(() => {
         getAccounts()
-      }, [])
+      }, [portis, web3])
 
     const updateEmail = async (e: React.FormEvent) => {
       if (updatedEmail === "" || updatedEmailConfirmed === "") {

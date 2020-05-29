@@ -34,7 +34,10 @@ import LandingPage from './pages/LandingPage';
 import Signup from './pages/Signup';
 import Login from './pages/Login';
 import AccountPage from './pages/AccountPage';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import PortisClient from './portis';
+import { setPortis, setWeb3 } from './store/actions/userActions';
+import Web3 from 'web3';
 
 const App: React.FC = () => {
 
@@ -43,10 +46,17 @@ const App: React.FC = () => {
   const [currentUser, setCurrentUser] = useState(user)
   const useDarkMode = useSelector((state: any) => state.user.useDarkMode)
 
+  const dispatch = useDispatch()
+
   useEffect(() => {
     setCurrentUser(user)
   }, [user])
   
+  useEffect(() => {
+    dispatch(setPortis(PortisClient))
+    dispatch(setWeb3(new Web3(PortisClient.provider)))
+  }, [PortisClient])
+
   return (
   <IonApp className={useDarkMode ? 'dark-theme' : 'light-mode'} >
     <IonReactRouter>
