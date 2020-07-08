@@ -200,7 +200,7 @@ const PaymentPage = () => {
             <IonList>
               <IonListHeader>
                 <IonTitle>
-                  Dependent Accounts
+                  Contacts
                 </IonTitle>
               </IonListHeader>
               {user !== null ? 
