@@ -1,5 +1,6 @@
 import * as firebase from 'firebase';
 import { toast } from './components/toast';
+import * as firebaseAdmin from "firebase-admin";
 
 const config = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -15,6 +16,24 @@ const Firebase  = firebase.initializeApp(config);
 
 export default Firebase
 
+var serviceAccount = {
+      type: "service_account",
+      project_id: process.env.REACT_APP_PROJECT_ID!!,
+      private_key_id: process.env.REACT_APP_PRIVATE_KEY_ID!!,
+      private_key: process.env.REACT_APP_PRIVATE_KEY!!,
+      client_email: process.env.REACT_APP_CLIENT_EMAIL!!,
+      client_id: process.env.REACT_APP_CLIENT_ID!!,
+      auth_uri: process.env.REACT_APP_AUTH_URI!!,
+      token_uri: process.env.REACT_APP_TOKEN_URI!!,
+      auth_provider_x509_cert_url: process.env.REACT_APP_AUTH_PROVIDER_X509_CERT_URL!!,
+      client_x509_cert_url: process.env.REACT_APP_CLIENT_X509_CERT_URL!!
+    }
+
+const FirebaseAdmin = firebaseAdmin.initializeApp({
+  credential: firebaseAdmin.credential.cert(serviceAccount as firebaseAdmin.ServiceAccount),
+  databaseURL: process.env.REACT_APP_ADMIN_DATABASE_URL
+});
+
 export async function getCurrentUser() {
   return await Firebase.auth().currentUser
 }
@@ -26,24 +45,27 @@ export async function saveNewAccount(newAccount: {name: string, address: string}
   Firebase.firestore().collection('accounts').doc(user!.uid).collection("accounts").doc(newAccount.address).set({
     name: newAccount.name,
     address: newAccount.address
-  })
-
-  return docRef.get().then(function(doc) {
-    if (doc.exists) {
-      toast("Error: Duplicate dependent address ", 2000)
-      return false
-    } else {
-      docRef.set({
-        name: newAccount.name,
-        address: newAccount.address
-      }).then(() => {
-        return true
-      })
-    }
   }).catch(function(error) {
-      console.log("Error getting document:", error);
-      return false
+    console.log("Error getting document:", error);
+    return false
   });
+
+  // return docRef.get().then(function(doc) {
+  //   if (doc.exists) {
+  //     toast("Error: Duplicate dependent address ", 2000)
+  //     return false
+  //   } else {
+  //     docRef.set({
+  //       name: newAccount.name,
+  //       address: newAccount.address
+  //     }).then(() => {
+  //       return true
+  //     })
+  //   }
+  // }).catch(function(error) {
+  //     console.log("Error getting document:", error);
+  //     return false
+  // });
 }
 
 export async function deleteAccount(address: string) {
@@ -104,6 +126,25 @@ export function updateUsersPassword(password: string) {
         });
   }
 }
+
+export async function signInWithCustomToken(token: any) {
+  const accessToken = await FirebaseAdmin.auth().createCustomToken(token)
+    .then(function(customToken) {
+      return Firebase.auth().signInWithCustomToken(customToken).then((response) => {
+        console.log(response.user)
+        return response.user
+        // dispatch({ type: 'COINBASE_LOGIN_SUCCESS', token: accessToken});
+      }).catch((err: any) => {
+        console.log(err)
+        return null
+      })
+    }).catch((err) => {
+        console.log(err)
+        return null
+    })
+  return accessToken
+}
+
 
 export async function loginUser(userData: {email: string, password: string}) {
   try {

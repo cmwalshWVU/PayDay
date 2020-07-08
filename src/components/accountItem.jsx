@@ -6,16 +6,21 @@ import { deleteAccount } from '../firebase';
 import { useSelector } from 'react-redux';
 
 
-const AccountItem = ({ownersAccount, account, openTransak}) => {
+const AccountItem = ({openModal, ownersAccount, account, openTransak}) => {
 
   const [balance, setBalance] = useState("0")
   const web3 = useSelector((state) => state.user.web3)
+  const [open, setOpen] = useState(false)
 
   const getBalance = async (address) => {
-    const amount = await web3.eth.getBalance(address)
-    if (amount) {
-      return amount.toString()
-    } else {
+    try {
+      const amount = await web3.eth.getBalance(address)
+      if (amount) {
+        return amount.toString()
+      } else {
+        return "0"
+      }
+    } catch (ex) {
       return "0"
     }
   }
@@ -29,7 +34,7 @@ const AccountItem = ({ownersAccount, account, openTransak}) => {
   
   return (
     <IonItemSliding id="item100">
-      <IonItem>
+      <IonItem onClick={() => openModal(true, account.address)} >
         <IonAvatar className={"avatar"} slot="start" onClick={() => openTransak(account.address)}>
           <Identicon size={40} string={account.address} />
         </IonAvatar>

@@ -16,6 +16,13 @@ export function setPortis(portis: any) {
     }
 }
 
+export function setFortmatic(fortmatic: any) {
+    return {
+        type: 'SET_FORTMATIC',
+        fortmatic
+    }
+}
+
 export function setWeb3(web3: any) {
     return {
         type: 'SET_WEB3',

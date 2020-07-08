@@ -2,7 +2,8 @@
 const initData = {
     user: null,
     useDarkMode: true,
-    portis: undefined
+    portis: undefined,
+    fortmatic: undefined
 }
 
 const userReducer = ( state = initData, action: any ) => {
@@ -26,6 +27,11 @@ switch (action.type) {
         return {
             ...state,
             web3: action.web3
+        }
+    case 'SET_FORTMATIC':
+        return {
+            ...state,
+            fortmatic: action.fortmatic
         }
     default:
         return {

@@ -36,8 +36,12 @@ import Login from './pages/Login';
 import AccountPage from './pages/AccountPage';
 import { useSelector, useDispatch } from 'react-redux';
 import PortisClient from './portis';
-import { setPortis, setWeb3 } from './store/actions/userActions';
+import { setPortis, setWeb3, setFortmatic, setUser } from './store/actions/userActions';
 import Web3 from 'web3';
+import FortmaticClient from './fortmatic';
+import { provider } from 'web3-core';
+import { WidgetModeConfiguration } from 'fortmatic';
+import { signInWithCustomToken } from './firebase';
 
 const App: React.FC = () => {
 
@@ -53,24 +57,35 @@ const App: React.FC = () => {
   }, [user])
   
   useEffect(() => {
-    dispatch(setPortis(PortisClient))
-    dispatch(setWeb3(new Web3(PortisClient.provider)))
-  }, [PortisClient])
+    // dispatch(setPortis(PortisClient))
+    FortmaticClient.configure({ primaryLoginOption: 'email' } as WidgetModeConfiguration).then(() => {
+      FortmaticClient.user.login().then((response: any) => {
+        console.log(response)
+        signInWithCustomToken(response[0]).then((user: any) => {
+          console.log(user)
+          dispatch(setUser(user))
+        })
+      });
+    });
+    dispatch(setFortmatic(FortmaticClient))
+    dispatch(setWeb3(new Web3(FortmaticClient.getProvider() as provider)))
+
+    // dispatch(setWeb3(new Web3("https://mainnet.infura.io/v3/fe144c9b7ccd44fc9f4ef53807df0bc5")))
+  }, [FortmaticClient])
 
   return (
   <IonApp className={useDarkMode ? 'dark-theme' : 'light-mode'} >
     <IonReactRouter>
       <IonTabs>
         <IonRouterOutlet>
-          <Route path="/tab1" component={PaymentPage} exact={true} />
+          <Route path="/" component={PaymentPage} exact={true} />
           <Route path="/account" render={() => currentUser ? <AccountPage /> : <LandingPage />} exact={true} />
           <Route path="/landing" component={LandingPage} exact={true} />
           <Route path="/login" component={Login} exact={true} />
           <Route path="/signup" component={Signup} exact={true} />
-          <Route path="/" render={() => <Redirect to="/tab1" />} exact={true} />
         </IonRouterOutlet>
         <IonTabBar slot="bottom">
-          <IonTabButton tab="tab1" href="/tab1">
+          <IonTabButton tab="accounts" href="/">
             <IonIcon icon={send} />
           </IonTabButton>
           <IonTabButton tab="landing" href="/account">

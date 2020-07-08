@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { IonFab, IonIcon, IonFabButton, IonItem, IonLabel, IonListHeader, IonList, IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle } from '@ionic/react';
-import './PaymentPage.css';
+import { IonFab, IonIcon, IonFabButton, IonItem, IonLabel, IonListHeader, IonList, IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonModal, IonInput, IonButtons, IonFooter } from '@ionic/react';
+import './PaymentPage.scss';
 import transakSDK from '@transak/transak-sdk'
 import { add } from 'ionicons/icons';
 import { useSelector } from 'react-redux';
@@ -12,13 +12,50 @@ import PortisClient from '../portis';
 const PaymentPage = () => {
   const [accounts, setaccounts] = useState([])
   const [account, setAccount] = useState([])
-  
+  const [amount, setAmount] = useState("0.0");
+  const [gas, setGas] = useState("0.0");
+  const [balance, setBalance] = useState("0");
+
   const portis = useSelector((state) => state.user.portis)
+  const fortmatic = useSelector((state) => state.user.fortmatic)
+
   const web3 = useSelector((state) => state.user.web3)
 
   const [dependentAccounts, setDependentAccounts] = useState([])
   const [portisLoggedIn, setPortisLoggedIn] = useState(portis ? portis.isLoggedIn() : false)
+  const [fortmaticLoggedIn, setFortmaticLoggedIn] = useState(fortmatic ? fortmatic.user.isLoggedIn() : false)
+
   const [addNewUser, setAddNewUser] = useState(false)
+  const [open, setOpen] = useState(false)
+  const [transferToAddress, setTransferToAddress] = useState("")
+
+  const openModal = (open, address) => {
+    setTransferToAddress(address)
+    setOpen(true)
+  }
+
+  const depositFortmatic = () => {
+    fortmatic.user.deposit();
+  }
+
+  const openFortmaticTransfer = (transferAmount, fromAddress, toAddress) => {
+    web3.eth.getAccounts().then((accounts) => {
+      const sendValue = web3.utils.toWei(transferAmount, 'ether'); // Convert 1 ether to wei
+
+      // Construct Ether transaction params
+      const txnParams = {
+        from: fromAddress,
+        to: toAddress,
+        value: sendValue
+      }
+      
+      // Send Ether transaction with web3
+      web3.eth.sendTransaction(txnParams)
+      .once('transactionHash', (hash) => { console.log(hash); })
+      .once('receipt', (receipt) => { console.log(receipt); });
+    });
+
+  }
 
   const user = useSelector((state) => state.user.user)
 
@@ -26,8 +63,8 @@ const PaymentPage = () => {
 
 
   useEffect(() => {
-    if (user && portis) {
-      portis.setDefaultEmail(user.email)
+    if (user) {
+      // portis.setDefaultEmail(user.email)
       getAccounts().then((resp) => {
         if (resp) {
           setDependentAccounts(resp)
@@ -49,10 +86,17 @@ const PaymentPage = () => {
   }, [user]);
 
   useEffect(() => {
-    if (portisLoggedIn !== portis.isLoggedIn()) {
-      setPortisLoggedIn(portis.isLoggedIn())
+    if (fortmaticLoggedIn !== fortmatic.user.isLoggedIn()) {
+      console.log(fortmatic.user)
+      setFortmaticLoggedIn(fortmatic.user.isLoggedIn())
     }
   }, [])
+
+  // useEffect(() => {
+  //   if (portisLoggedIn !== portis.isLoggedIn()) {
+  //     setPortisLoggedIn(portis.isLoggedIn())
+  //   }
+  // }, [])
   
   const openTransak = (address) => {
     let transak = new transakSDK({
@@ -85,10 +129,22 @@ const PaymentPage = () => {
   }
 
   const getAccounts = async () => {
+    // const accounts = await web3.eth.getAccounts()
+    // const [address] = accounts
     
-    web3.eth.getAccounts().then(accounts => {
+    web3.eth.getAccounts().then(async accounts => {
       setAccount(accounts[0])
       setaccounts(accounts)
+
+      const amount = await web3.eth.getBalance(accounts[0])
+      if (amount) {
+        console.log(Number(web3.utils.fromWei(amount.toString(), 'ether')))
+        return setBalance(web3.utils.fromWei(amount.toString(), 'ether'))
+      } else {
+        console.log("nothing")
+
+        return 0
+      }
     })
   }
 
@@ -100,7 +156,7 @@ const PaymentPage = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Tab 1</IonTitle>
+          <IonTitle>PayDay</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent>
@@ -121,19 +177,19 @@ const PaymentPage = () => {
               <>
                 <IonList>
                   {accounts.map((account) => 
-                    <AccountItem ownersAccount={true} openTransak={openTransak} account={{name: "", address: account}} />
+                    <AccountItem openModal={depositFortmatic} ownersAccount={true} openTransak={openTransak} account={{name: "", address: account}} />
                   )}
                 </IonList>
                 <IonButton onClick={() => openTransak(account)}>
-                  Add Funds
+                  Buy Crypto
                 </IonButton>
-                <IonButton onClick={() => portis.showBitcoinWallet()}>
-                  Open Wallets
+                <IonButton onClick={() => fortmatic.user.logout()}>
+                  Logout
                 </IonButton>
               </>
               : 
-                <IonButton onClick={() => portis.showPortis()}>
-                  Login To Portis Wallet
+                <IonButton onClick={() => fortmatic.user.login()}>
+                  Login To Fortmatic
                 </IonButton>
               }
             </IonCardContent>
@@ -154,7 +210,7 @@ const PaymentPage = () => {
                   </IonButton>
                   {addNewUser && <NewAccountItem setAddNewUser={setAddNewUser} />}
                   {dependentAccounts.length > 0 ? dependentAccounts.map((account) => (
-                    <AccountItem account={account} web3={web3} openTransak={openTransak} />
+                    <AccountItem openModal={openModal} account={account} web3={web3} openTransak={openTransak} />
                   )) : 
                     <IonItem>
                       <IonLabel>
@@ -178,6 +234,35 @@ const PaymentPage = () => {
               <IonIcon className={"black-text"} icon={add} />
           </IonFabButton>
       </IonFab>
+
+
+      <IonModal className={"transfer-modal"} isOpen={open} onDidDismiss={() => setOpen(false)}>
+        <IonContent className={"transfer-modal-content ion-padding"}>
+          <IonHeader>
+            <IonTitle className="transfer-modal-title">Transfer Funds</IonTitle>
+          </IonHeader>
+          <IonList className="address-inputs">
+            <IonItem>
+              <IonLabel position="stacked" color="primary">From:</IonLabel>
+              <IonInput readonly name="transferToAddress" type="text" value={account} />
+            </IonItem> 
+            <IonItem>
+              <IonLabel position="stacked" color="primary">To:</IonLabel>
+              <IonInput readonly name="transferToAddress" type="text" value={transferToAddress} />
+            </IonItem> 
+          </IonList>
+          <IonList className="amount-inputs">
+            <IonItem>
+              <IonLabel position="stacked" color="primary">Amount:</IonLabel>
+              <IonInput max={balance} clearInput name="transferToAddress" value={amount} onIonChange={e => setAmount(e.detail.value)}/>
+            </IonItem> 
+          </IonList>
+          <div className="modal-buttons">
+            <IonButton color="primary" onClick={() => openFortmaticTransfer(amount, account, transferToAddress)}>Transfer</IonButton>
+            <IonButton color="light" onClick={() => setOpen(false)}>Cancel</IonButton>
+          </div>
+        </IonContent>
+      </IonModal>
     </IonPage>
   );
 };
