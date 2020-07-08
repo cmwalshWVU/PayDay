@@ -1,0 +1,67 @@
+ion-content ion-toolbar {
+  --background: translucent;
+}
+
+.transfer-modal {
+  --height: 400px;
+  --width: 400px;
+  --border-radius: 8px;
+
+  .transfer-modal-content {
+    --background	: #282828;
+
+    .address-inputs {
+      padding: 0px;
+      margin-bottom: 10px;
+    }
+
+    .amount-inputs {
+      padding: 0px;
+
+      margin-bottom: 0px;
+    }
+
+    .modal-buttons {
+      padding-top: 16px;
+      text-align: center;
+    }
+
+    .transfer-modal-title {
+      text-align: center;
+      padding-bottom: 16px;
+    }
+  }
+}
+
+
+
+.home-page {
+  text-align: center;
+
+}
+
+.accounts-title {
+  padding: 0px
+}
+
+.accounts-card {
+  max-width: 500px;
+  margin: auto;
+}
+
+.avatar {
+  cursor: pointer;
+}
+
+.account {
+  text-align: left;
+  direction: rtl;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.login {
+  width: fit-content;
+  margin: auto;
+}
