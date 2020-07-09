@@ -29,6 +29,7 @@ var serviceAccount = {
       client_x509_cert_url: process.env.REACT_APP_CLIENT_X509_CERT_URL!!
     }
 
+console.log(serviceAccount)
 const FirebaseAdmin = firebaseAdmin.initializeApp({
   credential: firebaseAdmin.credential.cert(serviceAccount as firebaseAdmin.ServiceAccount),
   databaseURL: process.env.REACT_APP_ADMIN_DATABASE_URL
