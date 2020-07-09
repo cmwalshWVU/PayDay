@@ -21,6 +21,7 @@
     "firebase": "^7.14.5",
     "firebase-admin": "^8.13.0",
     "fortmatic": "^2.0.6",
+    "hash-stream-validation": "^0.2.3",
     "http2": "^3.3.7",
     "ionicons": "^5.0.0",
     "node-sass": "^4.14.1",
@@ -35,7 +36,8 @@
     "redux-thunk": "^2.3.0",
     "roboto-fontface": "^0.10.0",
     "typescript": "3.7.4",
-    "web3": "^1.2.8"
+    "web3": "^1.2.8",
+    "write-file-atomic": "^3.0.3"
   },
   "scripts": {
     "start": "react-scripts start",
