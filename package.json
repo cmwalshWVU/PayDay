@@ -37,7 +37,9 @@
     "redux-thunk": "^2.3.0",
     "roboto-fontface": "^0.10.0",
     "typescript": "3.7.4",
-    "web3": "^1.2.8"
+    "web3": "^1.2.8",
+    "worker-threads": "^1.0.0",
+    "write-file-atomic": "^3.0.3"
   },
   "scripts": {
     "start": "react-scripts start",
