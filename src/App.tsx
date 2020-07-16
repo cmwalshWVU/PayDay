@@ -35,8 +35,7 @@ import Signup from './pages/Signup';
 import Login from './pages/Login';
 import AccountPage from './pages/AccountPage';
 import { useSelector, useDispatch } from 'react-redux';
-import PortisClient from './portis';
-import { setPortis, setWeb3, setFortmatic, setUser } from './store/actions/userActions';
+import { setWeb3, setFortmatic, setUser } from './store/actions/userActions';
 import Web3 from 'web3';
 import FortmaticClient from './fortmatic';
 import { provider } from 'web3-core';
@@ -57,8 +56,7 @@ const App: React.FC = () => {
   }, [user])
   
   useEffect(() => {
-    // dispatch(setPortis(PortisClient))
-    FortmaticClient.configure({ primaryLoginOption: 'email' } as WidgetModeConfiguration).then(() => {
+    FortmaticClient.configure({ primaryLoginOption: 'phone' } as WidgetModeConfiguration).then(() => {
       FortmaticClient.user.login().then((response: any) => {
         console.log(response)
         signInWithCustomToken(response[0]).then((user: any) => {
@@ -69,8 +67,6 @@ const App: React.FC = () => {
     });
     dispatch(setFortmatic(FortmaticClient))
     dispatch(setWeb3(new Web3(FortmaticClient.getProvider() as provider)))
-
-    // dispatch(setWeb3(new Web3("https://mainnet.infura.io/v3/fe144c9b7ccd44fc9f4ef53807df0bc5")))
   }, [FortmaticClient])
 
   return (

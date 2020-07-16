@@ -7,7 +7,6 @@ import { useSelector } from 'react-redux';
 import AccountItem from '../components/accountItem';
 import NewAccountItem from '../components/NewAccountItem';
 import Firebase from '../firebase';
-import PortisClient from '../portis';
 
 const PaymentPage = () => {
   const [accounts, setaccounts] = useState([])
@@ -16,13 +15,11 @@ const PaymentPage = () => {
   const [gas, setGas] = useState("0.0");
   const [balance, setBalance] = useState("0");
 
-  const portis = useSelector((state) => state.user.portis)
   const fortmatic = useSelector((state) => state.user.fortmatic)
 
   const web3 = useSelector((state) => state.user.web3)
 
   const [dependentAccounts, setDependentAccounts] = useState([])
-  const [portisLoggedIn, setPortisLoggedIn] = useState(portis ? portis.isLoggedIn() : false)
   const [fortmaticLoggedIn, setFortmaticLoggedIn] = useState(fortmatic ? fortmatic.user.isLoggedIn() : false)
 
   const [addNewUser, setAddNewUser] = useState(false)
@@ -59,12 +56,9 @@ const PaymentPage = () => {
 
   const user = useSelector((state) => state.user.user)
 
-  // const web3 = new Web3(portis.provider);
-
 
   useEffect(() => {
     if (user) {
-      // portis.setDefaultEmail(user.email)
       getAccounts().then((resp) => {
         if (resp) {
           setDependentAccounts(resp)
@@ -91,12 +85,6 @@ const PaymentPage = () => {
       setFortmaticLoggedIn(fortmatic.user.isLoggedIn())
     }
   }, [])
-
-  // useEffect(() => {
-  //   if (portisLoggedIn !== portis.isLoggedIn()) {
-  //     setPortisLoggedIn(portis.isLoggedIn())
-  //   }
-  // }, [])
   
   const openTransak = (address) => {
     let transak = new transakSDK({
@@ -205,7 +193,7 @@ const PaymentPage = () => {
               </IonListHeader>
               {user !== null ? 
                 <>
-                  <IonButton onClick={() => portis.showPortis()}>
+                  <IonButton >
                     Transfer Funds
                   </IonButton>
                   {addNewUser && <NewAccountItem setAddNewUser={setAddNewUser} />}

@@ -36,7 +36,7 @@
   --ion-color-documentation: #b16be3;
   --ion-color-navigation: #6600cc;
 
-  --ion-color-primary: #3498DB;
+  --ion-color-primary: #6851ff;
   --ion-color-primary-rgb: 56, 128, 255;
   --ion-color-primary-contrast: #ffffff;
   --ion-color-primary-contrast-rgb: 255, 255, 255;
@@ -182,7 +182,7 @@
  */
 
 .dark-theme {
-  --ion-color-primary: #3498DB;
+  --ion-color-primary: #6851ff;
   --ion-color-primary-rgb: 66,140,255;
   --ion-color-primary-contrast: #ffffff;
   --ion-color-primary-contrast-rgb: 255,255,255;

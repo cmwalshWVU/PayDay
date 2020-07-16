@@ -4,7 +4,7 @@ import Identicon from 'react-identicons';
 import { trash, pencil } from 'ionicons/icons';
 import { deleteAccount } from '../firebase';
 import { useSelector } from 'react-redux';
-
+import numbro from 'numbro'
 
 const AccountItem = ({openModal, ownersAccount, account, openTransak}) => {
 
@@ -40,7 +40,7 @@ const AccountItem = ({openModal, ownersAccount, account, openTransak}) => {
         </IonAvatar>
         <IonLabel>
           <h2>{account.name}</h2>
-          <h3>Balance: {web3.utils.fromWei(balance, 'ether')} ETH</h3>
+          <h3>Balance: {numbro(web3.utils.fromWei(balance, 'ether')).format({thousandSeparated: true})} ETH</h3>
           <p className={"account"}>Address: {account.address}</p>
         </IonLabel>
       </IonItem>
