@@ -25,6 +25,9 @@
   'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
 }
 
+/* #6851ff */
+
+
 :root {
   --ion-color-angular: #ac282b;
   --ion-color-communication: #8e8d93;

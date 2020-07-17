@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Redirect, Route } from 'react-router-dom';
+import { Redirect, Route, RouteChildrenProps, withRouter, RouteComponentProps } from 'react-router-dom';
 import {
   IonApp,
   IonIcon,
@@ -62,6 +62,7 @@ const App: React.FC = () => {
         signInWithCustomToken(response[0]).then((user: any) => {
           console.log(user)
           dispatch(setUser(user))
+          return <Redirect to="/wallet" />
         })
       });
     });
@@ -74,17 +75,16 @@ const App: React.FC = () => {
     <IonReactRouter>
       <IonTabs>
         <IonRouterOutlet>
-          <Route path="/" component={PaymentPage} exact={true} />
+          <Route path="/wallet" component={PaymentPage} exact={true} />
           <Route path="/account" render={() => currentUser ? <AccountPage /> : <LandingPage />} exact={true} />
-          <Route path="/landing" component={LandingPage} exact={true} />
-          <Route path="/login" component={Login} exact={true} />
-          <Route path="/signup" component={Signup} exact={true} />
+          {/* <Route path="/login" component={Login} exact={true} />
+          <Route path="/signup" component={Signup} exact={true} /> */}
         </IonRouterOutlet>
         <IonTabBar slot="bottom">
-          <IonTabButton tab="accounts" href="/">
+          <IonTabButton tab="main" href="/wallet">
             <IonIcon icon={send} />
           </IonTabButton>
-          <IonTabButton tab="landing" href="/account">
+          <IonTabButton tab="account" href="/account">
             <IonIcon icon={person} />
           </IonTabButton>
         </IonTabBar>

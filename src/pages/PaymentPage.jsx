@@ -31,27 +31,32 @@ const PaymentPage = () => {
     setOpen(true)
   }
 
+  const closeModal = () => {
+    setTransferToAddress("")
+    setOpen(false)
+  }
+
   const depositFortmatic = () => {
     fortmatic.user.deposit();
   }
 
   const openFortmaticTransfer = (transferAmount, fromAddress, toAddress) => {
-    web3.eth.getAccounts().then((accounts) => {
-      const sendValue = web3.utils.toWei(transferAmount, 'ether'); // Convert 1 ether to wei
+    const sendValue = web3.utils.toWei(transferAmount, 'ether'); // Convert 1 ether to wei
 
-      // Construct Ether transaction params
-      const txnParams = {
-        from: fromAddress,
-        to: toAddress,
-        value: sendValue
-      }
-      
-      // Send Ether transaction with web3
-      web3.eth.sendTransaction(txnParams)
+    // Construct Ether transaction params
+    const txnParams = {
+      from: fromAddress,
+      to: toAddress,
+      value: sendValue
+    }
+    
+    // Send Ether transaction with web3
+    web3.eth.sendTransaction(txnParams)
       .once('transactionHash', (hash) => { console.log(hash); })
-      .once('receipt', (receipt) => { console.log(receipt); });
-    });
-
+      .once('receipt', (receipt) => { 
+        closeModal()
+        console.log(receipt); 
+      });
   }
 
   const user = useSelector((state) => state.user.user)
@@ -89,10 +94,10 @@ const PaymentPage = () => {
   const openTransak = (address) => {
     let transak = new transakSDK({
         apiKey: process.env.REACT_APP_TRANSAK_API_KEY ? process.env.REACT_APP_TRANSAK_API_KEY : 'DEFULT_TRANSAK_KEY',  // Your API Key
-        environment: 'STAGING', // STAGING/PRODUCTION
-        defaultCryptoCurrency: 'ETH',
+        environment: 'PRODUCTION', // STAGING/PRODUCTION
+        cryptoCurrencyCode: 'ETH',
         walletAddress: address, // Your customer's wallet address
-        themeColor: 'c0c0c0', // App theme color
+        themeColor: '6851ff', // App theme color
         fiatCurrency: 'USD', // INR/GBP
         email: '', // Your customer's email address
         redirectURL: '',
@@ -165,7 +170,7 @@ const PaymentPage = () => {
               <>
                 <IonList>
                   {accounts.map((account) => 
-                    <AccountItem openModal={depositFortmatic} ownersAccount={true} openTransak={openTransak} account={{name: "", address: account}} />
+                    <AccountItem openModal={openTransak} ownersAccount={true} openTransak={openTransak} account={{name: "", address: account}} />
                   )}
                 </IonList>
                 <IonButton onClick={() => openTransak(account)}>
@@ -185,33 +190,35 @@ const PaymentPage = () => {
           
 
           <IonCard className={"accounts-card"}>
+            <IonCardHeader className={"contacts-header"}>
+              <IonCardTitle>
+                Contacts
+              </IonCardTitle>
+            </IonCardHeader>
             <IonList>
-              <IonListHeader>
-                <IonTitle>
-                  Contacts
-                </IonTitle>
-              </IonListHeader>
               {user !== null ? 
                 <>
-                  <IonButton >
+                  <IonButton size={"normal"}  onClick={() => openModal(true, "")} >
                     Transfer Funds
                   </IonButton>
                   {addNewUser && <NewAccountItem setAddNewUser={setAddNewUser} />}
-                  {dependentAccounts.length > 0 ? dependentAccounts.map((account) => (
-                    <AccountItem openModal={openModal} account={account} web3={web3} openTransak={openTransak} />
-                  )) : 
-                    <IonItem>
-                      <IonLabel>
-                        <center>Add new dependents to track</center>
-                      </IonLabel>
-                    </IonItem>
-                  }
-                  {/* {DEFAULT_ACCOUNTS.map((account) => (
-                    <AccountItem account={account} web3={web3} openTransak={openTransak} />
-                  ))} */}
+                  {dependentAccounts.length > 0 ? 
+                    dependentAccounts.map((account) => (
+                      <AccountItem openModal={openModal} account={account} web3={web3} openTransak={openTransak} />
+                    )) : 
+                      <IonItem>
+                        <IonLabel>
+                          <center>Add new dependents to track</center>
+                        </IonLabel>
+                      </IonItem>
+                    }
                 </>
                 : 
-                <IonButton className={"login"} size="small" routerLink="/login" expand="block">Login</IonButton>
+                <IonItem>
+                  <IonLabel>
+                    <center>Login to add contacts</center>
+                  </IonLabel>
+                </IonItem>
               }
             </IonList>
           </IonCard>
@@ -236,7 +243,7 @@ const PaymentPage = () => {
             </IonItem> 
             <IonItem>
               <IonLabel position="stacked" color="primary">To:</IonLabel>
-              <IonInput readonly name="transferToAddress" type="text" value={transferToAddress} />
+              <IonInput readonly={transferToAddress !== ""} name="transferToAddress" type="text" value={transferToAddress} />
             </IonItem> 
           </IonList>
           <IonList className="amount-inputs">
