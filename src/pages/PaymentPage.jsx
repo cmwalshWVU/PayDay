@@ -3,12 +3,16 @@ import { IonFab, IonIcon, IonFabButton, IonItem, IonLabel, IonListHeader, IonLis
 import './PaymentPage.scss';
 import transakSDK from '@transak/transak-sdk'
 import { add } from 'ionicons/icons';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import AccountItem from '../components/accountItem';
 import NewAccountItem from '../components/NewAccountItem';
-import Firebase from '../firebase';
+import Firebase, { signout } from '../firebase';
+import { setUser } from '../store/actions/userActions';
+import { withRouter } from 'react-router';
+import FortmaticClient from '../fortmatic';
 
-const PaymentPage = () => {
+
+const PaymentPage = (props) => {
   const [accounts, setaccounts] = useState([])
   const [account, setAccount] = useState([])
   const [amount, setAmount] = useState("0.0");
@@ -25,6 +29,8 @@ const PaymentPage = () => {
   const [addNewUser, setAddNewUser] = useState(false)
   const [open, setOpen] = useState(false)
   const [transferToAddress, setTransferToAddress] = useState("")
+
+  const dispatch = useDispatch()
 
   const openModal = (open, address) => {
     setTransferToAddress(address)
@@ -81,6 +87,12 @@ const PaymentPage = () => {
       }, err => {
           console.log(`Encountered error: ${err}`);
       });
+    } else {
+      if (fortmaticLoggedIn !== fortmatic.user.isLoggedIn()) {
+        console.log(fortmatic.user)
+        setFortmaticLoggedIn(fortmatic.user.isLoggedIn())
+        setaccounts([])
+      }
     }
   }, [user]);
 
@@ -89,7 +101,7 @@ const PaymentPage = () => {
       console.log(fortmatic.user)
       setFortmaticLoggedIn(fortmatic.user.isLoggedIn())
     }
-  }, [])
+  }, [fortmatic.user])
   
   const openTransak = (address) => {
     let transak = new transakSDK({
@@ -166,7 +178,7 @@ const PaymentPage = () => {
               </IonCardTitle>
             </IonCardHeader>
             <IonCardContent>
-              {accounts.length > 0 ? 
+              {fortmatic.user.isLoggedIn() && accounts.length > 0 ? 
               <>
                 <IonList>
                   {accounts.map((account) => 
@@ -176,12 +188,19 @@ const PaymentPage = () => {
                 <IonButton onClick={() => openTransak(account)}>
                   Buy Crypto
                 </IonButton>
-                <IonButton onClick={() => fortmatic.user.logout()}>
+                <IonButton onClick={() => {
+                  fortmatic.user.logout().then(() => {
+                    signout().then(() => {
+                      dispatch(setUser(null))
+                      props.history.push("/landing") 
+                    })
+                  })
+                }}>
                   Logout
                 </IonButton>
               </>
               : 
-                <IonButton onClick={() => fortmatic.user.login()}>
+                <IonButton onClick={() => FortmaticClient.user.login()}>
                   Login To Fortmatic
                 </IonButton>
               }
@@ -262,4 +281,4 @@ const PaymentPage = () => {
   );
 };
 
-export default PaymentPage;
+export default withRouter(PaymentPage);

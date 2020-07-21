@@ -76,7 +76,9 @@ const App: React.FC = () => {
       <IonTabs>
         <IonRouterOutlet>
           <Route path="/wallet" component={PaymentPage} exact={true} />
-          <Route path="/account" render={() => currentUser ? <AccountPage /> : <LandingPage />} exact={true} />
+          <Route path="/" render={() => user ? <AccountPage /> : <LandingPage />} exact={true} />
+          <Route path="/landing" component={LandingPage} exact={true} />
+          <Route render={() => <Redirect to="/" />} />
           {/* <Route path="/login" component={Login} exact={true} />
           <Route path="/signup" component={Signup} exact={true} /> */}
         </IonRouterOutlet>
@@ -84,7 +86,7 @@ const App: React.FC = () => {
           <IonTabButton tab="main" href="/wallet">
             <IonIcon icon={send} />
           </IonTabButton>
-          <IonTabButton tab="account" href="/account">
+          <IonTabButton tab="account" href="/">
             <IonIcon icon={person} />
           </IonTabButton>
         </IonTabBar>

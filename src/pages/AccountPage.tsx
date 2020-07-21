@@ -7,11 +7,14 @@ import { toast } from "../components/toast";
 import Firebase, { updateUsersEmail, updateUsersPassword, signout } from "../firebase";
 import { setUser, setUseDarkMode } from "../store/actions/userActions";
 import ProfileIdenticon from "../components/indenticton";
+import FortmaticClient from "../fortmatic";
 
 interface OwnProps extends RouteComponentProps {}
 
-const AccountPage: React.FC<OwnProps> = () => {
+const AccountPage: React.FC<OwnProps> = ({history}) => {
   
+  const fortmatic = useSelector((state: any) => state.user.fortmatic)
+
     const dispatch = useDispatch()
     const useDarkMode = useSelector((state: any) => state.user.useDarkMode)
     const web3 = useSelector((state: any) => state.user.web3)
@@ -78,8 +81,12 @@ const AccountPage: React.FC<OwnProps> = () => {
     }
 
     const logout = () => {
-        dispatch(setUser(null))
-        signout()
+      FortmaticClient.user.logout().then(() => {
+        signout().then(() => {
+          dispatch(setUser(null))
+          history.push("/landing") 
+        })
+      })
     }
 
     return (
@@ -95,8 +102,8 @@ const AccountPage: React.FC<OwnProps> = () => {
                 <ProfileIdenticon size={140} address={account} />
               {/* <h2>{ user }</h2> */}
               <IonList inset>
-                <IonItem onClick={() => clicked('Update Picture')}>Update Picture</IonItem>
-                <IonItem className={"account-button"} onClick={() => {
+                <IonItem onClick={() => clicked('Update Picture')}>Update Picture (Coming Soon!)</IonItem>
+                {/* <IonItem className={"account-button"} onClick={() => {
                   setUpdatedEmail("")
                   setUpdatedEmailConfirmed("")
                   setShowEditPassword(false)
@@ -159,12 +166,12 @@ const AccountPage: React.FC<OwnProps> = () => {
                     </IonRow>
                   </IonCard>
                   : null
-                }
+                } */}
                 <IonItem>
                   <IonLabel>Use Dark Theme</IonLabel>
                   <IonToggle checked={useDarkMode} onClick={() => dispatch(setUseDarkMode(!useDarkMode))} />
                 </IonItem>
-                <IonItem className={"account-button"} onClick={() => logout()} routerLink="/landing" routerDirection="none">Logout</IonItem>
+                <IonItem className={"account-button"} onClick={() => logout()}>Logout</IonItem>
               </IonList>
             </div>)
           }

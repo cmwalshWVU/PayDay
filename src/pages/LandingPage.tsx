@@ -5,6 +5,7 @@ import './LandingPage.scss'
 import { useSelector, useDispatch } from "react-redux";
 import { signInWithCustomToken } from "../firebase";
 import { setUser } from "../store/actions/userActions";
+import FortmaticClient from "../fortmatic";
 
 interface OwnProps extends RouteComponentProps {}
 
@@ -14,13 +15,12 @@ const LandingPage: React.FC<OwnProps> = ({  history }) => {
 
   const dispatch = useDispatch()
   const signin = () => {
-    fortmatic.user.login().then((response: any) => {
+    FortmaticClient.user.login().then((response: any) => {
       signInWithCustomToken(response[0]).then((user: any) => {
         console.log(user)
         dispatch(setUser(user))
       }).then(() => {
         history.push("/wallet")
-
       })
     })
   }
