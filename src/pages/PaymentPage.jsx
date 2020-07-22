@@ -108,7 +108,8 @@ const PaymentPage = (props) => {
     let transak = new transakSDK({
         apiKey: process.env.REACT_APP_TRANSAK_API_KEY ? process.env.REACT_APP_TRANSAK_API_KEY : 'DEFULT_TRANSAK_KEY',  // Your API Key
         environment: 'PRODUCTION', // STAGING/PRODUCTION
-        cryptoCurrencyCode: 'ETH',
+        defaultCryptoCurrency: 'ETH',
+        cryptoCurrencyList: 'ETH,BAND,BAT,BNB,CBAT,CDAI,CEL,CETH,CUSDC,CZRX,DAI,KNC,LEND,LINK,MATIC,MKR,OMG,PAX,POWR,REN,RLC,SNX,UBT,USDC,USDT,WETH,ZRX',
         walletAddress: address, // Your customer's wallet address
         themeColor: '6851ff', // App theme color
         fiatCurrency: 'USD', // INR/GBP
