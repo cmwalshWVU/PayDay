@@ -10,7 +10,8 @@ import Firebase, { signout } from '../firebase';
 import { setUser } from '../store/actions/userActions';
 import { withRouter } from 'react-router';
 import FortmaticClient from '../fortmatic';
-
+import { DAI, MKR, ERC20TOKENS } from '../components/Erc20Tokens';
+import PersonalAccountItem from '../components/personalAccountItem'
 
 const PaymentPage = (props) => {
   const [accounts, setaccounts] = useState([])
@@ -182,7 +183,7 @@ const PaymentPage = (props) => {
               <>
                 <IonList>
                   {accounts.map((account) => 
-                    <AccountItem openModal={openTransak} ownersAccount={true} openTransak={openTransak} account={{name: "", address: account}} />
+                    <PersonalAccountItem tokens={ERC20TOKENS} openModal={openTransak} ownersAccount={true} openTransak={openTransak} account={{name: "", address: account}} />
                   )}
                 </IonList>
                 <IonButton onClick={() => openTransak(account)}>
@@ -223,7 +224,7 @@ const PaymentPage = (props) => {
                   {addNewUser && <NewAccountItem setAddNewUser={setAddNewUser} />}
                   {dependentAccounts.length > 0 ? 
                     dependentAccounts.map((account) => (
-                      <AccountItem openModal={openModal} account={account} web3={web3} openTransak={openTransak} />
+                      <AccountItem tokens={ERC20TOKENS} openModal={openModal} account={account} web3={web3} openTransak={openTransak} />
                     )) : 
                       <IonItem>
                         <IonLabel>

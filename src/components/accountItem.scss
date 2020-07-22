@@ -4,6 +4,7 @@
 }
 
 .account {
+    margin-top: 2px !important;
     padding-left: 5px;
     white-space: nowrap;
     overflow: hidden;
@@ -11,5 +12,20 @@
 }
 
 .copy-icon {
-    padding-left: 5px
+    padding-left: 5px;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.collapse-balances-icon {
+    vertical-align: middle;
+}
+
+.balance-list {
+    padding: 8px 0 0 20px;
+}
+
+.holding-icon {
+    vertical-align: middle;
+    height: 25px;
 }

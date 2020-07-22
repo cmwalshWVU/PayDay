@@ -4,11 +4,15 @@ import Identicon from 'react-identicons';
 import { save, close } from "ionicons/icons";
 import './NewAccountItem.scss'
 import { saveNewAccount } from '../firebase';
+import { useSelector } from 'react-redux';
+import { toast } from './toast';
+
 const NewAccountItem = ({setAddNewUser}) => {
 
   const [address, setAddress] = useState("")
   const [name, setName] = useState("")
-      
+  const web3 = useSelector((state) => state.user.web3)
+
   const onClose = () => {
     setName("")
     setAddress("")
@@ -16,11 +20,16 @@ const NewAccountItem = ({setAddNewUser}) => {
   }
 
   const onSave = async () => {
-    const success = await saveNewAccount({name: name, address: address})
-    if (success) {
-      setName("")
-      setAddress("")
-      setAddNewUser(false)
+    if (web3.utils.isAddress(address)) {
+      const success = await saveNewAccount({name: name, address: address})
+      if (success) {
+        setName("")
+        setAddress("")
+        setAddNewUser(false)
+      }
+    }
+    else {
+      toast("Invalid Address")
     }
   }
 
