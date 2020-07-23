@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { IonFab, IonIcon, IonFabButton, IonItem, IonLabel, IonListHeader, IonList, IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonModal, IonInput, IonButtons, IonFooter } from '@ionic/react';
+import { IonFab, IonIcon, IonFabButton, IonItem, IonLabel, IonListHeader, IonList, IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonModal, IonInput, IonButtons, IonFooter, IonSelectOption, IonSelect } from '@ionic/react';
 import './PaymentPage.scss';
 import transakSDK from '@transak/transak-sdk'
 import { add } from 'ionicons/icons';
@@ -12,6 +12,8 @@ import { withRouter } from 'react-router';
 import FortmaticClient from '../fortmatic';
 import { DAI, MKR, ERC20TOKENS } from '../components/Erc20Tokens';
 import PersonalAccountItem from '../components/personalAccountItem'
+import { erc20ContractAbi } from '../components/Erc20TokenAbi';
+import { isString } from 'util';
 
 const PaymentPage = (props) => {
   const [accounts, setaccounts] = useState([])
@@ -19,6 +21,7 @@ const PaymentPage = (props) => {
   const [amount, setAmount] = useState("0.0");
   const [gas, setGas] = useState("0.0");
   const [balance, setBalance] = useState("0");
+  const [tokenToSend, setTokenToSend] = useState("ETH")
 
   const fortmatic = useSelector((state) => state.user.fortmatic)
 
@@ -47,23 +50,77 @@ const PaymentPage = (props) => {
     fortmatic.user.deposit();
   }
 
-  const openFortmaticTransfer = (transferAmount, fromAddress, toAddress) => {
-    const sendValue = web3.utils.toWei(transferAmount, 'ether'); // Convert 1 ether to wei
-
-    // Construct Ether transaction params
-    const txnParams = {
-      from: fromAddress,
-      to: toAddress,
-      value: sendValue
+  let calculateHexValue = (value, decimals, BN) => {
+    if (!isString(value)) {
+      throw new Error('Pass strings to prevent floating point precision issues.')
     }
-    
-    // Send Ether transaction with web3
-    web3.eth.sendTransaction(txnParams)
-      .once('transactionHash', (hash) => { console.log(hash); })
-      .once('receipt', (receipt) => { 
-        closeModal()
-        console.log(receipt); 
-      });
+    const ten = new BN(10)
+    const base = ten.pow(new BN(decimals))
+
+    if (value === '.') {
+      throw new Error(
+      `Invalid value ${value} cannot be converted to`
+      + ` base unit with ${decimals} decimals.`)
+    }
+
+    // Split it into a whole and fractional part
+    let comps = value.split('.')
+    if (comps.length > 2) { throw new Error('Too many decimal points'); }
+  
+    let whole = comps[0], fraction = comps[1];
+  
+    if (!whole) { whole = '0'; }
+    if (!fraction) { fraction = '0'; }
+    if (fraction.length > decimals) {
+      throw new Error('Too many decimal places')
+    }
+
+    while (fraction.length < decimals) {
+      fraction += '0'
+    }
+
+    whole = new BN(whole)
+    fraction = new BN(fraction)
+    let result = (whole.mul(base)).add(fraction)
+
+    return web3.utils.toHex(result)
+  }
+
+  const openFortmaticTransfer = (transferAmount, fromAddress, toAddress) => {
+
+    if (tokenToSend === "ETH") {
+      const sendValue = web3.utils.toWei(transferAmount, 'ether'); // Convert 1 ether to wei
+
+      // Construct Ether transaction params
+      const txnParams = {
+        from: fromAddress,
+        to: toAddress,
+        value: sendValue
+      }
+      
+      // Send Ether transaction with web3
+      web3.eth.sendTransaction(txnParams)
+        .once('transactionHash', (hash) => { console.log(hash); })
+        .once('receipt', (receipt) => { 
+          closeModal()
+          console.log(receipt); 
+        });
+    } else {
+      let contractAddress = tokenToSend.address
+      let erc20Contract = new web3.eth.Contract(erc20ContractAbi, contractAddress);
+      erc20Contract.methods.decimals().call().then((decimals) => {
+        // Calculate contract compatible value for transfer with proper decimal points using BigNumber
+        let calculatedValue = calculateHexValue(transferAmount, decimals, web3.utils.BN);
+        erc20Contract
+            .methods
+            .transfer(toAddress, calculatedValue)
+            .send({ from: fromAddress }, (err, txnHash) => {
+              console.log(err);
+              console.log(txnHash);
+              closeModal()
+            })
+      })
+    }
   }
 
   const user = useSelector((state) => state.user.user)
@@ -258,6 +315,15 @@ const PaymentPage = (props) => {
             <IonTitle className="transfer-modal-title">Transfer Funds</IonTitle>
           </IonHeader>
           <IonList className="address-inputs">
+            <IonItem>
+              <IonLabel>Crypto to Send</IonLabel>
+              <IonSelect value={tokenToSend} okText="Okay" cancelText="Dismiss"  onIonChange={e => setTokenToSend(e.detail.value)}>
+                <IonSelectOption value={"ETH"} onC>Ethereum</IonSelectOption>
+                {ERC20TOKENS.map((token)  => {
+                  return <IonSelectOption value={token}>{token.name}</IonSelectOption>
+                })}
+              </IonSelect>
+            </IonItem>
             <IonItem>
               <IonLabel position="stacked" color="primary">From:</IonLabel>
               <IonInput readonly name="transferToAddress" type="text" value={account} />
