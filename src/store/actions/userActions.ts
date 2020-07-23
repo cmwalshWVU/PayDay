@@ -29,3 +29,10 @@ export function setWeb3(web3: any) {
         web3
     }
 }
+
+export function setContacts(contacts: any) {
+    return {
+        type: 'SET_CONTACTS',
+        contacts
+    }
+}

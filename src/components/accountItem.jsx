@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { IonItem, IonAvatar, IonLabel, IonItemSliding, IonItemOptions, IonItemOption, IonIcon } from "@ionic/react";
+import { IonItem, IonAvatar, IonLabel, IonItemSliding, IonItemOptions, IonItemOption, IonIcon, IonInput, IonButtons, IonButton } from "@ionic/react";
 import Identicon from 'react-identicons';
-import { chevronUp, chevronDown, cashOutline, copy, trash, pencil, sendOutline} from 'ionicons/icons';
-import { deleteAccount } from '../firebase';
+import { chevronUp, chevronDown, cashOutline, copy, trash, pencil, sendOutline, save, close} from 'ionicons/icons';
+import { deleteAccount, saveNewAccount } from '../firebase';
 import { useSelector } from 'react-redux';
 import numbro from 'numbro'
 import {CopyToClipboard} from 'react-copy-to-clipboard'
 import './accountItem.scss'
 import { promised } from 'q';
+import { toast } from './toast';
 
 const AccountItem = ({tokens, openModal, ownersAccount, account, openTransak}) => {
 
@@ -16,6 +17,9 @@ const AccountItem = ({tokens, openModal, ownersAccount, account, openTransak}) =
   const [open, setOpen] = useState(false)
   const [balances, setTokenBalances] = useState(null)
   const [showBalances, setShowBalances] = useState(false)
+  const [isEditing, setIsEditing] = useState(false)
+  const [updatedName, setUpdatedName] = useState(account.name)
+  const [updatedAddress, setUpdatedAddress] = useState(account.address)
 
   let minABI = [
     // balanceOf
@@ -83,8 +87,45 @@ const AccountItem = ({tokens, openModal, ownersAccount, account, openTransak}) =
     }
   }
 
+  const updateContact = async () => {
+    if (web3.utils.isAddress(updatedAddress)) {
+      const success = await saveNewAccount({name: updatedName, address: updatedAddress})
+      if (success) {
+        // getAccounts().then((resp) => {
+        //   if (resp) {
+        //     setDependentAccounts(resp)
+        //   }          
+        // })
+      }
+      setIsEditing(false)
+    }
+    else {
+      toast("Invalid Address")
+    }
+  }
+
   console.log(balances)
-  return (
+  if (isEditing) {
+    return (
+      <IonItem className={"ion-padding"}>
+        <IonAvatar className={"avatar"} slot="start">
+          <Identicon size={40} string={account.address} />
+        </IonAvatar>
+        <IonLabel position="stacked" color="primary">Name</IonLabel>
+        <IonInput name="name" type="text" value={updatedName} onIonChange={e => setUpdatedName(e.detail.value)} />
+        <IonLabel position="stacked" color="primary">Address</IonLabel>
+        <IonInput name="address" type="text" value={updatedAddress} onIonChange={e => setUpdatedAddress(e.detail.value)} />
+        <IonButtons slot="end" className={"account-action-buttons"} >
+          <IonButton onClick={() => updateContact()}>
+            <IonIcon slot="icon-only" icon={save} />
+          </IonButton>
+          <IonButton onClick={() => setIsEditing(false)}>
+            <IonIcon slot="icon-only" icon={close}  />
+          </IonButton>
+        </IonButtons>
+      </IonItem>
+    )
+  } return (
     <IonItemSliding id="item100">
       <IonItem >
         <IonAvatar className={"avatar"} slot="start">
@@ -107,17 +148,17 @@ const AccountItem = ({tokens, openModal, ownersAccount, account, openTransak}) =
               <div>
                 <img className={"holding-icon"} src={require(`cryptocurrency-icons/32/icon/eth.png`)}/> {numbro(web3.utils.fromWei(balance, 'ether')).format({thousandSeparated: true})} ETH
               </div>
-             {balances.map((token) => {
-               let icon = require(`cryptocurrency-icons/32/icon/generic.png`); 
-               try {
-                   icon = require(`cryptocurrency-icons/32/icon/${token[1].toLowerCase()}.png`); 
-               } catch (ex) {
-                   console.log(`Using generic icon for ${token[1]}`)
-               }
-               return <div>
+            {balances.map((token) => {
+              let icon = require(`cryptocurrency-icons/32/icon/generic.png`); 
+              try {
+                  icon = require(`cryptocurrency-icons/32/icon/${token[1].toLowerCase()}.png`); 
+              } catch (ex) {
+                  console.log(`Using generic icon for ${token[1]}`)
+              }
+              return <div>
                         <img className={"holding-icon"} src={icon}/> {token[0]} {token[1]}
                       </div>
-             })}
+            })}
             </div>
           : null}
         </IonLabel>
@@ -130,7 +171,7 @@ const AccountItem = ({tokens, openModal, ownersAccount, account, openTransak}) =
             <IonItemOption color="danger" onClick={() => deleteAccount(account.address)} >
               <IonIcon slot="icon-only" icon={trash} />
             </IonItemOption>
-            <IonItemOption color="warning" onClick={() => console.log("Coming Soon!")} >
+            <IonItemOption color="warning" onClick={() => setIsEditing(true)} >
               <IonIcon slot="icon-only" icon={pencil} />
             </IonItemOption>
           </IonItemOptions>

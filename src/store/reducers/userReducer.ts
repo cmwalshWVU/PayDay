@@ -3,7 +3,8 @@ const initData = {
     user: null,
     useDarkMode: true,
     portis: undefined,
-    fortmatic: undefined
+    fortmatic: undefined,
+    contacts: []
 }
 
 const userReducer = ( state = initData, action: any ) => {
@@ -32,6 +33,11 @@ switch (action.type) {
         return {
             ...state,
             fortmatic: action.fortmatic
+        }
+    case 'SET_CONTACTS':
+        return {
+            ...state,
+            contacts: action.contacts
         }
     default:
         return {

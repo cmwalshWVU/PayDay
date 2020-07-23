@@ -22,11 +22,9 @@ const NewAccountItem = ({setAddNewUser}) => {
   const onSave = async () => {
     if (web3.utils.isAddress(address)) {
       const success = await saveNewAccount({name: name, address: address})
-      if (success) {
-        setName("")
-        setAddress("")
-        setAddNewUser(false)
-      }
+      setName("")
+      setAddress("")
+      setAddNewUser(false)
     }
     else {
       toast("Invalid Address")

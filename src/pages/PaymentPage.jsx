@@ -7,7 +7,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import AccountItem from '../components/accountItem';
 import NewAccountItem from '../components/NewAccountItem';
 import Firebase, { signout } from '../firebase';
-import { setUser } from '../store/actions/userActions';
+import { setUser, setContacts } from '../store/actions/userActions';
 import { withRouter } from 'react-router';
 import FortmaticClient from '../fortmatic';
 import { DAI, MKR, ERC20TOKENS } from '../components/Erc20Tokens';
@@ -24,6 +24,7 @@ const PaymentPage = (props) => {
   const [tokenToSend, setTokenToSend] = useState("ETH")
 
   const fortmatic = useSelector((state) => state.user.fortmatic)
+  const contacts = useSelector((state) => state.user.contacts)
 
   const web3 = useSelector((state) => state.user.web3)
 
@@ -128,11 +129,11 @@ const PaymentPage = (props) => {
 
   useEffect(() => {
     if (user) {
-      getAccounts().then((resp) => {
-        if (resp) {
-          setDependentAccounts(resp)
-        }
-      })
+      // getAccounts().then((resp) => {
+      //   if (resp) {
+      //     dispatch(setContacts(resp))
+      //   }
+      // })
       const accounts = Firebase.firestore().collection('accounts').doc(user.uid).collection("accounts")
       accounts.onSnapshot(querySnapshot => {
           const accounts = []
@@ -141,7 +142,7 @@ const PaymentPage = (props) => {
               accounts.push(data)
           });
           console.log(accounts)
-          setDependentAccounts(accounts)
+          dispatch(setContacts(accounts))
       }, err => {
           console.log(`Encountered error: ${err}`);
       });
@@ -280,8 +281,8 @@ const PaymentPage = (props) => {
                     Transfer Funds
                   </IonButton>
                   {addNewUser && <NewAccountItem setAddNewUser={setAddNewUser} />}
-                  {dependentAccounts.length > 0 ? 
-                    dependentAccounts.map((account) => (
+                  {contacts.length > 0 ?
+                    contacts.map((account) => (
                       <AccountItem tokens={ERC20TOKENS} openModal={openModal} account={account} web3={web3} openTransak={openTransak} />
                     )) : 
                       <IonItem>
