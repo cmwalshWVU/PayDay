@@ -127,19 +127,19 @@ const AccountItem = ({tokens, openModal, ownersAccount, account, openTransak}) =
         :
         <>
           <IonItemOptions side="start">
-            <IonItemOption color="danger">
-              <IonIcon slot="icon-only" icon={trash} onClick={() => deleteAccount(account.address)} />
+            <IonItemOption color="danger" onClick={() => deleteAccount(account.address)} >
+              <IonIcon slot="icon-only" icon={trash} />
             </IonItemOption>
-            <IonItemOption color="warning">
-              <IonIcon slot="icon-only" icon={pencil} onClick={() => console.log("Coming Soon!")} />
+            <IonItemOption color="warning" onClick={() => console.log("Coming Soon!")} >
+              <IonIcon slot="icon-only" icon={pencil} />
             </IonItemOption>
           </IonItemOptions>
           <IonItemOptions side="end">
-            <IonItemOption color="success">
-              <IonIcon slot="icon-only" icon={cashOutline} onClick={() => openTransak(account.address)} />
+            <IonItemOption color="success" onClick={() => openTransak(account.address)} >
+              <IonIcon slot="icon-only" icon={cashOutline} />
             </IonItemOption>
-            <IonItemOption color="primary">
-              <IonIcon slot="icon-only" icon={sendOutline} onClick={() => openModal(true, account.address)} />
+            <IonItemOption color="primary" onClick={() => openModal(true, account.address)}>
+              <IonIcon slot="icon-only" icon={sendOutline} />
             </IonItemOption>
           </IonItemOptions>
         </>
