@@ -1,6 +1,6 @@
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import React from 'react';
-import { IonContent, IonPage,IonRow, IonCol, IonButton } from '@ionic/react';
+import { IonContent, IonPage,IonRow, IonCol, IonButton, IonList, IonItem, IonCard, IonCardTitle, IonCardContent } from '@ionic/react';
 import './LandingPage.scss'
 import { useSelector, useDispatch } from "react-redux";
 import { signInWithCustomToken } from "../firebase";
@@ -32,25 +32,75 @@ const LandingPage: React.FC<OwnProps> = ({  history }) => {
           <img className={"logo"} src={`assets/icon/logo.png`} alt="Ionic logo" />
         </div>
         <div className="col s12 center-align">
-          <h4>
+          {/* <h4>
             <span style={{ fontFamily: "monospace" }}>Is it {" "}
             <b>PayDay</b>
             {" "} yet?</span> 
+          </h4> */}
+          <h4 className="about-title">
+            <span style={{ fontFamily: "monospace" }}>New to Crypto? Long term HODLer?</span> 
+            {/* <br/> */}
+            {/* <span><b>This is wallet designed For Everyone</b></span> */}
           </h4>
-          <p className="flow-text grey-text text-darken-1">
-            The one App for all of your PayDay needs.
-            <br />
-          </p>
+
+          <IonRow>
+          <IonCol>
+            <div>
+              <IonCardContent>
+                <IonCardTitle className={"about-header"} style={{ fontFamily: "monospace" }}>
+                  <u><b>Why PayDay?</b></u>
+                </IonCardTitle>
+                <div>
+                  No Plugins/Extensions required
+                </div>
+                <div >
+                  No long pass phrases to remember
+                </div>
+                <div>
+                  2 factor authentication
+                </div>
+                <div>
+                  Access to 27 Cryptocurrencies with your debit card
+                </div>
+                <div>
+                  Save your friends and family's addresses
+                </div>
+                <div>
+                  Desktop and Mobile friendly (Native application coming soon!)
+                </div>
+              </IonCardContent>
+            </div>
+          </IonCol>
+          {/* <IonCol>
+            <div>
+              <IonCardContent>
+                <IonCardTitle>
+                  Don’t miss out because Crypto is too complicated
+                </IonCardTitle>
+                <div>
+                  No Plugins/Extensions required
+                </div>
+                <div >
+                  No long pass phrases to remember
+                </div>
+                <div>
+                  Email/Phone number and password authentication
+                </div>
+                <div>
+                  2 factor authentication
+                </div>
+              </IonCardContent>
+            </div>
+          </IonCol> */}
+        </IonRow>  
         </div>
         
         <IonRow>
           <IonCol>
             <IonButton className={"black-text"} onClick={() => signin()} expand="block">Login / Sign Up</IonButton>
           </IonCol>
-          {/* <IonCol>
-            <IonButton onClick={() => fortmatic.user.login()} color="light" expand="block">Signup</IonButton>
-          </IonCol> */}
-        </IonRow>  
+        </IonRow>
+        
       </IonContent>
 
     </IonPage>
