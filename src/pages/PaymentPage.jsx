@@ -243,7 +243,10 @@ const PaymentPage = (props) => {
                 <IonButton onClick={() => openTransak(account)}>
                   Buy Crypto
                 </IonButton>
-                <IonButton onClick={() => {
+                <IonButton size={"normal"}  onClick={() => openModal(true, "")} >
+                    Transfer Funds
+                  </IonButton>
+                {/* <IonButton onClick={() => {
                   fortmatic.user.logout().then(() => {
                     signout().then(() => {
                       dispatch(setUser(null))
@@ -252,7 +255,7 @@ const PaymentPage = (props) => {
                   })
                 }}>
                   Logout
-                </IonButton>
+                </IonButton> */}
               </>
               : 
                 <IonButton onClick={() => FortmaticClient.user.login()}>
@@ -272,8 +275,8 @@ const PaymentPage = (props) => {
             <IonList>
               {user !== null ? 
                 <>
-                  <IonButton size={"normal"}  onClick={() => openModal(true, "")} >
-                    Transfer Funds
+                  <IonButton size={"normal"}  onClick={() => setAddNewUser(true)} >
+                    Add Contact
                   </IonButton>
                   {addNewUser && <NewAccountItem setAddNewUser={setAddNewUser} />}
                   {contacts.length > 0 ?
@@ -298,11 +301,11 @@ const PaymentPage = (props) => {
           </IonCard>
         </IonContent>
       </IonContent>
-      <IonFab slot="fixed" vertical="bottom" horizontal="end">
+      {/* <IonFab slot="fixed" vertical="bottom" horizontal="end">
           <IonFabButton onClick={() => setAddNewUser(true)}>  
               <IonIcon className={"black-text"} icon={add} />
           </IonFabButton>
-      </IonFab>
+      </IonFab> */}
 
 
       <IonModal className={"transfer-modal"} isOpen={open} onDidDismiss={() => setOpen(false)}>

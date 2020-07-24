@@ -142,7 +142,7 @@ const AccountItem = ({tokens, openModal, ownersAccount, account, openTransak}) =
               </p>
             </div>
           </CopyToClipboard>
-          <h2 onClick={() => setShowBalances(!showBalances)}>Balances: <IonIcon className={"collapse-balances-icon"} icon={showBalances ? chevronDown  : chevronUp}/></h2>
+          <h2 onClick={() => setShowBalances(!showBalances)}>Balances: <IonIcon className={"collapse-balances-icon"} icon={showBalances ? chevronUp : chevronDown}/></h2>
           {balances && showBalances? 
             <div className="balance-list">
               <div>
