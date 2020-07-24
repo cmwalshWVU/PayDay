@@ -68,39 +68,21 @@ const LandingPage: React.FC<OwnProps> = ({  history }) => {
                 <div>
                   Desktop and Mobile friendly (Native application coming soon!)
                 </div>
+                <div>
+                  <b>Wallet Powered by Fortmatic</b>
+                </div>
               </IonCardContent>
             </div>
           </IonCol>
-          {/* <IonCol>
-            <div>
-              <IonCardContent>
-                <IonCardTitle>
-                  Don’t miss out because Crypto is too complicated
-                </IonCardTitle>
-                <div>
-                  No Plugins/Extensions required
-                </div>
-                <div >
-                  No long pass phrases to remember
-                </div>
-                <div>
-                  Email/Phone number and password authentication
-                </div>
-                <div>
-                  2 factor authentication
-                </div>
-              </IonCardContent>
-            </div>
-          </IonCol> */}
         </IonRow>  
-        </div>
         
         <IonRow>
           <IonCol>
             <IonButton className={"black-text"} onClick={() => signin()} expand="block">Login / Sign Up</IonButton>
           </IonCol>
         </IonRow>
-        
+        </div>
+
       </IonContent>
 
     </IonPage>

@@ -219,11 +219,6 @@ const PaymentPage = (props) => {
 
   return (
     <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>PayDay</IonTitle>
-        </IonToolbar>
-      </IonHeader>
       <IonContent>
         <IonHeader collapse="condense">
           <IonToolbar>
