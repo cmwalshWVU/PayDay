@@ -1,17 +1,19 @@
 import { RouteComponentProps, withRouter } from "react-router-dom";
-import React from 'react';
-import { IonContent, IonPage,IonRow, IonCol, IonButton, IonList, IonItem, IonCard, IonCardTitle, IonCardContent } from '@ionic/react';
+import React, { useState } from 'react';
+import { IonContent, IonPage,IonRow, IonCol, IonButton, IonList, IonItem, IonCard, IonCardTitle, IonCardContent, IonIcon } from '@ionic/react';
 import './LandingPage.scss'
 import { useSelector, useDispatch } from "react-redux";
 import { signInWithCustomToken } from "../firebase";
 import { setUser } from "../store/actions/userActions";
 import FortmaticClient from "../fortmatic";
+import { chevronUp, chevronDown } from "ionicons/icons";
 
 interface OwnProps extends RouteComponentProps {}
 
 const LandingPage: React.FC<OwnProps> = ({  history }) => {
 
   const fortmatic = useSelector((state: any) => state.user.fortmatic)
+  const [showInfo, setShowInfo] = useState(false)
 
   const dispatch = useDispatch()
   const signin = () => {
@@ -37,50 +39,57 @@ const LandingPage: React.FC<OwnProps> = ({  history }) => {
             <b>PayDay</b>
             {" "} yet?</span> 
           </h4> */}
-          <h4 className="about-title">
+          <h2 className="about-title">
             <span style={{ fontFamily: "monospace" }}>New to Crypto? Long term HODLer?</span> 
-            {/* <br/> */}
-            {/* <span><b>This is wallet designed For Everyone</b></span> */}
-          </h4>
-
+          </h2>
+          <h5>
+            <span style={{ fontFamily: "monospace" }}>This is wallet designed For Everyone!</span>
+          </h5>
+          <IonRow>
+          <IonCol>
+            <IonButton className={"black-text"} onClick={() => signin()} expand="block">Login / Sign Up</IonButton>
+          </IonCol>
+        </IonRow>
           <IonRow>
           <IonCol>
             <div>
               <IonCardContent>
                 <IonCardTitle className={"about-header"} style={{ fontFamily: "monospace" }}>
-                  <u><b>Why PayDay?</b></u>
+                  <u className={"show-info"} onClick={() => setShowInfo(!showInfo)}><b>Why PayDay?</b><IonIcon icon={showInfo ? chevronUp : chevronDown}/></u> 
                 </IonCardTitle>
-                <div>
-                  No Plugins/Extensions required
-                </div>
-                <div >
-                  No long pass phrases to remember
-                </div>
-                <div>
-                  2 factor authentication
-                </div>
-                <div>
-                  Access to 27 Cryptocurrencies with your debit card
-                </div>
-                <div>
-                  Save your friends and family's addresses
-                </div>
-                <div>
-                  Desktop and Mobile friendly (Native application coming soon!)
-                </div>
-                <div>
-                  <b>Wallet Powered by Fortmatic</b>
-                </div>
+                {showInfo ? 
+                  <>
+                    <div>
+                      No Plugins/Extensions required
+                    </div>
+                    <div >
+                      No long pass phrases to remember
+                    </div>
+                    <div>
+                      2 factor authentication
+                    </div>
+                    <div>
+                      Access to 27 Cryptocurrencies with your debit card
+                    </div>
+                    <div>
+                      Save your friends and family's addresses
+                    </div>
+                    <div>
+                      Desktop and Mobile friendly (Native application coming soon!)
+                    </div>
+                    <div>
+                      <b>Wallet Powered by Fortmatic</b>
+                    </div>
+                  </>
+                  : 
+                  null
+                }
               </IonCardContent>
             </div>
           </IonCol>
         </IonRow>  
         
-        <IonRow>
-          <IonCol>
-            <IonButton className={"black-text"} onClick={() => signin()} expand="block">Login / Sign Up</IonButton>
-          </IonCol>
-        </IonRow>
+        
         </div>
 
       </IonContent>

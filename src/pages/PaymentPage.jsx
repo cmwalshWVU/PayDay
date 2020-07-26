@@ -220,11 +220,6 @@ const PaymentPage = (props) => {
   return (
     <IonPage>
       <IonContent>
-        <IonHeader collapse="condense">
-          <IonToolbar>
-            <IonTitle size="large">Tab 1</IonTitle>
-          </IonToolbar>
-        </IonHeader>
         <IonContent className={"ion-padding home-page"} >
           <IonCard >
             <IonCardHeader>
@@ -244,18 +239,8 @@ const PaymentPage = (props) => {
                   Buy Crypto
                 </IonButton>
                 <IonButton size={"normal"}  onClick={() => openModal(true, "")} >
-                    Transfer Funds
-                  </IonButton>
-                {/* <IonButton onClick={() => {
-                  fortmatic.user.logout().then(() => {
-                    signout().then(() => {
-                      dispatch(setUser(null))
-                      props.history.push("/landing") 
-                    })
-                  })
-                }}>
-                  Logout
-                </IonButton> */}
+                  Transfer Funds
+                </IonButton>
               </>
               : 
                 <IonButton onClick={() => FortmaticClient.user.login()}>

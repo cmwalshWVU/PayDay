@@ -39,6 +39,18 @@ export async function getCurrentUser() {
   return await Firebase.auth().currentUser
 }
 
+export function updateContact(email: string) {
+  var user = firebase.auth().currentUser;
+  if (user) {
+      user.updateEmail(email).then(response => {
+          toast("Email successfully updated.", 2000)
+          return true
+        }).catch(error => {
+          toast(error.message, 2000)
+          return false
+        });
+  }
+}
 export async function saveNewAccount(newAccount: {name: string, address: string}) {
   const user = Firebase.auth().currentUser
   var docRef = Firebase.firestore().collection('accounts').doc(user!.uid).collection("accounts").doc(newAccount.address)

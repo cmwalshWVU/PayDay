@@ -92,7 +92,6 @@ const PersonalAccountItem = ({tokens, openModal, ownersAccount, account, openTra
             <h2>{account.name}</h2>
             <CopyToClipboard text={account.address}>
                 <div className={"account-flex"} >
-                Address: 
                 <IonIcon className={"copy-icon"} icon={copy}/>
                 <p className={"account"}>
                     {account.address}

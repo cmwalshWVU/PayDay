@@ -135,7 +135,6 @@ const AccountItem = ({tokens, openModal, ownersAccount, account, openTransak}) =
           <h2>{account.name}</h2>
           <CopyToClipboard text={account.address}>
             <div className={"account-flex"} >
-              Address: 
               <IonIcon className={"copy-icon"} icon={copy}/>
               <p className={"account"}>
                 {account.address}
@@ -145,20 +144,26 @@ const AccountItem = ({tokens, openModal, ownersAccount, account, openTransak}) =
           <h2 onClick={() => setShowBalances(!showBalances)}>Balances: <IonIcon className={"collapse-balances-icon"} icon={showBalances ? chevronUp : chevronDown}/></h2>
           {balances && showBalances? 
             <div className="balance-list">
-              <div>
-                <img className={"holding-icon"} src={require(`cryptocurrency-icons/32/icon/eth.png`)}/> {numbro(web3.utils.fromWei(balance, 'ether')).format({thousandSeparated: true})} ETH
+              <div className={"flex"}>
+                <img className={"holding-icon"} src={require(`cryptocurrency-icons/32/icon/eth.png`)}/> 
+                <div className={"holding-amount"} >
+                  {numbro(web3.utils.fromWei(balance, 'ether')).format({thousandSeparated: true})}
+                </div>
+                ETH
               </div>
-            {balances.map((token) => {
-              let icon = require(`cryptocurrency-icons/32/icon/generic.png`); 
-              try {
-                  icon = require(`cryptocurrency-icons/32/icon/${token[1].toLowerCase()}.png`); 
-              } catch (ex) {
-                  console.log(`Using generic icon for ${token[1]}`)
-              }
-              return <div>
-                        <img className={"holding-icon"} src={icon}/> {token[0]} {token[1]}
+              {balances.map((token) => {
+                let icon = require(`cryptocurrency-icons/32/icon/generic.png`); 
+                try {
+                    icon = require(`cryptocurrency-icons/32/icon/${token[1].toLowerCase()}.png`); 
+                } catch (ex) {
+                    console.log(`Using generic icon for ${token[1]}`)
+                }
+                return <div className={"flex"}>
+                          <img className={"holding-icon"} src={icon}/>
+                          <div className={"holding-amount"} >{token[0]}</div>
+                          {token[1]}
                       </div>
-            })}
+              })}
             </div>
           : null}
         </IonLabel>
