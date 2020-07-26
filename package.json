@@ -1,8 +1,9 @@
 {
-  "name": "crypto-watch",
+  "name": "payday",
   "version": "0.0.1",
   "private": true,
   "dependencies": {
+    "@capacitor/android": "^2.3.0",
     "@capacitor/core": "1.5.2",
     "@ionic/react": "^5.0.7",
     "@ionic/react-router": "^5.0.7",

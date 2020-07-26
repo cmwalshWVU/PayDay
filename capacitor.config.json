@@ -1,6 +1,6 @@
 {
   "appId": "io.ionic.starter",
-  "appName": "Crypto Watch",
+  "appName": "PayDay",
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "build",
