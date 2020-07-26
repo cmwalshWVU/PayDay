@@ -221,7 +221,7 @@ const PaymentPage = (props) => {
     <IonPage>
       <IonContent>
         <IonContent className={"ion-padding home-page"} >
-          <IonCard >
+          <IonCard className={"owners-acount"} >
             <IonCardHeader>
               <IonCardTitle className={"accounts-title"} >
                 Personal Accounts
