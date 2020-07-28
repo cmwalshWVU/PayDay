@@ -48,7 +48,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "resources": "cordova-res android && node scripts/resources.js"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -66,7 +67,8 @@
     ]
   },
   "devDependencies": {
-    "@capacitor/cli": "1.5.2"
+    "@capacitor/cli": "1.5.2",
+    "cordova-res": "^0.15.1"
   },
   "description": "An Ionic project"
 }
