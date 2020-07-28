@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { IonItem, IonAvatar, IonLabel, IonItemSliding, IonItemOptions, IonItemOption, IonIcon } from "@ionic/react";
+import { IonItem, IonAvatar, IonLabel, IonItemSliding, IonItemOptions, IonItemOption, IonIcon, IonList } from "@ionic/react";
 import Identicon from 'react-identicons';
 import { chevronDown, chevronUp, copy} from 'ionicons/icons';
 import { useSelector } from 'react-redux';
@@ -100,23 +100,32 @@ const PersonalAccountItem = ({tokens, openModal, ownersAccount, account, openTra
             </CopyToClipboard>
             <h2 onClick={() => setShowBalances(!showBalances)}>Balances: <IonIcon className={"copy-icon"} icon={showBalances ? chevronUp: chevronDown }/></h2>
             {balances && showBalances ? 
-                <div className="balance-list">
-                    <div>
-                        <img className={"holding-icon"} src={require(`cryptocurrency-icons/32/icon/eth.png`)}/> {numbro(web3.utils.fromWei(balance, 'ether')).format({thousandSeparated: true})} ETH
-                    </div>
-                    {balances.map((token) => {
-                        let icon = require(`cryptocurrency-icons/32/icon/generic.png`); 
-                        try {
-                            icon = require(`cryptocurrency-icons/32/icon/${token[1].toLowerCase()}.png`); 
-                        } catch (ex) {
-                            console.log(`Using generic icon for ${token[1]}`)
-                        }
-                        return <div>
-                                    <img className={"holding-icon"} src={icon}/> {token[0]} {token[1]}
-                                </div>
-                        })
-                    }
+                <IonList className="holding-list">
+                <IonItem style={{padding: "0px !important"}} className="holding-item ion-no-padding">
+              <div className={"flex"}>
+                <img className={"holding-icon"} src={require(`cryptocurrency-icons/32/icon/eth.png`)}/> 
+                <div className={"holding-amount"} >
+                  {numbro(web3.utils.fromWei(balance, 'ether')).format({thousandSeparated: true})}
                 </div>
+                ETH
+              </div>
+              </IonItem>
+              {balances.map((token) => {
+                let icon = require(`cryptocurrency-icons/32/icon/generic.png`); 
+                try {
+                    icon = require(`cryptocurrency-icons/32/icon/${token[1].toLowerCase()}.png`); 
+                } catch (ex) {
+                    console.log(`Using generic icon for ${token[1]}`)
+                }
+                return <IonItem style={{padding: "0px !important"}} className="holding-item ion-no-padding">
+                    <div className={"flex"}>
+                        <img className={"holding-icon"} src={icon}/>
+                        <div className={"holding-amount"} >{token[0]}</div>
+                        {token[1]}
+                    </div>
+                  </IonItem>
+              })}
+              </IonList>
             : null}
             </IonLabel>
         </IonItem>

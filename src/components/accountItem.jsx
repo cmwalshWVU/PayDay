@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { IonItem, IonAvatar, IonLabel, IonItemSliding, IonItemOptions, IonItemOption, IonIcon, IonInput, IonButtons, IonButton } from "@ionic/react";
+import { IonItem, IonAvatar, IonLabel, IonItemSliding, IonItemOptions, IonItemOption, IonIcon, IonInput, IonButtons, IonButton, IonList } from "@ionic/react";
 import Identicon from 'react-identicons';
 import { chevronUp, chevronDown, cashOutline, copy, trash, pencil, sendOutline, save, close} from 'ionicons/icons';
 import { deleteAccount, saveNewAccount } from '../firebase';
@@ -143,7 +143,8 @@ const AccountItem = ({tokens, openModal, ownersAccount, account, openTransak}) =
           </CopyToClipboard>
           <h2 onClick={() => setShowBalances(!showBalances)}>Balances: <IonIcon className={"collapse-balances-icon"} icon={showBalances ? chevronUp : chevronDown}/></h2>
           {balances && showBalances? 
-            <div className="balance-list">
+              <IonList className="holding-list">
+                <IonItem style={{padding: "0px !important"}} className="holding-item ion-no-padding">
               <div className={"flex"}>
                 <img className={"holding-icon"} src={require(`cryptocurrency-icons/32/icon/eth.png`)}/> 
                 <div className={"holding-amount"} >
@@ -151,6 +152,7 @@ const AccountItem = ({tokens, openModal, ownersAccount, account, openTransak}) =
                 </div>
                 ETH
               </div>
+              </IonItem>
               {balances.map((token) => {
                 let icon = require(`cryptocurrency-icons/32/icon/generic.png`); 
                 try {
@@ -158,13 +160,15 @@ const AccountItem = ({tokens, openModal, ownersAccount, account, openTransak}) =
                 } catch (ex) {
                     console.log(`Using generic icon for ${token[1]}`)
                 }
-                return <div className={"flex"}>
-                          <img className={"holding-icon"} src={icon}/>
-                          <div className={"holding-amount"} >{token[0]}</div>
-                          {token[1]}
-                      </div>
+                return <IonItem style={{padding: "0px !important"}} className="holding-item ion-no-padding">
+                    <div className={"flex"}>
+                        <img className={"holding-icon"} src={icon}/>
+                        <div className={"holding-amount"} >{token[0]}</div>
+                        {token[1]}
+                    </div>
+                  </IonItem>
               })}
-            </div>
+              </IonList>
           : null}
         </IonLabel>
       </IonItem>

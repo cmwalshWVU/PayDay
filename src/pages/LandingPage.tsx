@@ -66,16 +66,16 @@ const LandingPage: React.FC<OwnProps> = ({  history }) => {
                       No long pass phrases to remember
                     </div>
                     <div>
-                      2 factor authentication
+                      2 Factor Authentication
                     </div>
                     <div>
-                      Access to 27 Cryptocurrencies with your debit card
+                      Debit Card Access to 27 Cryptocurrencies 
                     </div>
                     <div>
-                      Save your friends and family's addresses
+                      Save all of your contacts
                     </div>
                     <div>
-                      Desktop and Mobile friendly (Native application coming soon!)
+                      Desktop and Mobile Support (Mobile app coming soon!)
                     </div>
                     <div>
                       <b>Wallet Powered by Fortmatic</b>

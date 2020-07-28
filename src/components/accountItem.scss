@@ -23,12 +23,12 @@
 }
 
 .balance-list {
-    padding: 8px 0 0 20px;
+    padding: 0 0 0 20px;
 }
 
 .holding-icon {
     vertical-align: middle;
-    height: 25px;
+    height: 23px;
     padding-right: 4px;
 }
 
@@ -45,4 +45,13 @@
 
 .flex {
     display: flex;
+    align-items: center;
+}
+
+.holding-item {
+    height: 34px;
+}
+
+.holding-list {
+    padding: 0 0 0 20px;
 }
