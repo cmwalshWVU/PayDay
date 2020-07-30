@@ -9,7 +9,7 @@ import {
   IonTabs
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { person, send } from 'ionicons/icons';
+import { person, send, wallet } from 'ionicons/icons';
 import PaymentPage from './pages/PaymentPage';
 
 /* Core CSS required for Ionic components to work properly */
@@ -84,7 +84,7 @@ const App: React.FC = () => {
         </IonRouterOutlet>
         <IonTabBar slot="bottom">
           <IonTabButton tab="main" href="/wallet">
-            <IonIcon icon={send} />
+            <IonIcon icon={wallet} />
           </IonTabButton>
           <IonTabButton tab="account" href="/">
             <IonIcon icon={person} />
