@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Redirect, Route, RouteChildrenProps, withRouter, RouteComponentProps } from 'react-router-dom';
+import { Redirect, Route } from 'react-router-dom';
 import {
   IonApp,
   IonIcon,
@@ -9,7 +9,7 @@ import {
   IonTabs
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { person, send, wallet } from 'ionicons/icons';
+import { person, send, wallet, newspaperOutline, newspaper, walletOutline, personOutline } from 'ionicons/icons';
 import PaymentPage from './pages/PaymentPage';
 
 /* Core CSS required for Ionic components to work properly */
@@ -41,6 +41,9 @@ import FortmaticClient from './fortmatic';
 import { provider } from 'web3-core';
 import { WidgetModeConfiguration } from 'fortmatic';
 import { signInWithCustomToken } from './firebase';
+import NewsPage from './pages/NewsPage';
+import { setFeed, updateFeed } from './store/actions/newsActions';
+import Pusher, { Options } from 'pusher-js';
 
 const App: React.FC = () => {
 
@@ -70,6 +73,23 @@ const App: React.FC = () => {
     dispatch(setWeb3(new Web3(FortmaticClient.getProvider() as provider)))
   }, [FortmaticClient])
 
+  useEffect(() => {
+    fetch('https://mighty-dawn-74394.herokuapp.com/live')
+      .then(response => response.json())
+      .then(articles => {
+          // dispatch(updateN(articles.articles))
+          dispatch(setFeed(articles))
+      }).catch(error => console.log(error));
+    const pusher = new Pusher('5994b268d4758d733605', {
+        cluster: 'us2',
+        encrypted: true
+    } as Options);
+    pusher.subscribe('news-channel').bind('update-news', (data: any) => {
+        // news.push(data.articles)
+        dispatch(updateFeed(data.articles))
+    })
+  }, [])
+
   return (
   <IonApp className={useDarkMode ? 'dark-theme' : 'light-mode'} >
     <IonReactRouter>
@@ -78,16 +98,20 @@ const App: React.FC = () => {
           <Route path="/wallet" component={PaymentPage} exact={true} />
           <Route path="/" render={() => user ? <AccountPage /> : <LandingPage />} exact={true} />
           <Route path="/landing" component={LandingPage} exact={true} />
+          <Route path="/news" component={NewsPage} />
           <Route render={() => <Redirect to="/" />} />
           {/* <Route path="/login" component={Login} exact={true} />
           <Route path="/signup" component={Signup} exact={true} /> */}
         </IonRouterOutlet>
         <IonTabBar slot="bottom">
           <IonTabButton tab="main" href="/wallet">
-            <IonIcon icon={wallet} />
+            <IonIcon icon={walletOutline} />
+          </IonTabButton>
+          <IonTabButton tab="news" href="/news">
+            <IonIcon icon={newspaperOutline} />
           </IonTabButton>
           <IonTabButton tab="account" href="/">
-            <IonIcon icon={person} />
+            <IonIcon icon={personOutline} />
           </IonTabButton>
         </IonTabBar>
       </IonTabs>

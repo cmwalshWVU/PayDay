@@ -1,0 +1,32 @@
+.article-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    margin: 0 !important;
+    // min-width: 250px;
+
+    .article-img {
+        width: 100%;
+        max-height: 200px;
+    }
+
+    .articleTitle {
+        font-size: 20px;
+        margin-top: 2px;
+    }
+
+    .article-card-content {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+
+        .read-more {
+            margin-top: auto;
+        }
+    }
+
+}
+
+.article-grid {
+    width: 90%;
+}

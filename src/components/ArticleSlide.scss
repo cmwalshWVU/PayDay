@@ -1,0 +1,48 @@
+.article-slide-card {
+    margin: 0px !important;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+
+    .slide-article-img {
+        width: 100%;
+        height: 44%;
+    }
+
+    .slide-title {
+        color: #262626;
+        font-size: 24px;
+    }
+
+    .slide-title-dark {
+        color: #ffffff;
+        font-size: 24px;
+    }
+
+
+    .article-slide-source {
+        margin-bottom: 0px !important;
+    }
+
+    .slide-card-body {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
+    }
+
+    .slide-header {
+        padding: 10px;
+    }
+
+    .slide-article-link {
+        justify-content: center;
+        display: flex;
+        width: 100%;
+        margin-top: auto;
+    }
+}
+
+    
