@@ -9,6 +9,7 @@ import {CopyToClipboard} from 'react-copy-to-clipboard'
 import './accountItem.scss'
 import { promised } from 'q';
 import { toast } from './toast';
+import HoldingsList from './HoldingsList';
 
 const AccountItem = ({tokens, openModal, ownersAccount, account, openTransak}) => {
 
@@ -20,6 +21,8 @@ const AccountItem = ({tokens, openModal, ownersAccount, account, openTransak}) =
   const [isEditing, setIsEditing] = useState(false)
   const [updatedName, setUpdatedName] = useState(account.name)
   const [updatedAddress, setUpdatedAddress] = useState(account.address)
+
+  const currentPrices = useSelector((state) => state.prices.currentPrices)
 
   let minABI = [
     // balanceOf
@@ -78,7 +81,7 @@ const AccountItem = ({tokens, openModal, ownersAccount, account, openTransak}) =
         bal = bal / (10**dec).toString();
 
         console.log(bal)
-        return [bal, token.symbol]
+        return [bal, token.symbol, token.name]
       })
       Promise.all(bals).then((finalBalances) => {
         console.log(finalBalances)
@@ -143,32 +146,77 @@ const AccountItem = ({tokens, openModal, ownersAccount, account, openTransak}) =
           </CopyToClipboard>
           <h2 onClick={() => setShowBalances(!showBalances)}>Balances: <IonIcon className={"collapse-balances-icon"} icon={showBalances ? chevronUp : chevronDown}/></h2>
           {balances && showBalances? 
-              <IonList className="holding-list">
-                <IonItem style={{padding: "0px !important"}} className="holding-item ion-no-padding">
-              <div className={"flex"}>
-                <img className={"holding-icon"} src={require(`cryptocurrency-icons/32/icon/eth.png`)}/> 
-                <div className={"holding-amount"} >
-                  {numbro(web3.utils.fromWei(balance, 'ether')).format({thousandSeparated: true})}
-                </div>
-                ETH
-              </div>
-              </IonItem>
-              {balances.map((token) => {
-                let icon = require(`cryptocurrency-icons/32/icon/generic.png`); 
-                try {
-                    icon = require(`cryptocurrency-icons/32/icon/${token[1].toLowerCase()}.png`); 
-                } catch (ex) {
-                    console.log(`Using generic icon for ${token[1]}`)
-                }
-                return <IonItem style={{padding: "0px !important"}} className="holding-item ion-no-padding">
-                    <div className={"flex"}>
-                        <img className={"holding-icon"} src={icon}/>
-                        <div className={"holding-amount"} >{token[0]}</div>
-                        {token[1]}
-                    </div>
-                  </IonItem>
-              })}
-              </IonList>
+              // <IonList className="holding-list">
+              //   <IonItem style={{padding: "0px !important"}} className="holding-item ion-no-padding">
+              // <div className={"flex"}>
+              //   <img className={"holding-icon"} src={require(`cryptocurrency-icons/32/icon/eth.png`)}/> 
+              //   <div className={"holding-amount"} >
+              //     {numbro(web3.utils.fromWei(balance, 'ether')).format({thousandSeparated: true})}
+              //   </div>
+              //   ETH
+              // </div>
+              // </IonItem>
+              // {balances.map((token) => {
+              //   let icon = require(`cryptocurrency-icons/32/icon/generic.png`); 
+              //   try {
+              //       icon = require(`cryptocurrency-icons/32/icon/${token[1].toLowerCase()}.png`); 
+              //   } catch (ex) {
+              //       console.log(`Using generic icon for ${token[1]}`)
+              //   }
+              //   return <IonItem style={{padding: "0px !important"}} className="holding-item ion-no-padding">
+              //       <div className={"flex"}>
+              //           <img className={"holding-icon"} src={icon}/>
+              //           <div className={"holding-amount"} >{token[0]}</div>
+              //           {token[1]}
+              //       </div>
+              //     </IonItem>
+              // })}
+              // </IonList>
+              <HoldingsList balances={balances} balance={balance} />
+        //       <IonList className={"ion-padding default-background"}>
+        //     <IonItem className="holding-item">
+        //                     <IonAvatar className={"holding-avatar"} slot="start">
+        //                         {/* <img className={"holding-icon"} src={icon}/> */}
+        //                     </IonAvatar>
+        //                     <IonLabel className={"holding-list-label"}>
+        //                         <div>
+        //                             Ethereum
+        //                         </div>
+        //                         <p>
+        //                             Eth
+        //                         </p>
+        //                         <div className={"name"}>
+        //                             ${numbro(web3.utils.fromWei(balance, 'ether')).format({
+        //                                 thousandSeparated: true,
+        //                                 mantissa: 2,
+        //                             })}
+        //                             <div className={"ticker-priceChange"}>
+        //                                 (<div className={`${currentPrices.filter((it) => it.symbol === "eth")[0].price_change_percentage_24h >= 0 ? "positive" : "negative"}`}>
+        //                                     {numbro(currentPrices.filter((it) => it.symbol === "eth")[0].price_change_percentage_24h).format({
+        //                                         average: true,
+        //                                         mantissa: 2,
+        //                                     })}%
+        //                                 </div>)
+        //                             </div>
+        //                         </div>
+        //                     </IonLabel>
+        //                     <IonLabel className={"holdings-list-amount"}>
+        //                         <div>
+        //                             ${numbro(Number(currentPrices.filter((it) => it.symbol === "eth")[0].current_price) * Number(numbro(web3.utils.fromWei(balance, 'ether')))).format({
+        //                                 thousandSeparated: true,
+        //                                 mantissa: 2,
+        //                             })}
+        //                         </div>
+        //                         <p>
+        //                             {numbro(web3.utils.fromWei(balance, 'ether')).format({
+        //                                     thousandSeparated: true
+        //                                 })
+        //                             } 
+        //                         </p>
+        //                     </IonLabel>
+        //                 </IonItem>
+        //     {/* {buildList()} */}
+        // </IonList>
           : null}
         </IonLabel>
       </IonItem>

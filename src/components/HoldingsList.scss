@@ -1,0 +1,92 @@
+.holdings-list {
+    // width: 50%;
+    max-width: 400px;
+    padding-top: 0 !important;
+}
+
+.holdings-list-amount {
+    // text-align: right;
+    margin-bottom: 4px;
+}
+
+.holding-list-label {
+    width: fit-content;
+}
+
+.holding-label {
+    margin-bottom: 0px !important;
+}
+
+.name {
+    display: flex;
+    flex-direction: row;
+    font-size: 14px;
+    .ticker-priceChange {
+        display: flex;
+        font-size: 12px;
+        width: fit-content;
+        padding-left: 6px;
+
+        .positive {
+            color: #009e74;
+        }
+        .negative {
+            color: #d94040;
+        }
+    }
+
+}
+
+.holding-icon {
+    width: 26px;
+    height: 26px;
+}
+
+.holding-avatar {
+    margin-right: 8px;
+    width: 26px !important;
+    height: fit-content;
+}
+
+.holding-item {
+    display: flex;
+    flex-direction: row;
+    --padding-start: 16px !important;
+    --padding-end: 16px !important;
+    --border-color: grey;
+}
+
+.holdings-grid {
+    --ion-grid-padding: 10px;
+}
+
+.holding-col {
+    max-width: 150px !important;
+    --ion-grid-column-padding: 1px;
+}
+
+.holding-card {
+    display: flex;
+    flex-direction: row;
+    padding: 0px !important;
+    margin: 2px;
+}
+
+ion-item {
+    --padding-start: 6px !important;
+    --padding-end: 0px !important;
+    --inner-padding-end: 0px !important;
+}
+
+.holdings-row {
+    justify-content: center;
+}
+
+.holdings-list {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+.current-value {
+    font-size: 14px;
+}

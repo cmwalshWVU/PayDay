@@ -44,6 +44,7 @@ import { signInWithCustomToken } from './firebase';
 import NewsPage from './pages/NewsPage';
 import { setFeed, updateFeed } from './store/actions/newsActions';
 import Pusher, { Options } from 'pusher-js';
+import { getCurrentPrices } from './store/actions/currentPricesAction';
 
 const App: React.FC = () => {
 
@@ -54,6 +55,8 @@ const App: React.FC = () => {
 
   const dispatch = useDispatch()
 
+  dispatch(getCurrentPrices())
+  
   useEffect(() => {
     setCurrentUser(user)
   }, [user])

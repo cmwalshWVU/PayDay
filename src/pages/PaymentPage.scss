@@ -33,7 +33,10 @@ ion-content ion-toolbar {
   }
 }
 
-
+.contacts-list {
+  padding-right: 8px;
+  padding-left: 8px;
+}
 
 .home-page {
   text-align: center;
@@ -52,6 +55,8 @@ ion-content ion-toolbar {
 
 .owners-acount {
   border-radius: 16px;
+  max-width: 600px;
+  margin: 20px auto 20px auto;
 }
 
 .avatar {

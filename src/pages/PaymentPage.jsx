@@ -257,7 +257,7 @@ const PaymentPage = (props) => {
                 Contacts
               </IonCardTitle>
             </IonCardHeader>
-            <IonList>
+            <IonList className="contacts-list">
               {user !== null ? 
                 <>
                   <IonButton size={"normal"}  onClick={() => setAddNewUser(true)} >
