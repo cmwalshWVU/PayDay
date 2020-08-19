@@ -141,14 +141,12 @@ const PaymentPage = (props) => {
               const data = doc.data()
               accounts.push(data)
           });
-          console.log(accounts)
           dispatch(setContacts(accounts))
       }, err => {
           console.log(`Encountered error: ${err}`);
       });
     } else {
       if (fortmaticLoggedIn !== fortmatic.user.isLoggedIn()) {
-        console.log(fortmatic.user)
         setFortmaticLoggedIn(fortmatic.user.isLoggedIn())
         setaccounts([])
       }
@@ -157,7 +155,6 @@ const PaymentPage = (props) => {
 
   useEffect(() => {
     if (fortmaticLoggedIn !== fortmatic.user.isLoggedIn()) {
-      console.log(fortmatic.user)
       setFortmaticLoggedIn(fortmatic.user.isLoggedIn())
     }
   }, [fortmatic.user])
@@ -203,11 +200,8 @@ const PaymentPage = (props) => {
 
       const amount = await web3.eth.getBalance(accounts[0])
       if (amount) {
-        console.log(Number(web3.utils.fromWei(amount.toString(), 'ether')))
         return setBalance(web3.utils.fromWei(amount.toString(), 'ether'))
       } else {
-        console.log("nothing")
-
         return 0
       }
     })

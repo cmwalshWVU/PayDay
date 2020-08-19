@@ -64,9 +64,7 @@ const App: React.FC = () => {
   useEffect(() => {
     FortmaticClient.configure({ primaryLoginOption: 'phone' } as WidgetModeConfiguration).then(() => {
       FortmaticClient.user.login().then((response: any) => {
-        console.log(response)
         signInWithCustomToken(response[0]).then((user: any) => {
-          console.log(user)
           dispatch(setUser(user))
           return <Redirect to="/wallet" />
         })
@@ -83,7 +81,7 @@ const App: React.FC = () => {
           // dispatch(updateN(articles.articles))
           dispatch(setFeed(articles))
       }).catch(error => console.log(error));
-    const pusher = new Pusher('5994b268d4758d733605', {
+    const pusher = new Pusher(process.env.REACT_APP_PUSHER_ID!, {
         cluster: 'us2',
         encrypted: true
     } as Options);

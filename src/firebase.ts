@@ -29,7 +29,6 @@ var serviceAccount = {
       client_x509_cert_url: process.env.REACT_APP_CLIENT_X509_CERT_URL!!
     }
 
-console.log(serviceAccount)
 const FirebaseAdmin = firebaseAdmin.initializeApp({
   credential: firebaseAdmin.credential.cert(serviceAccount as firebaseAdmin.ServiceAccount),
   databaseURL: process.env.REACT_APP_ADMIN_DATABASE_URL
@@ -59,7 +58,6 @@ export async function saveNewAccount(newAccount: {name: string, address: string}
     name: newAccount.name,
     address: newAccount.address
   }).catch(function(error) {
-    console.log("Error getting document:", error);
     return false
   });
 
@@ -144,7 +142,6 @@ export async function signInWithCustomToken(token: any) {
   const accessToken = await FirebaseAdmin.auth().createCustomToken(token)
     .then(function(customToken) {
       return Firebase.auth().signInWithCustomToken(customToken).then((response) => {
-        console.log(response.user)
         return response.user
         // dispatch({ type: 'COINBASE_LOGIN_SUCCESS', token: accessToken});
       }).catch((err: any) => {

@@ -61,28 +61,23 @@ const PersonalAccountItem = ({tokens, openModal, ownersAccount, account, openTra
     const tokenBalances = async () => {
 
     if (tokens) {
-    //   console.log(tokens)
       const bals = tokens.map(async (token) => {
         // GET TOKEN contract and decimals
-        // console.log(token)
         const contract = new web3.eth.Contract(minABI, token.address);
         const dec = await contract.methods.decimals().call()
 
         // GET ERC20 Token Balance and divide by decimals
         let bal = await contract.methods.balanceOf(account.address).call()
         bal = bal / (10**dec).toString();
-        console.log(bal)
         return [bal, token.symbol, token.name]
         
       })
       Promise.all(bals).then((finalBalances) => {
-        console.log(finalBalances)
         setTokenBalances(finalBalances.filter((it) => Number(it[0]) > 0 ))
       })  
     }
   }
 
-    console.log(balances)
     return (
         <IonItemSliding id="item100">
         <IonItem >
@@ -90,7 +85,7 @@ const PersonalAccountItem = ({tokens, openModal, ownersAccount, account, openTra
             <Identicon size={40} string={account.address} />
             </IonAvatar>
             <IonLabel>
-            <h2>{account.name}</h2>
+            <div className="account-name">{account.name}</div>
             <CopyToClipboard text={account.address}>
                 <div className={"account-flex"} >
                 <IonIcon className={"copy-icon"} icon={copy}/>

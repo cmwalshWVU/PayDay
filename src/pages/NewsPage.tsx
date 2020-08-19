@@ -15,15 +15,6 @@ const NewsPage: React.FC<SpeakerListProps> = ({}) => {
 
     const [news, setNews] = useState<any[]>([])
 
-    // useEffect(() => {
-    //     fetch('https://mighty-dawn-74394.herokuapp.com/live')
-    //         .then(response => response.json())
-    //         .then(articles => {
-    //             // dispatch(updateN(articles.articles))
-    //             setNews(articles);
-    //         }).catch(error => console.log(error));
-    // }, [])
-
     function refresh(event: CustomEvent<RefresherEventDetail>) {
         fetch('https://mighty-dawn-74394.herokuapp.com/live')
             .then(response => response.json())
@@ -39,12 +30,7 @@ const NewsPage: React.FC<SpeakerListProps> = ({}) => {
 
     return (
         <IonPage id="news-page">
-           
             <IonHeader>
-                <IonRefresher slot="fixed" onIonRefresh={refresh}>
-                    <IonRefresherContent>
-                    </IonRefresherContent>
-                </IonRefresher>
                 <IonToolbar>
                     <IonButtons slot="start">
                         <IonMenuButton />
@@ -54,7 +40,10 @@ const NewsPage: React.FC<SpeakerListProps> = ({}) => {
             </IonHeader>
 
             <IonContent className={`outer-content`}>
-                
+                <IonRefresher slot="fixed" onIonRefresh={refresh}>
+                    <IonRefresherContent>
+                    </IonRefresherContent>
+                </IonRefresher>
                 {/* {isPlatform("mobile") ?  */}
                     {/* <ArticleListSlides news={news} /> */}
                     {/* : */}

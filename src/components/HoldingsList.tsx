@@ -28,12 +28,6 @@ const HoldingsList: React.FC<Props> = ({balance, balances}) => {
         // if (isPlatform('mobile')) {
             return (
                 balances && balances.map((holding: any, index: number) => {
-                    console.log(currentPrices)
-                    console.log(holding[0])
-                    console.log(holding[1].toLowerCase())
-
-                    console.log(currentPrices.filter((it:any) => it.symbol === holding[1].toLowerCase()))
-
                     let icon = require(`cryptocurrency-icons/32/icon/generic.png`); 
                     try {
                         icon = require(`cryptocurrency-icons/32/icon/${holding[1].toLowerCase()}.png`); 
