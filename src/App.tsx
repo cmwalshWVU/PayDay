@@ -81,7 +81,7 @@ const App: React.FC = () => {
           // dispatch(updateN(articles.articles))
           dispatch(setFeed(articles))
       }).catch(error => console.log(error));
-    const pusher = new Pusher(process.env.REACT_APP_PUSHER_ID!, {
+    const pusher = new Pusher(process.env.REACT_APP_PUSHER_ID ? process.env.REACT_APP_PUSHER_ID : '5994b268d4758d733605', {
         cluster: 'us2',
         encrypted: true
     } as Options);
