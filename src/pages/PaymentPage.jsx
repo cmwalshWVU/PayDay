@@ -162,8 +162,8 @@ const PaymentPage = (props) => {
   const openTransak = (address) => {
     let transak = new transakSDK({
         apiKey: process.env.REACT_APP_TRANSAK_API_KEY ? process.env.REACT_APP_TRANSAK_API_KEY : 'DEFULT_TRANSAK_KEY',  // Your API Key
-        environment: 'PRODUCTION', // STAGING/PRODUCTION
-        hostURL: 'https://paydayapp.netlify.app',
+        environment: 'STAGING', // STAGING/PRODUCTION
+        hostURL: window.location.origin,
         defaultCryptoCurrency: 'ETH',
         cryptoCurrencyList: 'ETH,BAND,BAT,BNB,CBAT,CDAI,CEL,CETH,CUSDC,CZRX,DAI,KNC,LEND,LINK,MATIC,MKR,OMG,PAX,POWR,REN,RLC,SNX,UBT,USDC,USDT,WETH,ZRX',
         walletAddress: address, // Your customer's wallet address
