@@ -163,6 +163,7 @@ const PaymentPage = (props) => {
     let transak = new transakSDK({
         apiKey: process.env.REACT_APP_TRANSAK_API_KEY ? process.env.REACT_APP_TRANSAK_API_KEY : 'DEFULT_TRANSAK_KEY',  // Your API Key
         environment: 'PRODUCTION', // STAGING/PRODUCTION
+        hostURL: 'https://paydayapp.netlify.app',
         defaultCryptoCurrency: 'ETH',
         cryptoCurrencyList: 'ETH,BAND,BAT,BNB,CBAT,CDAI,CEL,CETH,CUSDC,CZRX,DAI,KNC,LEND,LINK,MATIC,MKR,OMG,PAX,POWR,REN,RLC,SNX,UBT,USDC,USDT,WETH,ZRX',
         walletAddress: address, // Your customer's wallet address
@@ -170,7 +171,6 @@ const PaymentPage = (props) => {
         fiatCurrency: 'USD', // INR/GBP
         email: '', // Your customer's email address
         redirectURL: '',
-        hostURL: window.location.origin,
         widgetHeight: '600px',
         widgetWidth: '400px'
     });
@@ -181,6 +181,10 @@ const PaymentPage = (props) => {
     transak.on(transak.ALL_EVENTS, (data) => {
         console.log(data)
     });
+
+    transak.on(transak.EVENTS.TRANSAK_WIDGET_CLOSE, (data) => {
+      transak.close();
+    })
     
     // This will trigger when the user marks payment is made.
     transak.on(transak.EVENTS.TRANSAK_ORDER_SUCCESSFUL, (orderData) => {
