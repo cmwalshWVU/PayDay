@@ -160,21 +160,34 @@ const PaymentPage = (props) => {
   }, [fortmatic.user])
   
   const openTransak = (address) => {
-    let transak = new transakSDK({
-        apiKey: process.env.REACT_APP_TRANSAK_API_KEY ? process.env.REACT_APP_TRANSAK_API_KEY : 'DEFULT_TRANSAK_KEY',  // Your API Key
-        environment: 'STAGING', // STAGING/PRODUCTION
-        hostURL: window.location.origin,
-        defaultCryptoCurrency: 'ETH',
-        cryptoCurrencyList: 'ETH,BAND,BAT,BNB,CBAT,CDAI,CEL,CETH,CUSDC,CZRX,DAI,KNC,LEND,LINK,MATIC,MKR,OMG,PAX,POWR,REN,RLC,SNX,UBT,USDC,USDT,WETH,ZRX',
-        walletAddress: address, // Your customer's wallet address
-        themeColor: '6851ff', // App theme color
-        fiatCurrency: 'USD', // INR/GBP
-        email: '', // Your customer's email address
-        redirectURL: '',
-        widgetHeight: '600px',
-        widgetWidth: '400px'
-    });
+    // let transak = new transakSDK({
+    //     apiKey: process.env.REACT_APP_TRANSAK_API_KEY ? process.env.REACT_APP_TRANSAK_API_KEY : 'DEFULT_TRANSAK_KEY',  // Your API Key
+    //     environment: 'STAGING', // STAGING/PRODUCTION
+    //     hostURL: window.location.origin,
+    //     defaultCryptoCurrency: 'ETH',
+    //     cryptoCurrencyList: 'ETH,BAND,BAT,BNB,CBAT,CDAI,CEL,CETH,CUSDC,CZRX,DAI,KNC,LEND,LINK,MATIC,MKR,OMG,PAX,POWR,REN,RLC,SNX,UBT,USDC,USDT,WETH,ZRX',
+    //     walletAddress: address, // Your customer's wallet address
+    //     themeColor: '6851ff', // App theme color
+    //     fiatCurrency: 'USD', // INR/GBP
+    //     email: '', // Your customer's email address
+    //     redirectURL: '',
+    //     widgetHeight: '600px',
+    //     widgetWidth: '400px'
+    // });
     
+    let transak = new transakSDK({
+      apiKey: '08492b5f-b07c-46d1-86b4-0435a2cf7146',  // Your API Key
+      environment: 'STAGING', // STAGING/PRODUCTION
+      defaultCryptoCurrency: 'ETH',
+      walletAddress: '', // Your customer's wallet address
+      themeColor: '000000', // App theme color
+      fiatCurrency: '', // INR/GBP
+      email: '', // Your customer's email address
+      redirectURL: '',
+      hostURL: window.location.origin,
+      widgetHeight: '550px',
+      widgetWidth: '450px'
+    });
     transak.init();
     
     // To get all the events
