@@ -179,7 +179,6 @@ const PaymentPage = (props) => {
       apiKey: '08492b5f-b07c-46d1-86b4-0435a2cf7146',  // Your API Key
       environment: 'STAGING', // STAGING/PRODUCTION
       defaultCryptoCurrency: 'ETH',
-      cryptoCurrencyList: 'ETH,BAND,BAT,BNB,CBAT,CDAI,CEL,CETH,CUSDC,CZRX,DAI,KNC,LEND,LINK,MATIC,MKR,OMG,PAX,POWR,REN,RLC,SNX,UBT,USDC,USDT,WETH,ZRX',
       walletAddress: address, // Your customer's wallet address
       themeColor: '6851ff', // App theme color
       fiatCurrency: 'USD', // INR/GBP
