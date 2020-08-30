@@ -169,8 +169,6 @@ const PaymentPage = (props) => {
         walletAddress: address, // Your customer's wallet address
         themeColor: '6851ff', // App theme color
         fiatCurrency: 'USD', // INR/GBP
-        email: '', // Your customer's email address
-        redirectURL: '',
         widgetHeight: '600px',
         widgetWidth: '400px'
     });
