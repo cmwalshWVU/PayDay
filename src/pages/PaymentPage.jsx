@@ -165,7 +165,7 @@ const PaymentPage = (props) => {
         environment: 'STAGING', // STAGING/PRODUCTION
         hostURL: window.location.origin,
         defaultCryptoCurrency: 'ETH',
-        cryptoCurrencyList: "ETH,BAND,BAT,DAI,LEND,LINK,OMG,USDC,USDT",
+        cryptoCurrencyList: "ETH,LINK,BAND",
         walletAddress: address, // Your customer's wallet address
         themeColor: '6851ff', // App theme color
         fiatCurrency: 'USD', // INR/GBP
