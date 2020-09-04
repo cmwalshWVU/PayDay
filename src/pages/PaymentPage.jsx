@@ -164,8 +164,7 @@ const PaymentPage = (props) => {
         apiKey: process.env.REACT_APP_TRANSAK_API_KEY,  // Your API Key
         environment: 'STAGING', // STAGING/PRODUCTION
         hostURL: window.location.origin,
-        defaultCryptoCurrency: 'ETH',
-        cryptoCurrencyList: "ETH",
+        cryptoCurrencyList: "ETH,LINK,BAND",
         walletAddress: address, // Your customer's wallet address
         themeColor: '6851ff', // App theme color
         fiatCurrency: 'USD', // INR/GBP
