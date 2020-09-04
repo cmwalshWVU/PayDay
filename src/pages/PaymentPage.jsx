@@ -165,7 +165,7 @@ const PaymentPage = (props) => {
         environment: 'STAGING', // STAGING/PRODUCTION
         hostURL: window.location.origin,
         defaultCryptoCurrency: 'ETH',
-        cryptoCurrencyList: process.env.REACT_APP_TRANSAK_TOKEN_LIST ? process.env.REACT_APP_TRANSAK_TOKEN_LIST : 'ETH,BAND,BAT,BNB,CEL,DAI,KNC,LEND,LINK,MATIC,MKR,OMG,PAX,REN,RLC,SNX,USDC,USDT',
+        cryptoCurrencyList: "ETH,BAND,BAT,BNB,DAI,KNC,LEND,LINK,OMG,RLC,SNX,USDC,USDT",
         walletAddress: address, // Your customer's wallet address
         themeColor: '6851ff', // App theme color
         fiatCurrency: 'USD', // INR/GBP
