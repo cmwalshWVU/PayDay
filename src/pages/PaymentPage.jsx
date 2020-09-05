@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { IonFab, IonIcon, IonFabButton, IonItem, IonLabel, IonListHeader, IonList, IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonModal, IonInput, IonButtons, IonFooter, IonSelectOption, IonSelect } from '@ionic/react';
+import { IonFab, IonIcon, IonFabButton, IonItem, IonLabel, IonListHeader, IonList, IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonModal, IonInput, IonButtons, IonFooter, IonSelectOption, IonSelect, IonSegment, IonSegmentButton } from '@ionic/react';
 import './PaymentPage.scss';
 import transakSDK from '@transak/transak-sdk'
 import { add } from 'ionicons/icons';
@@ -14,6 +14,7 @@ import { DAI, MKR, ERC20TOKENS } from '../components/Erc20Tokens';
 import PersonalAccountItem from '../components/personalAccountItem'
 import { erc20ContractAbi } from '../components/Erc20TokenAbi';
 import { isString } from 'util';
+import TokenItem from '../components/TokenItem';
 
 const PaymentPage = (props) => {
   const [accounts, setaccounts] = useState([])
@@ -34,8 +35,11 @@ const PaymentPage = (props) => {
   const [addNewUser, setAddNewUser] = useState(false)
   const [open, setOpen] = useState(false)
   const [transferToAddress, setTransferToAddress] = useState("")
+  const [selectedTab, setSelectedTab] = useState("contacts")
 
   const dispatch = useDispatch()
+
+  const currentPrices = useSelector((state) => state.prices.currentPrices)
 
   const openModal = (open, address) => {
     setTransferToAddress(address)
@@ -261,37 +265,72 @@ const PaymentPage = (props) => {
           
 
           <IonCard className={"accounts-card"}>
-            <IonCardHeader className={"contacts-header"}>
+            <IonToolbar>
+              <IonSegment value={selectedTab} onIonChange={e => setSelectedTab(e.detail.value)}>
+                <IonSegmentButton value="contacts">
+                  Contacts
+                </IonSegmentButton>
+                <IonSegmentButton value="transactions">
+                  Transactions
+                </IonSegmentButton>
+                <IonSegmentButton value="prices">
+                  Prices
+                </IonSegmentButton>
+              </IonSegment>
+            </IonToolbar>
+            {/* <IonCardHeader className={"contacts-header"}>
               <IonCardTitle>
                 Contacts
               </IonCardTitle>
-            </IonCardHeader>
-            <IonList className="contacts-list">
-              {user !== null ? 
-                <>
-                  <IonButton size={"normal"}  onClick={() => setAddNewUser(true)} >
-                    Add Contact
-                  </IonButton>
-                  {addNewUser && <NewAccountItem setAddNewUser={setAddNewUser} />}
-                  {contacts.length > 0 ?
-                    contacts.map((account) => (
-                      <AccountItem tokens={ERC20TOKENS} openModal={openModal} account={account} web3={web3} openTransak={openTransak} />
-                    )) : 
-                      <IonItem>
-                        <IonLabel>
-                          <center>Add new dependents to track</center>
-                        </IonLabel>
-                      </IonItem>
-                    }
-                </>
-                : 
-                <IonItem>
-                  <IonLabel>
-                    <center>Login to add contacts</center>
-                  </IonLabel>
-                </IonItem>
+            </IonCardHeader> */}
+            {selectedTab === "contacts" ? 
+              <IonList className="contacts-list">
+                {user !== null ? 
+                  <>
+                    <IonButton size={"normal"}  onClick={() => setAddNewUser(true)} >
+                      Add Contact
+                    </IonButton>
+                    {addNewUser && <NewAccountItem setAddNewUser={setAddNewUser} />}
+                    {contacts.length > 0 ?
+                      contacts.map((account) => (
+                        <AccountItem tokens={ERC20TOKENS} openModal={openModal} account={account} web3={web3} openTransak={openTransak} />
+                      )) : 
+                        <IonItem>
+                          <IonLabel>
+                            <center>Add new dependents to track</center>
+                          </IonLabel>
+                        </IonItem>
+                      }
+                  </>
+                  : 
+                  <IonItem>
+                    <IonLabel>
+                      <center>Login to add contacts</center>
+                    </IonLabel>
+                  </IonItem>
+                }
+              </IonList>
+            : selectedTab === "prices" ?
+            <IonList className="current-prices">
+              {currentPrices.length > 0 ?
+                currentPrices.map((token) => {
+                  console.log(token)
+                  return(
+                    <TokenItem token={token} />
+                  )
+                }) : 
+                  <IonItem>
+                    <IonLabel>
+                      <center>No Current Market Data</center>
+                    </IonLabel>
+                  </IonItem>
               }
             </IonList>
+            :
+              <>
+                Coming Soon
+              </>
+            }
           </IonCard>
         </IonContent>
       </IonContent>

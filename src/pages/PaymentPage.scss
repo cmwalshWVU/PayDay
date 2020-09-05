@@ -43,6 +43,11 @@ ion-content ion-toolbar {
 
 }
 
+.current-prices {
+  max-height: 600px;
+  overflow: scroll;
+}
+
 .accounts-title {
   padding: 0px
 }
