@@ -11,6 +11,22 @@
 
 .holding-list-label {
     width: fit-content;
+    display: flex !important;
+    flex-direction: row;
+
+    .token-name {
+        display: flex !important;
+        flex-direction: column;
+
+        .token-symbol {
+            color: var(--ion-color-step-600, #666666);
+        }
+    }
+}
+
+.holdings-list-amount {
+    display: flex !important;
+    flex-direction: column;
 }
 
 .holding-label {
@@ -19,14 +35,18 @@
 
 .name {
     display: flex;
-    flex-direction: row;
-    font-size: 14px;
+    flex-direction: column;
+    font-size: 18px;
+    font-weight: 500;
+    margin: auto 7px auto auto;
+    text-align: right;
+
     .ticker-priceChange {
         display: flex;
         font-size: 12px;
         width: fit-content;
-        padding-left: 6px;
-
+        margin: auto 0 auto auto;
+        
         .positive {
             color: #009e74;
         }

@@ -15,16 +15,19 @@ const TokenItem: React.FC<Props> = ({token}) => {
     if (token) {
       return (            
         <IonItem className="holding-item">
-            <IonAvatar className={"holding-avatar"} slot="start">
-                <img className={"holding-icon"} src={token.image}/>
-            </IonAvatar>
+            
             <IonLabel className={"holding-list-label"}>
+              <IonAvatar className={"holding-avatar"} slot="start">
+                  <img className={"holding-icon"} src={token.image}/>
+              </IonAvatar>
+              <div className="token-name">
                 <div>
                     {token.name}
                 </div>
-                <p>
+                <p className="token-symbol">
                     {token.symbol.toUpperCase()}
                 </p>
+              </div>
             </IonLabel>
             <IonLabel className={"holdings-list-amount"}>
               <div className={"name"}>

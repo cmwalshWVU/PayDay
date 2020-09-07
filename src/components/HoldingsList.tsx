@@ -36,16 +36,19 @@ const HoldingsList: React.FC<Props> = ({balance, balances}) => {
                     }
                     return (
                         <IonItem className="holding-item">
-                            <IonAvatar className={"holding-avatar"} slot="start">
-                                <img className={"holding-icon"} src={icon}/>
-                            </IonAvatar>
+                            
                             <IonLabel className={"holding-list-label"}>
-                                <div>
-                                    {holding[2]}
+                                <IonAvatar className={"holding-avatar"} slot="start">
+                                    <img className={"holding-icon"} src={icon}/>
+                                </IonAvatar>
+                                <div className="token-name">
+                                    <div>
+                                        {holding[2]}
+                                    </div>
+                                    <p className="token-symbol">
+                                        {holding[1]}
+                                    </p>
                                 </div>
-                                <p>
-                                    {holding[1]}
-                                </p>
                             </IonLabel>
                             <IonLabel className={"holdings-list-amount"}>
                                 {currentPrices.filter((it:any) => it.symbol === holding[1].toLowerCase())[0] && <div className="current-value">
@@ -61,7 +64,7 @@ const HoldingsList: React.FC<Props> = ({balance, balances}) => {
                                         })
                                     } 
                                 </p>
-                                {currentPrices.filter((it:any) => it.symbol === holding[1].toLowerCase())[0] && <div className={"name"}>
+                                {/* {currentPrices.filter((it:any) => it.symbol === holding[1].toLowerCase())[0] && <div className={"name"}>
                                     ${numbro(currentPrices.filter((it:any) => it.symbol === holding[1].toLowerCase())[0].current_price).format({
                                         thousandSeparated: true,
                                         mantissa: 2,
@@ -75,7 +78,7 @@ const HoldingsList: React.FC<Props> = ({balance, balances}) => {
                                         </div>)
                                     </div>
                                 </div>
-                                }
+                                } */}
                             </IonLabel>
                         </IonItem>
                     )
@@ -146,47 +149,48 @@ const HoldingsList: React.FC<Props> = ({balance, balances}) => {
     return (
         <IonList lines="full" className={"holdings-list ion-padding default-background"}>
             <IonItem className="holding-item">
-                            <IonAvatar className={"holding-avatar"} slot="start">
-                                <img className={"holding-icon"} src={icon}/>
-                            </IonAvatar>
-                            <IonLabel className={"holding-list-label"}>
-                                <div>
-                                    Ethereum
-                                </div>
-                                <p>
-                                    Eth
-                                </p>
-
-                            </IonLabel>
-                            <IonLabel className={"holdings-list-amount"}>
-                                <div className="current-value">
-                                    ${numbro(Number(currentPrices.filter((it:any) => it.symbol === "eth")[0].current_price) * Number(numbro(web3.utils.fromWei(balance, 'ether')))).format({
-                                        thousandSeparated: true,
-                                        mantissa: 2,
-                                    })}
-                                </div>
-                                <p>
-                                    {numbro(web3.utils.fromWei(balance, 'ether')).format({
-                                            thousandSeparated: true
-                                        })
-                                    } 
-                                </p>
-                                <div className={"name"}>
-                                    ${numbro(currentPrices.filter((it:any) => it.symbol === "eth")[0].current_price).format({
-                                        thousandSeparated: true,
-                                        mantissa: 2,
-                                    })}
-                                    <div className={"ticker-priceChange"}>
-                                        (<div className={`${currentPrices.filter((it:any) => it.symbol === "eth")[0].price_change_percentage_24h >= 0 ? "positive" : "negative"}`}>
-                                            {numbro(currentPrices.filter((it:any) => it.symbol === "eth")[0].price_change_percentage_24h).format({
-                                                average: true,
-                                                mantissa: 2,
-                                            })}%
-                                        </div>)
-                                    </div>
-                                </div>
-                            </IonLabel>
-                        </IonItem>
+                <IonLabel className={"holding-list-label"}>
+                    <IonAvatar className={"holding-avatar"} slot="start">
+                        <img className={"holding-icon"} src={icon}/>
+                    </IonAvatar>
+                    <div className="token-name">
+                        <div>
+                            Ethereum
+                        </div>
+                        <p className="token-symbol">
+                            Eth
+                        </p>
+                    </div>
+                </IonLabel>
+                <IonLabel className={"holdings-list-amount"}>
+                    <div className="current-value">
+                        ${numbro(Number(currentPrices.filter((it:any) => it.symbol === "eth")[0].current_price) * Number(numbro(web3.utils.fromWei(balance, 'ether')))).format({
+                            thousandSeparated: true,
+                            mantissa: 2,
+                        })}
+                    </div>
+                    <p>
+                        {numbro(web3.utils.fromWei(balance, 'ether')).format({
+                                thousandSeparated: true
+                            })
+                        } 
+                    </p>
+                    {/* <div className={"name"}>
+                        ${numbro(currentPrices.filter((it:any) => it.symbol === "eth")[0].current_price).format({
+                            thousandSeparated: true,
+                            mantissa: 2,
+                        })}
+                        <div className={"ticker-priceChange"}>
+                            (<div className={`${currentPrices.filter((it:any) => it.symbol === "eth")[0].price_change_percentage_24h >= 0 ? "positive" : "negative"}`}>
+                                {numbro(currentPrices.filter((it:any) => it.symbol === "eth")[0].price_change_percentage_24h).format({
+                                    average: true,
+                                    mantissa: 2,
+                                })}%
+                            </div>)
+                        </div>
+                    </div> */}
+                </IonLabel>
+            </IonItem>
             {list}
         </IonList>
     )
