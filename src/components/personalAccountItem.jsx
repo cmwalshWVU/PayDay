@@ -95,37 +95,11 @@ const PersonalAccountItem = ({tokens, openModal, ownersAccount, account, openTra
                 </div>
             </CopyToClipboard>
             <h2 onClick={() => setShowBalances(!showBalances)}>Balances: <IonIcon className={"copy-icon"} icon={showBalances ? chevronUp: chevronDown }/></h2>
-            {balances && showBalances ? 
-              //   <IonList className="holding-list">
-              //   <IonItem style={{padding: "0px !important"}} className="holding-item ion-no-padding">
-              // <div className={"flex"}>
-              //   <img className={"holding-icon"} src={require(`cryptocurrency-icons/32/icon/eth.png`)}/> 
-              //   <div className={"holding-amount"} >
-              //     {numbro(web3.utils.fromWei(balance, 'ether')).format({thousandSeparated: true})}
-              //   </div>
-              //   ETH
-              // </div>
-              // </IonItem>
-              // {balances.map((token) => {
-              //   let icon = require(`cryptocurrency-icons/32/icon/generic.png`); 
-              //   try {
-              //       icon = require(`cryptocurrency-icons/32/icon/${token[1].toLowerCase()}.png`); 
-              //   } catch (ex) {
-              //       console.log(`Using generic icon for ${token[1]}`)
-              //   }
-              //   return <IonItem style={{padding: "0px !important"}} className="holding-item ion-no-padding">
-              //       <div className={"flex"}>
-              //           <img className={"holding-icon"} src={icon}/>
-              //           <div className={"holding-amount"} >{token[0]}</div>
-              //           {token[1]}
-              //       </div>
-              //     </IonItem>
-              // })}
-              // </IonList>
-              <HoldingsList balances={balances} balance={balance} />
-            : null}
             </IonLabel>
         </IonItem>
+        {balances && showBalances ?
+              <HoldingsList balances={balances} balance={balance} />
+            : null}
         </IonItemSliding>
     )
 }
