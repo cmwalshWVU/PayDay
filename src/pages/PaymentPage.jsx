@@ -215,7 +215,7 @@ const PaymentPage = (props) => {
 
   const openTransakModal = (address, amount, token) => {
     let transak = new transakSDK({
-        apiKey: '2687d99e-d336-40fe-b205-018bb7ea2dab',  // Your API Key
+        apiKey: process.env.REACT_APP_TRANSAK_API_KEY,  // Your API Key
         environment: 'PRODUCTION', // STAGING/PRODUCTION
         hostURL: window.location.origin,
         cryptoCurrencyCode: token,
