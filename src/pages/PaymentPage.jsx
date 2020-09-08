@@ -15,6 +15,7 @@ import PersonalAccountItem from '../components/personalAccountItem'
 import { erc20ContractAbi } from '../components/Erc20TokenAbi';
 import { isString } from 'util';
 import TokenItem from '../components/TokenItem';
+import PurchaseModal from '../components/PurchaseModal';
 
 const PaymentPage = (props) => {
   const [accounts, setaccounts] = useState([])
@@ -23,6 +24,9 @@ const PaymentPage = (props) => {
   const [gas, setGas] = useState("0.0");
   const [balance, setBalance] = useState("0");
   const [tokenToSend, setTokenToSend] = useState("ETH")
+
+  const [purchaseModalOpen, setPurchaseModalOpen] = useState(false)
+  const [purchaseAmount, setPurchaseAmount] = useState(0);
 
   const fortmatic = useSelector((state) => state.user.fortmatic)
   const contacts = useSelector((state) => state.user.contacts)
@@ -209,6 +213,54 @@ const PaymentPage = (props) => {
   
   }
 
+  const openTransakModal = (address, amount, token) => {
+    let transak = new transakSDK({
+        apiKey: '2687d99e-d336-40fe-b205-018bb7ea2dab',  // Your API Key
+        environment: 'PRODUCTION', // STAGING/PRODUCTION
+        hostURL: window.location.origin,
+        cryptoCurrencyCode: token,
+        fiatAmount: amount,
+        walletAddress: address, // Your customer's wallet address
+        themeColor: '6851ff', // App theme color
+        fiatCurrency: 'USD', // INR/GBP
+        widgetHeight: '600px',
+        widgetWidth: '400px'
+    });
+    
+    // let transak = new transakSDK({
+    //   apiKey: '08492b5f-b07c-46d1-86b4-0435a2cf7146',  // Your API Key
+    //   environment: 'STAGING', // STAGING/PRODUCTION
+    //   defaultCryptoCurrency: 'ETH',
+
+    //   walletAddress: address, // Your customer's wallet address
+    //   themeColor: '6851ff', // App theme color
+    //   fiatCurrency: 'USD', // INR/GBP
+    //   email: '', // Your customer's email address
+    //   redirectURL: '',
+    //   hostURL: window.location.origin,
+    //   widgetHeight: '600px',
+    //   widgetWidth: '400px'
+    // });
+    transak.init();
+    
+    // To get all the events
+    transak.on(transak.ALL_EVENTS, (data) => {
+        console.log(data)
+    });
+
+    transak.on(transak.EVENTS.TRANSAK_WIDGET_CLOSE, (data) => {
+      transak.close();
+    })
+    
+    // This will trigger when the user marks payment is made.
+    transak.on(transak.EVENTS.TRANSAK_ORDER_SUCCESSFUL, (orderData) => {
+        console.log(orderData);
+        transak.close();
+        setPurchaseModalOpen(false)
+    });
+  
+  }
+
   const getAccounts = async () => {
     // const accounts = await web3.eth.getAccounts()
     // const [address] = accounts
@@ -237,7 +289,7 @@ const PaymentPage = (props) => {
           <IonCard className={"owners-acount"} >
             <IonCardHeader>
               <IonCardTitle className={"accounts-title"} >
-                Personal Accounts
+                Personal Account
               </IonCardTitle>
             </IonCardHeader>
             <IonCardContent>
@@ -248,7 +300,7 @@ const PaymentPage = (props) => {
                     <PersonalAccountItem tokens={ERC20TOKENS} openModal={openTransak} ownersAccount={true} openTransak={openTransak} account={{name: "", address: account}} />
                   )}
                 </IonList>
-                <IonButton onClick={() => openTransak(account)}>
+                <IonButton onClick={() => setPurchaseModalOpen(true)}>
                   Buy Crypto
                 </IonButton>
                 <IonButton size={"normal"}  onClick={() => openModal(true, "")} >
@@ -340,6 +392,14 @@ const PaymentPage = (props) => {
           </IonFabButton>
       </IonFab> */}
 
+      <PurchaseModal  open={purchaseModalOpen}
+                      tokenToSend={tokenToSend}
+                      amount={purchaseAmount}
+                      setAmount={setPurchaseAmount}
+                      openTransakModal={openTransakModal}
+                      account={account}
+                      setPurchaseModalOpen={setPurchaseModalOpen}
+                      setTokenToSend={setTokenToSend} />
 
       <IonModal className={"transfer-modal"} isOpen={open} onDidDismiss={() => setOpen(false)}>
         <IonContent className={"transfer-modal-content ion-padding"}>
@@ -350,7 +410,7 @@ const PaymentPage = (props) => {
             <IonItem>
               <IonLabel>Crypto to Send</IonLabel>
               <IonSelect value={tokenToSend} okText="Okay" cancelText="Dismiss"  onIonChange={e => setTokenToSend(e.detail.value)}>
-                <IonSelectOption value={"ETH"} onC>Ethereum</IonSelectOption>
+                <IonSelectOption value={"ETH"} >Ethereum</IonSelectOption>
                 {ERC20TOKENS.map((token)  => {
                   return <IonSelectOption value={token}>{token.name}</IonSelectOption>
                 })}

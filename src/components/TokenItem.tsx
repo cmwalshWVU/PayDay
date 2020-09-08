@@ -15,7 +15,6 @@ const TokenItem: React.FC<Props> = ({token}) => {
     if (token) {
       return (            
         <IonItem className="holding-item">
-            
             <IonLabel className={"holding-list-label"}>
               <IonAvatar className={"holding-avatar"} slot="start">
                   <img className={"holding-icon"} src={token.image}/>
@@ -36,9 +35,9 @@ const TokenItem: React.FC<Props> = ({token}) => {
                     mantissa: 2,
                 })}
                 <div className={"ticker-priceChange"}>
-                  (<div className={`${token.price_change_percentage_24h >= 0 ? "positive" : "negative"}`}>
+                  <div className={`${token.price_change_percentage_24h >= 0 ? "positive" : "negative"}`}>
                       {token.price_change_percentage_24h}%
-                  </div>)
+                  </div>
                 </div>
               </div>
             </IonLabel>

@@ -2,12 +2,12 @@ ion-content ion-toolbar {
   --background: translucent;
 }
 
-.transfer-modal {
+.transfer-modal, #purchase-modal {
   --height: 350px;
   --width: 400px;
   --border-radius: 8px;
 
-  .transfer-modal-content {
+  .transfer-modal-content, .purchase-modal-content {
     --background	: #282828;
 
     .address-inputs {
@@ -26,7 +26,7 @@ ion-content ion-toolbar {
       text-align: center;
     }
 
-    .transfer-modal-title {
+    .transfer-modal-title, .purchase-modal-title {
       text-align: center;
       padding-bottom: 16px;
     }
