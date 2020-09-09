@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { IonFab, IonIcon, IonFabButton, IonItem, IonLabel, IonListHeader, IonList, IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonModal, IonInput, IonButtons, IonFooter, IonSelectOption, IonSelect, IonSegment, IonSegmentButton } from '@ionic/react';
+import { IonFab, IonIcon, IonFabButton, IonItem, IonLabel, IonListHeader, IonList, IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonModal, IonInput, IonButtons, IonFooter, IonSelectOption, IonSelect, IonSegment, IonSegmentButton, IonSearchbar } from '@ionic/react';
 import './PaymentPage.scss';
 import transakSDK from '@transak/transak-sdk'
 import { add } from 'ionicons/icons';
@@ -16,6 +16,8 @@ import { erc20ContractAbi } from '../components/Erc20TokenAbi';
 import { isString } from 'util';
 import TokenItem from '../components/TokenItem';
 import PurchaseModal from '../components/PurchaseModal';
+import ContactsList from '../components/ContactsList';
+import TransferModal from '../components/TransferModal';
 
 const PaymentPage = (props) => {
   const [accounts, setaccounts] = useState([])
@@ -40,6 +42,8 @@ const PaymentPage = (props) => {
   const [open, setOpen] = useState(false)
   const [transferToAddress, setTransferToAddress] = useState("")
   const [selectedTab, setSelectedTab] = useState("contacts")
+
+  const [searchString, setSearchString] = useState("")
 
   const dispatch = useDispatch()
 
@@ -262,9 +266,6 @@ const PaymentPage = (props) => {
   }
 
   const getAccounts = async () => {
-    // const accounts = await web3.eth.getAccounts()
-    // const [address] = accounts
-    
     web3.eth.getAccounts().then(async accounts => {
       setAccount(accounts[0])
       setaccounts(accounts)
@@ -330,47 +331,22 @@ const PaymentPage = (props) => {
                 </IonSegmentButton>
               </IonSegment>
             </IonToolbar>
-            {/* <IonCardHeader className={"contacts-header"}>
-              <IonCardTitle>
-                Contacts
-              </IonCardTitle>
-            </IonCardHeader> */}
             {selectedTab === "contacts" ? 
-              <IonList className="contacts-list">
-                {user !== null ? 
-                  <>
-                    <IonButton size={"normal"}  onClick={() => setAddNewUser(true)} >
-                      Add Contact
-                    </IonButton>
-                    {addNewUser && <NewAccountItem setAddNewUser={setAddNewUser} />}
-                    {contacts.length > 0 ?
-                      contacts.map((account) => (
-                        <AccountItem tokens={ERC20TOKENS} openModal={openModal} account={account} web3={web3} openTransak={openTransak} />
-                      )) : 
-                        <IonItem>
-                          <IonLabel>
-                            <center>Add new dependents to track</center>
-                          </IonLabel>
-                        </IonItem>
-                      }
-                  </>
-                  : 
-                  <IonItem>
-                    <IonLabel>
-                      <center>Login to add contacts</center>
-                    </IonLabel>
-                  </IonItem>
-                }
-              </IonList>
+              <ContactsList openModal={openModal} openTransak={openTransak} />
+
             : selectedTab === "prices" ?
             <IonList className="current-prices">
+              <IonSearchbar value={searchString} onIonChange={e => setSearchString(e.detail.value)}></IonSearchbar>
+
               {currentPrices.length > 0 ?
-                currentPrices.map((token) => {
-                  console.log(token)
-                  return(
-                    <TokenItem token={token} />
-                  )
-                }) : 
+                currentPrices.filter(it => it.name.toLowerCase().includes(searchString))
+                  .map((token) => {
+                    console.log(token)
+                    return(
+                      <TokenItem token={token} />
+                    )
+                  })
+              : 
                   <IonItem>
                     <IonLabel>
                       <center>No Current Market Data</center>
@@ -386,12 +362,6 @@ const PaymentPage = (props) => {
           </IonCard>
         </IonContent>
       </IonContent>
-      {/* <IonFab slot="fixed" vertical="bottom" horizontal="end">
-          <IonFabButton onClick={() => setAddNewUser(true)}>  
-              <IonIcon className={"black-text"} icon={add} />
-          </IonFabButton>
-      </IonFab> */}
-
       <PurchaseModal  open={purchaseModalOpen}
                       tokenToSend={tokenToSend}
                       amount={purchaseAmount}
@@ -401,42 +371,15 @@ const PaymentPage = (props) => {
                       setPurchaseModalOpen={setPurchaseModalOpen}
                       setTokenToSend={setTokenToSend} />
 
-      <IonModal className={"transfer-modal"} isOpen={open} onDidDismiss={() => setOpen(false)}>
-        <IonContent className={"transfer-modal-content ion-padding"}>
-          <IonHeader>
-            <IonTitle className="transfer-modal-title">Transfer Funds</IonTitle>
-          </IonHeader>
-          <IonList className="address-inputs">
-            <IonItem>
-              <IonLabel>Crypto to Send</IonLabel>
-              <IonSelect value={tokenToSend} okText="Okay" cancelText="Dismiss"  onIonChange={e => setTokenToSend(e.detail.value)}>
-                <IonSelectOption value={"ETH"} >Ethereum</IonSelectOption>
-                {ERC20TOKENS.map((token)  => {
-                  return <IonSelectOption value={token}>{token.name}</IonSelectOption>
-                })}
-              </IonSelect>
-            </IonItem>
-            <IonItem>
-              <IonLabel position="stacked" color="primary">From:</IonLabel>
-              <IonInput readonly name="transferToAddress" type="text" value={account} />
-            </IonItem> 
-            <IonItem>
-              <IonLabel position="stacked" color="primary">To:</IonLabel>
-              <IonInput readonly={transferToAddress !== ""} name="transferToAddress" type="text" value={transferToAddress} />
-            </IonItem> 
-          </IonList>
-          <IonList className="amount-inputs">
-            <IonItem>
-              <IonLabel position="stacked" color="primary">Amount:</IonLabel>
-              <IonInput max={balance} clearInput name="transferToAddress" value={amount} onIonChange={e => setAmount(e.detail.value)}/>
-            </IonItem> 
-          </IonList>
-          <div className="modal-buttons">
-            <IonButton color="primary" onClick={() => openFortmaticTransfer(amount, account, transferToAddress)}>Transfer</IonButton>
-            <IonButton color="light" onClick={() => setOpen(false)}>Cancel</IonButton>
-          </div>
-        </IonContent>
-      </IonModal>
+      <TransferModal  open={open}
+                      setOpen={setOpen}
+                      setTokenToSend={setTokenToSend}
+                      tokenToSend={tokenToSend}
+                      account={account}
+                      setTransferToAddress={setTransferToAddress}
+                      transferToAddress={transferToAddress}
+                      balance={balance}
+                      openFortmaticTransfer={openFortmaticTransfer} />
     </IonPage>
   );
 };
