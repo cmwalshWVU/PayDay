@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { IonFab, IonIcon, IonFabButton, IonItem, IonLabel, IonListHeader, IonList, IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonModal, IonInput, IonButtons, IonFooter, IonSelectOption, IonSelect, IonSegment, IonSegmentButton, IonSearchbar } from '@ionic/react';
+import { IonFab, IonIcon, IonFabButton, IonItem, IonLabel, IonListHeader, IonList, IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonModal, IonInput, IonButtons, IonFooter, IonSelectOption, IonSelect, IonSegment, IonSegmentButton, IonSearchbar, IonAvatar } from '@ionic/react';
 import './PaymentPage.scss';
 import transakSDK from '@transak/transak-sdk'
 import { add } from 'ionicons/icons';
@@ -18,6 +18,8 @@ import TokenItem from '../components/TokenItem';
 import PurchaseModal from '../components/PurchaseModal';
 import ContactsList from '../components/ContactsList';
 import TransferModal from '../components/TransferModal';
+import ProfileIdenticon from '../components/indenticton';
+import ArticleList from '../components/ArticleList';
 
 const PaymentPage = (props) => {
   const [accounts, setaccounts] = useState([])
@@ -44,6 +46,8 @@ const PaymentPage = (props) => {
   const [selectedTab, setSelectedTab] = useState("contacts")
 
   const [searchString, setSearchString] = useState("")
+
+  const [selectedView, setSelectedView] = useState("Recent News")
 
   const dispatch = useDispatch()
 
@@ -283,10 +287,47 @@ const PaymentPage = (props) => {
     getAccounts()
   }, [])
 
+  const [news, setNews] = useState([])
+
+  function refresh(event) {
+    fetch('https://mighty-dawn-74394.herokuapp.com/live')
+        .then(response => response.json())
+        .then(articles => {
+            // dispatch(updateN(articles.articles))
+            setNews(articles);
+            event.detail.complete();
+        }).catch(error => {
+            event.detail.complete();
+        }
+    );
+}
+
   return (
     <IonPage>
-      <IonContent>
-        <IonContent className={"ion-padding home-page"} >
+      <div className="desktopview">
+          <IonList className="menu-list">
+            <IonListHeader>
+            <IonAvatar className={"avatar"} onClick={() => props.history.push("/")}>
+              <ProfileIdenticon size={40} string={accounts[0]} />
+            </IonAvatar>
+            </IonListHeader>
+            <div className="list-items">
+              <IonItem className={selectedView === "Recent News" ? "selected" : null} onClick={() => setSelectedView("Recent News")}>
+                News
+              </IonItem>
+              <IonItem className={selectedView === "Current Prices" ? "selected" : null} onClick={() => setSelectedView("Current Prices")}>
+                Prices
+              </IonItem>
+              <IonItem className={selectedView === "Contacts" ? "selected" : null} onClick={() => setSelectedView("Contacts")}>
+                Contacts
+              </IonItem>
+              <IonItem className={selectedView === "Transactions" ? "selected" : null} onClick={() => setSelectedView("Transactions")}>
+                Transactions
+              </IonItem>
+            </div>
+          </IonList>
+          <IonContent className={"ion-padding home-page"} >
+
           <IonCard className={"owners-acount"} >
             <IonCardHeader>
               <IonCardTitle className={"accounts-title"} >
@@ -315,53 +356,51 @@ const PaymentPage = (props) => {
               }
             </IonCardContent>
           </IonCard>
-          
 
-          <IonCard className={"accounts-card"}>
-            <IonToolbar>
-              <IonSegment value={selectedTab} onIonChange={e => setSelectedTab(e.detail.value)}>
-                <IonSegmentButton value="contacts">
-                  Contacts
-                </IonSegmentButton>
-                <IonSegmentButton value="transactions">
-                  Transactions
-                </IonSegmentButton>
-                <IonSegmentButton value="prices">
-                  Prices
-                </IonSegmentButton>
-              </IonSegment>
-            </IonToolbar>
-            {selectedTab === "contacts" ? 
+          <IonCard className={`main-card ${selectedView === "Recent News" ? "news-card" : null} `}>
+            {selectedView !== "Recent News" ?
+              <IonCardHeader>
+                <IonCardTitle className={"accounts-title"} >
+                  {selectedView}
+                </IonCardTitle>
+              </IonCardHeader>
+              : null
+            }
+            {selectedView === "Recent News" ? 
+              <div className="news-list">
+              <ArticleList  news={news} />
+              </div>
+              : selectedView === "Current Prices" ?
+              
+                currentPrices.length > 0 ?
+                  currentPrices.filter(it => it.name.toLowerCase().includes(searchString.toLowerCase()))
+                    .map((token) => {
+                      console.log(token)
+                      return(
+                        <TokenItem token={token} />
+                      )
+                    })
+                : 
+                    <IonItem>
+                      <IonLabel>
+                        <center>No Current Market Data</center>
+                      </IonLabel>
+                    </IonItem>
+              : selectedView === "Transactions" ?
+                <IonCardContent>
+                  <>
+                    Coming Soon
+                  </>
+                </IonCardContent>
+              :
               <ContactsList openModal={openModal} openTransak={openTransak} />
-
-            : selectedTab === "prices" ?
-            <IonList className="current-prices">
-              <IonSearchbar value={searchString} onIonChange={e => setSearchString(e.detail.value)}></IonSearchbar>
-
-              {currentPrices.length > 0 ?
-                currentPrices.filter(it => it.name.toLowerCase().includes(searchString.toLowerCase()))
-                  .map((token) => {
-                    console.log(token)
-                    return(
-                      <TokenItem token={token} />
-                    )
-                  })
-              : 
-                  <IonItem>
-                    <IonLabel>
-                      <center>No Current Market Data</center>
-                    </IonLabel>
-                  </IonItem>
-              }
-            </IonList>
-            :
-              <>
-                Coming Soon
-              </>
             }
           </IonCard>
+          
+          
         </IonContent>
-      </IonContent>
+        </div>
+
       <PurchaseModal  open={purchaseModalOpen}
                       tokenToSend={tokenToSend}
                       amount={purchaseAmount}

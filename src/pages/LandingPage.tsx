@@ -20,7 +20,6 @@ const LandingPage: React.FC<OwnProps> = ({  history }) => {
     FortmaticClient.user.login().then((response: any) => {
       history.push("/wallet")
       signInWithCustomToken(response[0]).then((user: any) => {
-        console.log(user)
         dispatch(setUser(user))
       }).then(() => {
       })

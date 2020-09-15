@@ -89,3 +89,50 @@ ion-content ion-toolbar {
 .contacts-header {
   padding-bottom: 0
 }
+
+.desktopview {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+
+  .menu-list {
+    
+    padding: 20px;
+    width: 200px;
+
+    .selected {
+      color: #6851ff;
+      font-weight: 600 !important;
+
+    }
+
+    .list-items {
+      margin-top: 30px;
+
+      ion-item {
+        cursor: pointer;
+        font-size: 17px;
+        font-weight: 300;
+
+      }
+    }
+  }
+
+  .main-card {
+    border-radius: 10px;
+    height: 500px;
+    min-width: 500px;
+    width: fit-content;
+    margin: auto;
+    padding: 10px;
+
+    .news-list {
+      height: 100%;
+    }
+  }
+
+  .news-card {
+    width: unset !important;
+    padding: 0 !important;
+  }
+}

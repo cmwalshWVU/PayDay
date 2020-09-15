@@ -6,7 +6,8 @@ import {
   IonRouterOutlet,
   IonTabBar,
   IonTabButton,
-  IonTabs
+  IonTabs,
+  isPlatform
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import { person, send, wallet, newspaperOutline, newspaper, walletOutline, personOutline } from 'ionicons/icons';
@@ -45,6 +46,7 @@ import NewsPage from './pages/NewsPage';
 import { setFeed, updateFeed } from './store/actions/newsActions';
 import Pusher, { Options } from 'pusher-js';
 import { getCurrentPrices } from './store/actions/currentPricesAction';
+import DesktopViewPage from './pages/DesktopViewPage';
 
 const App: React.FC = () => {
 
@@ -94,28 +96,38 @@ const App: React.FC = () => {
   return (
   <IonApp className={useDarkMode ? 'dark-theme' : 'light-mode'} >
     <IonReactRouter>
-      <IonTabs>
-        <IonRouterOutlet>
-          <Route path="/wallet" component={PaymentPage} exact={true} />
-          <Route path="/" render={() => user ? <AccountPage /> : <LandingPage />} exact={true} />
-          <Route path="/landing" component={LandingPage} exact={true} />
-          <Route path="/news" component={NewsPage} />
-          <Route render={() => <Redirect to="/" />} />
-          {/* <Route path="/login" component={Login} exact={true} />
-          <Route path="/signup" component={Signup} exact={true} /> */}
-        </IonRouterOutlet>
-        <IonTabBar slot="bottom">
-          <IonTabButton tab="main" href="/wallet">
-            <IonIcon icon={walletOutline} />
-          </IonTabButton>
-          <IonTabButton tab="news" href="/news">
-            <IonIcon icon={newspaperOutline} />
-          </IonTabButton>
-          <IonTabButton tab="account" href="/">
-            <IonIcon icon={personOutline} />
-          </IonTabButton>
-        </IonTabBar>
-      </IonTabs>
+      {isPlatform("mobile") ? 
+        <IonTabs>
+          <IonRouterOutlet>
+            <Route path="/wallet" component={PaymentPage} exact={true} />
+            <Route path="/" render={() => user ? <AccountPage /> : <LandingPage />} exact={true} />
+            <Route path="/landing" component={LandingPage} exact={true} />
+            <Route path="/news" component={NewsPage} />
+            <Route render={() => <Redirect to="/" />} />
+            {/* <Route path="/login" component={Login} exact={true} />
+            <Route path="/signup" component={Signup} exact={true} /> */}
+          </IonRouterOutlet>
+          <IonTabBar slot="bottom">
+            <IonTabButton tab="main" href="/wallet">
+              <IonIcon icon={walletOutline} />
+            </IonTabButton>
+            <IonTabButton tab="news" href="/news">
+              <IonIcon icon={newspaperOutline} />
+            </IonTabButton>
+            <IonTabButton tab="account" href="/">
+              <IonIcon icon={personOutline} />
+            </IonTabButton>
+          </IonTabBar>
+        </IonTabs>
+        : 
+          <IonRouterOutlet>
+            <Route path="/wallet" component={DesktopViewPage} exact={true} />
+            <Route path="/" render={() => user ? <AccountPage /> : <LandingPage />} exact={true} />
+            <Route render={() => <Redirect to="/" />} />
+            {/* <Route path="/login" component={Login} exact={true} />
+            <Route path="/signup" component={Signup} exact={true} /> */}
+          </IonRouterOutlet>
+        }
     </IonReactRouter>
   </IonApp>
   )

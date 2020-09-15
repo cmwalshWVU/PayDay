@@ -1,13 +1,14 @@
 import { RouteComponentProps, withRouter } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
 import React, { useEffect, useState } from "react";
-import { IonPage, IonContent, IonHeader, IonTitle, IonToolbar, IonButton, IonCard, IonItem, IonList, IonInput, IonLabel, IonRow, IonCol, IonToggle } from "@ionic/react";
-// import "./AccountsPage.scss"
+import { IonPage, IonContent, IonHeader, IonTitle, IonToolbar, IonButton, IonCard, IonItem, IonList, IonInput, IonLabel, IonRow, IonCol, IonToggle, isPlatform, IonIcon } from "@ionic/react";
+import "./AccountPage.scss"
 import { toast } from "../components/toast";
 import Firebase, { updateUsersEmail, updateUsersPassword, signout } from "../firebase";
 import { setUser, setUseDarkMode } from "../store/actions/userActions";
 import ProfileIdenticon from "../components/indenticton";
 import FortmaticClient from "../fortmatic";
+import { arrowBack } from "ionicons/icons";
 
 interface OwnProps extends RouteComponentProps {}
 
@@ -93,7 +94,14 @@ const AccountPage: React.FC<OwnProps> = ({history}) => {
       <IonPage id="account-page">
         <IonHeader>
         <IonToolbar>
+          {isPlatform("mobile") ?
             <IonTitle>Account</IonTitle>
+          : 
+            <IonTitle>
+              <IonIcon className={"back-arrow"} onClick={() => history.push("/wallet")} icon={arrowBack}/>
+            </IonTitle>
+          }
+            
         </IonToolbar>
         </IonHeader>
         <IonContent>
