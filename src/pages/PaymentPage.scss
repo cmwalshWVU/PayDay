@@ -95,6 +95,12 @@ ion-content ion-toolbar {
   flex-direction: row;
   height: 100%;
 
+  .main-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
   .menu-list {
     
     padding: 20px;
@@ -125,6 +131,7 @@ ion-content ion-toolbar {
     width: fit-content;
     margin: auto;
     padding: 10px;
+    overflow: scroll;
 
     .news-list {
       height: 100%;
@@ -132,7 +139,14 @@ ion-content ion-toolbar {
   }
 
   .news-card {
-    width: unset !important;
+    flex-grow: 1;
+    // height: fill-available;
+    width: 95% !important;
     padding: 0 !important;
+  }
+
+  .price-card {
+    flex-grow: 1;
+    // height: fill-available !important;
   }
 }

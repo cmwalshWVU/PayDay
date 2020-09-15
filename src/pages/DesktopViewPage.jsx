@@ -328,78 +328,85 @@ const PaymentPage = (props) => {
           </IonList>
           <IonContent className={"ion-padding home-page"} >
 
-          <IonCard className={"owners-acount"} >
-            <IonCardHeader>
-              <IonCardTitle className={"accounts-title"} >
-                Personal Account
-              </IonCardTitle>
-            </IonCardHeader>
-            <IonCardContent>
-              {fortmatic.user.isLoggedIn() && accounts.length > 0 ? 
-              <>
-                <IonList>
-                  {accounts.map((account) => 
-                    <PersonalAccountItem tokens={ERC20TOKENS} openModal={openTransak} ownersAccount={true} openTransak={openTransak} account={{name: "", address: account}} />
-                  )}
-                </IonList>
-                <IonButton onClick={() => setPurchaseModalOpen(true)}>
-                  Buy Crypto
-                </IonButton>
-                <IonButton size={"normal"}  onClick={() => openModal(true, "")} >
-                  Transfer Funds
-                </IonButton>
-              </>
-              : 
-                <IonButton onClick={() => FortmaticClient.user.login()}>
-                  Login To Fortmatic
-                </IonButton>
-              }
-            </IonCardContent>
-          </IonCard>
-
-          <IonCard className={`main-card ${selectedView === "Recent News" ? "news-card" : null} `}>
-            {selectedView !== "Recent News" ?
-              <IonCardHeader>
-                <IonCardTitle className={"accounts-title"} >
-                  {selectedView}
-                </IonCardTitle>
-              </IonCardHeader>
-              : null
-            }
-            {selectedView === "Recent News" ? 
-              <div className="news-list">
-              <ArticleList  news={news} />
-              </div>
-              : selectedView === "Current Prices" ?
-              
-                currentPrices.length > 0 ?
-                  currentPrices.filter(it => it.name.toLowerCase().includes(searchString.toLowerCase()))
-                    .map((token) => {
-                      console.log(token)
-                      return(
-                        <TokenItem token={token} />
-                      )
-                    })
-                : 
-                    <IonItem>
-                      <IonLabel>
-                        <center>No Current Market Data</center>
-                      </IonLabel>
-                    </IonItem>
-              : selectedView === "Transactions" ?
+            <div className="main-content">
+              <IonCard className={"owners-acount"} >
+                <IonCardHeader>
+                  <IonCardTitle className={"accounts-title"} >
+                    Personal Account
+                  </IonCardTitle>
+                </IonCardHeader>
                 <IonCardContent>
+                  {fortmatic.user.isLoggedIn() && accounts.length > 0 ? 
                   <>
-                    Coming Soon
+                    <IonList>
+                      {accounts.map((account) => 
+                        <PersonalAccountItem tokens={ERC20TOKENS} openModal={openTransak} ownersAccount={true} openTransak={openTransak} account={{name: "", address: account}} />
+                      )}
+                    </IonList>
+                    <IonButton onClick={() => setPurchaseModalOpen(true)}>
+                      Buy Crypto
+                    </IonButton>
+                    <IonButton size={"normal"}  onClick={() => openModal(true, "")} >
+                      Transfer Funds
+                    </IonButton>
                   </>
+                  : 
+                    <IonButton onClick={() => FortmaticClient.user.login()}>
+                      Login To Fortmatic
+                    </IonButton>
+                  }
                 </IonCardContent>
-              :
-              <ContactsList openModal={openModal} openTransak={openTransak} />
-            }
-          </IonCard>
-          
-          
+              </IonCard>
+
+              <IonCard className={`main-card ${selectedView === "Recent News" ? "news-card" : selectedView === "Current Prices" ? "price-card" : null} `}>
+                {selectedView !== "Recent News" ?
+                  <IonCardHeader>
+                    <IonCardTitle className={"accounts-title"} >
+                      {selectedView}
+                    </IonCardTitle>
+                  </IonCardHeader>
+                  : null
+                }
+                {selectedView === "Recent News" ? 
+                  <div className="news-list">
+                    <ArticleList  news={news} />
+                  </div>
+                  : selectedView === "Current Prices" ?
+                  <>
+                  <IonSearchbar value={searchString} onIonChange={e => setSearchString(e.detail.value)}></IonSearchbar>
+                  <IonList className="current-prices">
+                  
+                    {currentPrices.length > 0 ?
+                      currentPrices.filter(it => it.name.toLowerCase().includes(searchString.toLowerCase()))
+                        .map((token) => {
+                          console.log(token)
+                          return(
+                            <TokenItem token={token} />
+                          )
+                        })
+                    : 
+                        <IonItem>
+                          <IonLabel>
+                            <center>No Current Market Data</center>
+                          </IonLabel>
+                        </IonItem>
+                    }
+                </IonList>
+                </>
+                  : selectedView === "Transactions" ?
+                    <IonCardContent>
+                      <>
+                        Coming Soon
+                      </>
+                    </IonCardContent>
+                  :
+                  <ContactsList openModal={openModal} openTransak={openTransak} />
+                }
+            </IonCard>
+              
+          </div>
         </IonContent>
-        </div>
+      </div>
 
       <PurchaseModal  open={purchaseModalOpen}
                       tokenToSend={tokenToSend}
