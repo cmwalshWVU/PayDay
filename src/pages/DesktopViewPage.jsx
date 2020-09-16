@@ -375,9 +375,12 @@ const PaymentPage = (props) => {
                         Recent News
                       </IonCardTitle>
                     </IonCardHeader>
+                    <IonCardContent>
+
                     <div className="current-prices">
                       <DesktopArticleList  news={news} />
                     </div>
+                    </IonCardContent>
                   </IonCard>
                   <IonCard className={`main-card ${selectedView === "Recent News" ? "news-card" : selectedView === "Current Prices" ? "price-card" : null} `}>
                     <IonCardHeader>
@@ -385,6 +388,8 @@ const PaymentPage = (props) => {
                         Current Prices
                       </IonCardTitle>
                     </IonCardHeader>
+                    <IonCardContent>
+
                     <IonSearchbar value={searchString} onIonChange={e => setSearchString(e.detail.value)}></IonSearchbar>
                     <IonList className="current-prices">
                       {currentPrices.length > 0 ?
@@ -403,6 +408,7 @@ const PaymentPage = (props) => {
                           </IonItem>
                       }
                     </IonList>
+                    </IonCardContent>
                   </IonCard>
                 </div>
               : user !== null ? 
@@ -413,7 +419,9 @@ const PaymentPage = (props) => {
                           Contacts
                         </IonCardTitle>
                       </IonCardHeader>
-                      <ContactsList openModal={openModal} openTransak={openTransak} />
+                      <IonCardContent>
+                        <ContactsList openModal={openModal} openTransak={openTransak} />
+                      </IonCardContent>
                     </IonCard>
                     <IonCard className={`main-card ${selectedView === "Recent News" ? "news-card" : selectedView === "Current Prices" ? "price-card" : null} `}>
                       <IonCardHeader>
