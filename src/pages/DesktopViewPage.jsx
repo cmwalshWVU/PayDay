@@ -20,6 +20,7 @@ import ContactsList from '../components/ContactsList';
 import TransferModal from '../components/TransferModal';
 import ProfileIdenticon from '../components/indenticton';
 import ArticleList from '../components/ArticleList';
+import DesktopArticleList from '../components/desktopArticleList';
 
 const PaymentPage = (props) => {
   const [accounts, setaccounts] = useState([])
@@ -47,7 +48,7 @@ const PaymentPage = (props) => {
 
   const [searchString, setSearchString] = useState("")
 
-  const [selectedView, setSelectedView] = useState("Recent News")
+  const [selectedView, setSelectedView] = useState("Market")
 
   const dispatch = useDispatch()
 
@@ -311,7 +312,7 @@ const PaymentPage = (props) => {
               <ProfileIdenticon size={40} string={accounts[0]} />
             </IonAvatar>
             </IonListHeader>
-            <div className="list-items">
+            {/* <div className="list-items">
               <IonItem className={selectedView === "Recent News" ? "selected" : null} onClick={() => setSelectedView("Recent News")}>
                 News
               </IonItem>
@@ -323,6 +324,14 @@ const PaymentPage = (props) => {
               </IonItem>
               <IonItem className={selectedView === "Transactions" ? "selected" : null} onClick={() => setSelectedView("Transactions")}>
                 Transactions
+              </IonItem>
+            </div> */}
+            <div className="list-items">
+              <IonItem className={selectedView === "Market" ? "selected" : null} onClick={() => setSelectedView("Market")}>
+                Market
+              </IonItem>
+              <IonItem className={selectedView === "Wallet" ? "selected" : null} onClick={() => setSelectedView("Wallet")}>
+                Wallet
               </IonItem>
             </div>
           </IonList>
@@ -357,8 +366,70 @@ const PaymentPage = (props) => {
                   }
                 </IonCardContent>
               </IonCard>
+              { selectedView === "Market" ?
+                <div className="market-cards">
+                  <IonCard className={`main-card ${selectedView === "Recent News" ? "news-card" : selectedView === "Current Prices" ? "price-card" : null} `}>
+                    <IonCardHeader>
+                      <IonCardTitle className={"accounts-title"} >
+                        Recent News
+                      </IonCardTitle>
+                    </IonCardHeader>
+                    <div className="current-prices">
+                      <DesktopArticleList  news={news} />
+                    </div>
+                  </IonCard>
+                  <IonCard className={`main-card ${selectedView === "Recent News" ? "news-card" : selectedView === "Current Prices" ? "price-card" : null} `}>
+                    <IonCardHeader>
+                      <IonCardTitle className={"accounts-title"} >
+                        Current Prices
+                      </IonCardTitle>
+                    </IonCardHeader>
+                    <IonSearchbar value={searchString} onIonChange={e => setSearchString(e.detail.value)}></IonSearchbar>
+                    <IonList className="current-prices">
+                      {currentPrices.length > 0 ?
+                        currentPrices.filter(it => it.name.toLowerCase().includes(searchString.toLowerCase()))
+                          .map((token) => {
+                            console.log(token)
+                            return(
+                              <TokenItem token={token} />
+                            )
+                          })
+                      : 
+                          <IonItem>
+                            <IonLabel>
+                              <center>No Current Market Data</center>
+                            </IonLabel>
+                          </IonItem>
+                      }
+                    </IonList>
+                  </IonCard>
+                </div>
+              : 
+              <div className="market-cards">
+                  <IonCard className={`main-card ${selectedView === "Recent News" ? "news-card" : selectedView === "Current Prices" ? "price-card" : null} `}>
+                    <IonCardHeader>
+                      <IonCardTitle className={"accounts-title"} >
+                        Contacts
+                      </IonCardTitle>
+                    </IonCardHeader>
+                    <ContactsList openModal={openModal} openTransak={openTransak} />
+                  </IonCard>
+                  <IonCard className={`main-card ${selectedView === "Recent News" ? "news-card" : selectedView === "Current Prices" ? "price-card" : null} `}>
+                    <IonCardHeader>
+                      <IonCardTitle className={"accounts-title"} >
+                        Transactions
+                      </IonCardTitle>
+                    </IonCardHeader>
+                    <IonCardContent>
+                      <>
+                        Coming Soon
+                      </>
+                    </IonCardContent>
+                  </IonCard>
+                </div>
 
-              <IonCard className={`main-card ${selectedView === "Recent News" ? "news-card" : selectedView === "Current Prices" ? "price-card" : null} `}>
+              }
+              {/* <IonCard className={`main-card ${selectedView === "Recent News" ? "news-card" : selectedView === "Current Prices" ? "price-card" : null} `}>
                 {selectedView !== "Recent News" ?
                   <IonCardHeader>
                     <IonCardTitle className={"accounts-title"} >
@@ -369,7 +440,7 @@ const PaymentPage = (props) => {
                 }
                 {selectedView === "Recent News" ? 
                   <div className="news-list">
-                    <ArticleList  news={news} />
+                    <DesktopArticleList  news={news} />
                   </div>
                   : selectedView === "Current Prices" ?
                   <>
@@ -402,7 +473,7 @@ const PaymentPage = (props) => {
                   :
                   <ContactsList openModal={openModal} openTransak={openTransak} />
                 }
-            </IonCard>
+            </IonCard> */}
               
           </div>
         </IonContent>

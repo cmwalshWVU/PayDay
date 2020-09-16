@@ -30,3 +30,35 @@
 .article-grid {
     width: 90%;
 }
+
+.article-item {
+    .article-img {
+        max-width: 80px;
+        max-height: 80px;
+    }
+
+    .article-content {
+        padding: 20px 20px 0 20px;
+    }
+
+    .articleTitle {
+        font-size: 16px;
+        margin-top: 2px;
+    }
+
+    .article-body {
+        margin-top: 8px;
+        font-size: 14px;
+    }
+}
+
+.desktop-article {
+    white-space: normal;
+    
+    .article-content {
+        padding: 0 20px 0 20px !important;
+    }
+    .article-content {
+        white-space: normal;
+    }
+}

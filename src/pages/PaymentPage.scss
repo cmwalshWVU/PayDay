@@ -43,7 +43,7 @@ ion-content ion-toolbar {
 
 }
 
-.current-prices {
+.current-prices, .contacts-list {
   max-height: 600px;
   overflow: scroll;
 }
@@ -62,6 +62,8 @@ ion-content ion-toolbar {
   border-radius: 16px;
   max-width: 600px;
   margin: 20px auto 20px auto;
+  height: fit-content;
+  overflow: visible;
 }
 
 .avatar {
@@ -126,15 +128,15 @@ ion-content ion-toolbar {
 
   .main-card {
     border-radius: 10px;
-    height: 500px;
-    min-width: 500px;
-    width: fit-content;
-    margin: auto;
+    max-height: 96%;
+    height: fit-content;
+    width: 45%;
+    margin: 30px auto 10px auto;
     padding: 10px;
     overflow: scroll;
 
     .news-list {
-      height: 100%;
+      // height: 100%;
     }
   }
 
@@ -148,5 +150,15 @@ ion-content ion-toolbar {
   .price-card {
     flex-grow: 1;
     // height: fill-available !important;
+  }
+}
+
+.market-cards {
+  max-height: 70%;
+  display: flex;
+  flex-direction: row;
+
+  .main-card {
+    // margin: 8px;
   }
 }
