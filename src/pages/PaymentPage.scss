@@ -43,7 +43,7 @@ ion-content ion-toolbar {
 
 }
 
-.current-prices {
+.current-prices, .contacts-list {
   max-height: 600px;
   overflow: scroll;
 }
@@ -62,6 +62,8 @@ ion-content ion-toolbar {
   border-radius: 16px;
   max-width: 600px;
   margin: 20px auto 20px auto;
+  height: fit-content;
+  overflow: visible;
 }
 
 .avatar {
@@ -101,6 +103,18 @@ ion-content ion-toolbar {
     height: 100%;
   }
 
+  .news-list {
+    display: flex;
+    flex-direction: column;
+    border-radius: 16px;
+    max-width: 80%;
+    margin: auto;
+
+    .articles {
+      overflow: scroll;
+    }
+  }
+
   .menu-list {
     
     padding: 20px;
@@ -126,27 +140,53 @@ ion-content ion-toolbar {
 
   .main-card {
     border-radius: 10px;
-    height: 500px;
-    min-width: 500px;
-    width: fit-content;
-    margin: auto;
+    width: 45%;
+    margin: 30px auto 10px auto;
     padding: 10px;
-    overflow: scroll;
-
-    .news-list {
-      height: 100%;
-    }
+    display: flex;
+    flex-direction: column;
   }
 
   .news-card {
     flex-grow: 1;
-    // height: fill-available;
     width: 95% !important;
     padding: 0 !important;
-  }
 
+  }
+  .read-more {
+    text-align: right;
+  }
   .price-card {
-    flex-grow: 1;
-    // height: fill-available !important;
+    display: flex;
+    flex-direction: column;
+    border-radius: 16px;
+    width: 80%;
+    margin: auto;
+
+    .price-list {
+      overflow: scroll;
+    }
+
+    .price-tab {
+      display: flex;
+
+      .segment-icon {
+        align-self: center;
+        padding-left: 4px;
+      }
+    }
+  }
+}
+
+.market-cards {
+  max-height: 70%;
+  display: flex;
+  flex-direction: row;
+
+  .main-card {
+
+    .article-list, .price-list {
+      overflow: scroll;
+    }
   }
 }

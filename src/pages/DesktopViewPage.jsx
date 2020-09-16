@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { IonFab, IonIcon, IonFabButton, IonItem, IonLabel, IonListHeader, IonList, IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonModal, IonInput, IonButtons, IonFooter, IonSelectOption, IonSelect, IonSegment, IonSegmentButton, IonSearchbar, IonAvatar } from '@ionic/react';
 import './PaymentPage.scss';
 import transakSDK from '@transak/transak-sdk'
-import { add } from 'ionicons/icons';
+import { add, chevronDown, chevronUp } from 'ionicons/icons';
 import { useSelector, useDispatch } from 'react-redux';
 import AccountItem from '../components/accountItem';
 import NewAccountItem from '../components/NewAccountItem';
@@ -20,6 +20,8 @@ import ContactsList from '../components/ContactsList';
 import TransferModal from '../components/TransferModal';
 import ProfileIdenticon from '../components/indenticton';
 import ArticleList from '../components/ArticleList';
+import DesktopArticleList from '../components/desktopArticleList';
+import LandingPageComponent from '../components/LandingPageComponent'
 
 const PaymentPage = (props) => {
   const [accounts, setaccounts] = useState([])
@@ -37,17 +39,16 @@ const PaymentPage = (props) => {
 
   const web3 = useSelector((state) => state.user.web3)
 
-  const [dependentAccounts, setDependentAccounts] = useState([])
   const [fortmaticLoggedIn, setFortmaticLoggedIn] = useState(fortmatic ? fortmatic.user.isLoggedIn() : false)
 
-  const [addNewUser, setAddNewUser] = useState(false)
   const [open, setOpen] = useState(false)
   const [transferToAddress, setTransferToAddress] = useState("")
-  const [selectedTab, setSelectedTab] = useState("contacts")
+  const [selectedTab, setSelectedTab] = useState("all")
 
   const [searchString, setSearchString] = useState("")
+  const [sortingDirection, setSortingDirection] = useState("")
 
-  const [selectedView, setSelectedView] = useState("Recent News")
+  const [selectedView, setSelectedView] = useState("Wallet")
 
   const dispatch = useDispatch()
 
@@ -307,7 +308,7 @@ const PaymentPage = (props) => {
       <div className="desktopview">
           <IonList className="menu-list">
             <IonListHeader>
-            <IonAvatar className={"avatar"} onClick={() => props.history.push("/")}>
+            <IonAvatar className={"avatar"} onClick={() => props.history.push("/account")}>
               <ProfileIdenticon size={40} string={accounts[0]} />
             </IonAvatar>
             </IonListHeader>
@@ -315,95 +316,175 @@ const PaymentPage = (props) => {
               <IonItem className={selectedView === "Recent News" ? "selected" : null} onClick={() => setSelectedView("Recent News")}>
                 News
               </IonItem>
-              <IonItem className={selectedView === "Current Prices" ? "selected" : null} onClick={() => setSelectedView("Current Prices")}>
-                Prices
+              <IonItem className={selectedView === "Market" ? "selected" : null} onClick={() => setSelectedView("Market")}>
+                Market
               </IonItem>
-              <IonItem className={selectedView === "Contacts" ? "selected" : null} onClick={() => setSelectedView("Contacts")}>
-                Contacts
-              </IonItem>
-              <IonItem className={selectedView === "Transactions" ? "selected" : null} onClick={() => setSelectedView("Transactions")}>
-                Transactions
+              <IonItem className={selectedView === "Wallet" ? "selected" : null} onClick={() => setSelectedView("Wallet")}>
+                Wallet
               </IonItem>
             </div>
           </IonList>
           <IonContent className={"ion-padding home-page"} >
 
             <div className="main-content">
-              <IonCard className={"owners-acount"} >
-                <IonCardHeader>
-                  <IonCardTitle className={"accounts-title"} >
-                    Personal Account
-                  </IonCardTitle>
-                </IonCardHeader>
-                <IonCardContent>
-                  {fortmatic.user.isLoggedIn() && accounts.length > 0 ? 
-                  <>
-                    <IonList>
-                      {accounts.map((account) => 
-                        <PersonalAccountItem tokens={ERC20TOKENS} openModal={openTransak} ownersAccount={true} openTransak={openTransak} account={{name: "", address: account}} />
-                      )}
-                    </IonList>
-                    <IonButton onClick={() => setPurchaseModalOpen(true)}>
-                      Buy Crypto
-                    </IonButton>
-                    <IonButton size={"normal"}  onClick={() => openModal(true, "")} >
-                      Transfer Funds
-                    </IonButton>
-                  </>
-                  : 
-                    <IonButton onClick={() => FortmaticClient.user.login()}>
-                      Login To Fortmatic
-                    </IonButton>
-                  }
-                </IonCardContent>
-              </IonCard>
-
-              <IonCard className={`main-card ${selectedView === "Recent News" ? "news-card" : selectedView === "Current Prices" ? "price-card" : null} `}>
-                {selectedView !== "Recent News" ?
+              { selectedView !== "Wallet" || (selectedView === "Wallet" && user) ?
+                <IonCard className={"owners-acount"} >
                   <IonCardHeader>
                     <IonCardTitle className={"accounts-title"} >
-                      {selectedView}
+                      Personal Account
                     </IonCardTitle>
                   </IonCardHeader>
-                  : null
-                }
-                {selectedView === "Recent News" ? 
-                  <div className="news-list">
-                    <ArticleList  news={news} />
-                  </div>
-                  : selectedView === "Current Prices" ?
-                  <>
-                  <IonSearchbar value={searchString} onIonChange={e => setSearchString(e.detail.value)}></IonSearchbar>
-                  <IonList className="current-prices">
-                  
-                    {currentPrices.length > 0 ?
-                      currentPrices.filter(it => it.name.toLowerCase().includes(searchString.toLowerCase()))
-                        .map((token) => {
-                          console.log(token)
-                          return(
-                            <TokenItem token={token} />
-                          )
-                        })
-                    : 
-                        <IonItem>
-                          <IonLabel>
-                            <center>No Current Market Data</center>
-                          </IonLabel>
-                        </IonItem>
+                  <IonCardContent>
+                    {fortmatic.user.isLoggedIn() && accounts.length > 0 ? 
+                    <>
+                      <IonList>
+                        {accounts.map((account) => 
+                          <PersonalAccountItem tokens={ERC20TOKENS} openModal={openTransak} ownersAccount={true} openTransak={openTransak} account={{name: "", address: account}} />
+                        )}
+                      </IonList>
+                      <IonButton onClick={() => setPurchaseModalOpen(true)}>
+                        Buy Crypto
+                      </IonButton>
+                      <IonButton size={"normal"}  onClick={() => openModal(true, "")} >
+                        Transfer Funds
+                      </IonButton>
+                    </>
+                    :
+                      <IonButton onClick={() => FortmaticClient.user.login()}>
+                        Login To Fortmatic
+                      </IonButton>
                     }
-                </IonList>
-                </>
-                  : selectedView === "Transactions" ?
-                    <IonCardContent>
-                      <>
-                        Coming Soon
-                      </>
+                  </IonCardContent>
+                </IonCard>
+                : null
+              }
+              { selectedView === "Market" ?
+                  <IonCard className={`price-card`}>
+                    <IonCardHeader>
+                      <IonCardTitle className={"accounts-title"} >
+                        Current Prices
+                      </IonCardTitle>
+                    </IonCardHeader>
+                    <IonSearchbar value={searchString} onIonChange={e => setSearchString(e.detail.value)}></IonSearchbar>
+                    <IonSegment value={selectedTab} >
+                      <IonSegmentButton value="all" onClick={() => {
+                        setSelectedTab("all")
+                        setSortingDirection("desc")}
+                      }>
+                        All
+                      </IonSegmentButton>
+                      <IonSegmentButton value="priceChange" onClick={() => {
+                        if (selectedTab === "priceChange") {
+                          if (sortingDirection === "asc") {
+                            setSortingDirection("desc")
+                          } else if (sortingDirection === "desc") {
+                            setSortingDirection("asc")
+                          } else {
+                            setSortingDirection("desc")
+                          }
+                        } else {
+                          setSelectedTab("priceChange")
+                          setSortingDirection("desc")
+                        }
+                      }}>
+                        <div className="price-tab">
+                          Price Change {selectedTab  === "priceChange" ? sortingDirection === "desc" ? <IonIcon className={"segment-icon"} icon={chevronDown} /> : sortingDirection === "asc" ? <IonIcon className={"segment-icon"} icon={chevronUp}/> : null : null}
+                        </div>
+                      </IonSegmentButton>
+                      <IonSegmentButton value="marketCap" onClick={() => {
+                        if (selectedTab === "marketCap") {
+                          if (sortingDirection === "asc") {
+                            setSortingDirection("desc")
+                          } else if (sortingDirection === "desc") {
+                            setSortingDirection("asc")
+                          } else {
+                            setSortingDirection("desc")
+                          }
+                        } else {
+                          setSelectedTab("marketCap")
+                          setSortingDirection("desc")
+                        }
+                      }}>
+                        <div className="price-tab">
+                          Market Cap {selectedTab  === "marketCap" ? sortingDirection === "desc" ? <IonIcon className={"segment-icon"} icon={chevronDown} /> : sortingDirection === "asc" ? <IonIcon className={"segment-icon"} icon={chevronUp}/> : null : null}
+                        </div>
+                      </IonSegmentButton>
+                    </IonSegment>
+                    <IonCardContent className="price-list">
+                      <IonList>
+                        {currentPrices.length > 0 ?
+                          currentPrices.filter(it => it.name.toLowerCase().includes(searchString.toLowerCase()))
+                            .sort((a,b) => {
+                              if (selectedTab === "priceChange") {
+                                if (sortingDirection === "desc") {
+                                  return a.current_price > b.current_price ? -1 : 1
+                                } else {
+                                  return a.current_price > b.current_price ? 1 : -1
+                                }
+                              } if (selectedTab === "marketCap") {
+                                if (sortingDirection === "desc") {
+                                  return a.market_cap > b.market_cap ? -1 : 1
+                                } else {
+                                  return a.market_cap > b.market_cap ? 1 : -1
+                                }
+                              }
+                            })
+                            .map((token) => {
+                              return(
+                                <TokenItem token={token} />
+                              )
+                            })
+                        :
+                          <IonItem>
+                            <IonLabel>
+                              <center>No Current Market Data</center>
+                            </IonLabel>
+                          </IonItem>
+                        }
+                      </IonList>
                     </IonCardContent>
-                  :
-                  <ContactsList openModal={openModal} openTransak={openTransak} />
-                }
-            </IonCard>
-              
+                  </IonCard>
+                // </div>
+              : selectedView === "Recent News" ?
+                <IonCard className="news-list">
+                  <IonCardHeader>
+                    <IonCardTitle className={"accounts-title"} >
+                      Recent News
+                    </IonCardTitle>
+                  </IonCardHeader>
+                  <IonCardContent className="articles">
+                    <DesktopArticleList  news={news} />
+                  </IonCardContent>
+                </IonCard>
+              :
+              user !== null ?
+                <div className="market-cards">
+                    <IonCard className={`main-card ${selectedView === "Recent News" ? "news-card" : selectedView === "Current Prices" ? "price-card" : null} `}>
+                      <IonCardHeader>
+                        <IonCardTitle className={"accounts-title"} >
+                          Contacts
+                        </IonCardTitle>
+                      </IonCardHeader>
+                      <IonCardContent>
+                        <ContactsList openModal={openModal} openTransak={openTransak} />
+                      </IonCardContent>
+                    </IonCard>
+                    <IonCard className={`main-card ${selectedView === "Recent News" ? "news-card" : selectedView === "Current Prices" ? "price-card" : null} `}>
+                      <IonCardHeader>
+                        <IonCardTitle className={"accounts-title"} >
+                          Transactions
+                        </IonCardTitle>
+                      </IonCardHeader>
+                      <IonCardContent>
+                        <>
+                          Coming Soon
+                        </>
+                      </IonCardContent>
+                    </IonCard>
+                  </div>
+                : 
+                <LandingPageComponent />
+              }              
           </div>
         </IonContent>
       </div>

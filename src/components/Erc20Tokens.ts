@@ -24,6 +24,7 @@ export const USDC = {symbol: "USDC",name: "USD Coin", address: '0xa0b86991c6218b
 export const USDT = {symbol: "USDT",name: "Tether", address: '0xdac17f958d2ee523a2206206994597c13d831ec7'}
 export const WETH = {symbol: "WETH",name: "Wrapped Ether", address: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2'}
 export const ZRX = {symbol: "ZRX",name: "0RX", address: '0xe41d2489571d322189246dafa5ebde1f4699f498'}
+export const WBTC = {symbol: "WBTC",name: "Wrapped Bitcoin", address: '0x2260fac5e5542a773aa44fbcfedf7c193bc2c599'}
 
 export const ERC20TOKENS = [BAND, BAT, BNB, CBAT, CDAI, CEL, CETH, CUSDC, CZRX, DAI,
-    KNC, LEND, LINK, MATIC, MKR, OMG, PAX, POWR, REN, RLC, SNX, UBT, USDC, USDT, WETH, ZRX]
+    KNC, LEND, LINK, MATIC, MKR, OMG, PAX, POWR, REN, RLC, SNX, UBT, USDC, USDT, WETH, ZRX, WBTC]

@@ -121,8 +121,8 @@ const App: React.FC = () => {
         </IonTabs>
         : 
           <IonRouterOutlet>
-            <Route path="/wallet" component={DesktopViewPage} exact={true} />
-            <Route path="/" render={() => user ? <AccountPage /> : <LandingPage />} exact={true} />
+            <Route path="/" component={DesktopViewPage} exact={true} />
+            <Route path="/account" component={AccountPage} exact={true} />
             <Route render={() => <Redirect to="/" />} />
             {/* <Route path="/login" component={Login} exact={true} />
             <Route path="/signup" component={Signup} exact={true} /> */}

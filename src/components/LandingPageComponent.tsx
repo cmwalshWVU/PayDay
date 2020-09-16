@@ -1,7 +1,7 @@
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import React, { useState } from 'react';
 import { IonContent, IonPage,IonRow, IonCol, IonButton, IonList, IonItem, IonCard, IonCardTitle, IonCardContent, IonIcon } from '@ionic/react';
-import './LandingPage.scss'
+import '../pages/LandingPage.scss'
 import { useSelector, useDispatch } from "react-redux";
 import { signInWithCustomToken } from "../firebase";
 import { setUser } from "../store/actions/userActions";
@@ -10,7 +10,7 @@ import { chevronUp, chevronDown } from "ionicons/icons";
 
 interface OwnProps extends RouteComponentProps {}
 
-const LandingPage: React.FC<OwnProps> = ({  history }) => {
+const LandingPageComponent: React.FC<OwnProps> = ({  history }) => {
 
   const fortmatic = useSelector((state: any) => state.user.fortmatic)
   const [showInfo, setShowInfo] = useState(false)
@@ -27,12 +27,16 @@ const LandingPage: React.FC<OwnProps> = ({  history }) => {
   }
 
   return (
-    <IonPage id="landing-page">
-      <IonContent className={"ion-padding"}>
+    <>
         <div className="login-logo">
           <img className={"logo"} src={`assets/icon/logo.png`} alt="Ionic logo" />
         </div>
         <div className="col s12 center-align">
+          {/* <h4>
+            <span style={{ fontFamily: "monospace" }}>Is it {" "}
+            <b>PayDay</b>
+            {" "} yet?</span> 
+          </h4> */}
           <h2 className="about-title">
             <span style={{ fontFamily: "monospace" }}>New to Crypto? Long term HODLer?</span> 
           </h2>
@@ -83,9 +87,8 @@ const LandingPage: React.FC<OwnProps> = ({  history }) => {
           </IonCol>
         </IonRow>  
         </div>
-      </IonContent>
-    </IonPage>
-  );
+      </>
+    );
 };
 
-export default withRouter(LandingPage);
+export default withRouter(LandingPageComponent);
