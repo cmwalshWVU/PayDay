@@ -327,34 +327,37 @@ const PaymentPage = (props) => {
           <IonContent className={"ion-padding home-page"} >
 
             <div className="main-content">
-              <IonCard className={"owners-acount"} >
-                <IonCardHeader>
-                  <IonCardTitle className={"accounts-title"} >
-                    Personal Account
-                  </IonCardTitle>
-                </IonCardHeader>
-                <IonCardContent>
-                  {fortmatic.user.isLoggedIn() && accounts.length > 0 ? 
-                  <>
-                    <IonList>
-                      {accounts.map((account) => 
-                        <PersonalAccountItem tokens={ERC20TOKENS} openModal={openTransak} ownersAccount={true} openTransak={openTransak} account={{name: "", address: account}} />
-                      )}
-                    </IonList>
-                    <IonButton onClick={() => setPurchaseModalOpen(true)}>
-                      Buy Crypto
-                    </IonButton>
-                    <IonButton size={"normal"}  onClick={() => openModal(true, "")} >
-                      Transfer Funds
-                    </IonButton>
-                  </>
-                  : 
-                    <IonButton onClick={() => FortmaticClient.user.login()}>
-                      Login To Fortmatic
-                    </IonButton>
-                  }
-                </IonCardContent>
-              </IonCard>
+              { selectedView !== "Wallet" || (selectedView === "Wallet" && user) ?
+                <IonCard className={"owners-acount"} >
+                  <IonCardHeader>
+                    <IonCardTitle className={"accounts-title"} >
+                      Personal Account
+                    </IonCardTitle>
+                  </IonCardHeader>
+                  <IonCardContent>
+                    {fortmatic.user.isLoggedIn() && accounts.length > 0 ? 
+                    <>
+                      <IonList>
+                        {accounts.map((account) => 
+                          <PersonalAccountItem tokens={ERC20TOKENS} openModal={openTransak} ownersAccount={true} openTransak={openTransak} account={{name: "", address: account}} />
+                        )}
+                      </IonList>
+                      <IonButton onClick={() => setPurchaseModalOpen(true)}>
+                        Buy Crypto
+                      </IonButton>
+                      <IonButton size={"normal"}  onClick={() => openModal(true, "")} >
+                        Transfer Funds
+                      </IonButton>
+                    </>
+                    :
+                      <IonButton onClick={() => FortmaticClient.user.login()}>
+                        Login To Fortmatic
+                      </IonButton>
+                    }
+                  </IonCardContent>
+                </IonCard>
+                : null
+              }
               { selectedView === "Market" ?
                   <IonCard className={`price-card`}>
                     <IonCardHeader>
