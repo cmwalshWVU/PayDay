@@ -16,177 +16,118 @@ const AccountPage: React.FC<OwnProps> = ({history}) => {
   
   const fortmatic = useSelector((state: any) => state.user.fortmatic)
 
-    const dispatch = useDispatch()
-    const useDarkMode = useSelector((state: any) => state.user.useDarkMode)
-    const web3 = useSelector((state: any) => state.user.web3)
+  const user = useSelector((state: any) => state.user.user)
 
-    const [showEditPassword, setShowEditPassword] = useState(false);
-    const [updatedPassword, setUpdatedPassword] = useState("")
-    const [updatedPasswordConfirmed, setUpdatedPasswordConfirmed] = useState("")
+  const dispatch = useDispatch()
+  const useDarkMode = useSelector((state: any) => state.user.useDarkMode)
+  const web3 = useSelector((state: any) => state.user.web3)
 
-    const [showEditEmail, setShowEditEmail] = useState(false);
-    const [updatedEmail, setUpdatedEmail] = useState("")
-    const [updatedEmailConfirmed, setUpdatedEmailConfirmed] = useState("")
-    const [account, setAccount] = useState("")
+  const [showEditPassword, setShowEditPassword] = useState(false);
+  const [updatedPassword, setUpdatedPassword] = useState("")
+  const [updatedPasswordConfirmed, setUpdatedPasswordConfirmed] = useState("")
 
-    const clicked = (text: string) => {
-      console.log(`Clicked ${text}`);
-    }
+  const [showEditEmail, setShowEditEmail] = useState(false);
+  const [updatedEmail, setUpdatedEmail] = useState("")
+  const [updatedEmailConfirmed, setUpdatedEmailConfirmed] = useState("")
+  const [account, setAccount] = useState("")
 
-    const getAccounts = async () => {
-        web3.eth.getAccounts().then((accounts: any) => {
-          setAccount(accounts[0])
-        })
-    }
+  const clicked = (text: string) => {
+    console.log(`Clicked ${text}`);
+  }
 
-    useEffect(() => {
-        getAccounts()
-      }, [web3])
-
-    const updateEmail = async (e: React.FormEvent) => {
-      if (updatedEmail === "" || updatedEmailConfirmed === "") {
-        toast("Email cannot be blank!")
-        return
-      } else if (updatedEmail !== updatedEmailConfirmed) {
-        toast("Emails do not match!")
-        return
-      } else if(Firebase.auth().currentUser !== null && Firebase.auth().currentUser!.email !== updatedEmail) {
-        const res: any = await updateUsersEmail(updatedEmail)
-        if (res) {
-          toast("Email updated successfully")
-          setUpdatedEmail("")
-          setUpdatedEmailConfirmed("")
-        } else {
-          toast("Error updating email")
-        }
-      } else {
-        toast("Current and Updated email are the same")
-      }
-    }
-
-    const updatePassowrd = async (e: React.FormEvent) => {
-      if (updatedPassword === "" || updatedPasswordConfirmed === "") {
-        toast("Updated password is blank")
-      } else if(updatedPassword === updatedPasswordConfirmed) {
-        const res: any = await updateUsersPassword(updatedPassword)
-        if (res) {
-          toast("Password updated successfully")
-          setUpdatedPassword("")
-          setUpdatedPasswordConfirmed("")
-        } else {
-          toast("Password updating password")
-        }
-      } else {
-        toast("Passwords do not match")
-      }
-    }
-
-    const logout = () => {
-      FortmaticClient.user.logout().then(() => {
-        signout().then(() => {
-          dispatch(setUser(null))
-          history.push("/landing") 
-        })
+  const getAccounts = async () => {
+      web3.eth.getAccounts().then((accounts: any) => {
+        setAccount(accounts[0])
       })
+  }
+
+  useEffect(() => {
+      getAccounts()
+    }, [web3])
+
+  const updateEmail = async (e: React.FormEvent) => {
+    if (updatedEmail === "" || updatedEmailConfirmed === "") {
+      toast("Email cannot be blank!")
+      return
+    } else if (updatedEmail !== updatedEmailConfirmed) {
+      toast("Emails do not match!")
+      return
+    } else if(Firebase.auth().currentUser !== null && Firebase.auth().currentUser!.email !== updatedEmail) {
+      const res: any = await updateUsersEmail(updatedEmail)
+      if (res) {
+        toast("Email updated successfully")
+        setUpdatedEmail("")
+        setUpdatedEmailConfirmed("")
+      } else {
+        toast("Error updating email")
+      }
+    } else {
+      toast("Current and Updated email are the same")
     }
+  }
 
-    return (
-      <IonPage id="account-page">
-        <IonHeader>
-        <IonToolbar>
-          {isPlatform("mobile") ?
-            <IonTitle>Account</IonTitle>
-          : 
-            <IonTitle>
-              <IonIcon className={"back-arrow"} onClick={() => history.push("/wallet")} icon={arrowBack}/>
-            </IonTitle>
-          }
-            
-        </IonToolbar>
-        </IonHeader>
-        <IonContent>
-          {Firebase.auth().currentUser &&
-            (<div className="ion-padding-top ion-text-center">
-                <ProfileIdenticon size={140} address={account} />
-              {/* <h2>{ user }</h2> */}
-              <IonList inset>
-                <IonItem onClick={() => clicked('Update Picture')}>Update Picture (Coming Soon!)</IonItem>
-                {/* <IonItem className={"account-button"} onClick={() => {
-                  setUpdatedEmail("")
-                  setUpdatedEmailConfirmed("")
-                  setShowEditPassword(false)
-                  setShowEditEmail(!showEditEmail)
-                }}>
-                  Change Email
-                  </IonItem>
-                {
-                  showEditEmail ? 
+  const updatePassowrd = async (e: React.FormEvent) => {
+    if (updatedPassword === "" || updatedPasswordConfirmed === "") {
+      toast("Updated password is blank")
+    } else if(updatedPassword === updatedPasswordConfirmed) {
+      const res: any = await updateUsersPassword(updatedPassword)
+      if (res) {
+        toast("Password updated successfully")
+        setUpdatedPassword("")
+        setUpdatedPasswordConfirmed("")
+      } else {
+        toast("Password updating password")
+      }
+    } else {
+      toast("Passwords do not match")
+    }
+  }
 
-                  <IonCard className="ion-padding">
-                    <IonItem>
-                      <IonLabel position="stacked" color="primary">New Email</IonLabel>
-                      <IonInput name="currentEmail" type="text" value={updatedEmail} spellCheck={false} autocapitalize="off"  onIonChange={e => setUpdatedEmail(e.detail.value!)}>
-                      </IonInput>
-                    </IonItem> 
-                    <IonItem>
-                      <IonLabel position="stacked" color="primary">Confirm Email</IonLabel>
-                      <IonInput name="updatedEmail" type="text" value={updatedEmailConfirmed} spellCheck={false} autocapitalize="off" onIonChange={e => setUpdatedEmailConfirmed(e.detail.value!)}
-                        required>
-                      </IonInput>
-                    </IonItem> 
+  const logout = () => {
+    FortmaticClient.user.logout().then(() => {
+      signout().then(() => {
+        dispatch(setUser(null))
+        history.push("/")
+      })
+    })
+  }
 
-                    <IonRow>
-                      <IonCol>
-                        <IonButton onClick={updateEmail} type="submit" expand="block">Update Email</IonButton>
-                      </IonCol>
-                    </IonRow>
-                  </IonCard>
-                  : null
-                }
-                <IonItem className={"account-button"} onClick={() => {
-                  setUpdatedPassword("")
-                  setUpdatedPasswordConfirmed("")
-                  setShowEditEmail(false)
-                  setShowEditPassword(!showEditPassword)}}
-                  >
-                    Change Password
-                </IonItem>
-                {
-                  showEditPassword ? 
-
-                  <IonCard className="ion-padding">
-                    <IonItem>
-                      <IonLabel position="stacked" color="primary">New Password</IonLabel>
-                      <IonInput name="currentPassword" type="password" value={updatedPassword} spellCheck={false} autocapitalize="off" onIonChange={e => setUpdatedPassword(e.detail.value!)} >
-                      </IonInput>
-                    </IonItem> 
-                    <IonItem>
-                      <IonLabel position="stacked" color="primary">Confirm New Password</IonLabel>
-                      <IonInput name="updatedPassword" type="password" value={updatedPasswordConfirmed} spellCheck={false} autocapitalize="off" onIonChange={e => setUpdatedPasswordConfirmed(e.detail.value!)}
-                        required>
-                      </IonInput>
-                    </IonItem> 
-
-                    <IonRow>
-                      <IonCol>
-                        <IonButton onClick={updatePassowrd} type="submit" expand="block">Update Password</IonButton>
-                      </IonCol>
-                    </IonRow>
-                  </IonCard>
-                  : null
-                } */}
+  return (
+    <IonPage id="account-page">
+      <IonHeader>
+      <IonToolbar>
+        {isPlatform("mobile") ?
+          <IonTitle>Account</IonTitle>
+        :
+          <IonTitle>
+            <IonIcon className={"back-arrow"} onClick={() => history.push("/")} icon={arrowBack}/>
+          </IonTitle>
+        }
+      </IonToolbar>
+      </IonHeader>
+      <IonContent>
+        {Firebase.auth().currentUser &&
+          (<div className="ion-padding-top ion-text-center">
+              <ProfileIdenticon size={140} address={account} />
+            {/* <h2>{ user }</h2> */}
+            <IonList inset>
+              {user !== null ?
+                <>
+                  <IonItem onClick={() => clicked('Update Picture')}>Update Picture (Coming Soon!)</IonItem>
+                  <IonItem className={"account-button"} onClick={() => logout()}>Logout</IonItem>
+                </>
+                :
                 <IonItem>
                   <IonLabel>Use Dark Theme</IonLabel>
                   <IonToggle checked={useDarkMode} onClick={() => dispatch(setUseDarkMode(!useDarkMode))} />
                 </IonItem>
-                <IonItem className={"account-button"} onClick={() => logout()}>Logout</IonItem>
-              </IonList>
-            </div>)
-          }
-        </IonContent>
-        
-      </IonPage>
+              }
+            </IonList>
+          </div>)
+        }
+      </IonContent>
+    </IonPage>
     );
-  };
+};
   
-  export default withRouter(AccountPage);
+export default withRouter(AccountPage);

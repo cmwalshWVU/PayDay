@@ -21,6 +21,7 @@ import TransferModal from '../components/TransferModal';
 import ProfileIdenticon from '../components/indenticton';
 import ArticleList from '../components/ArticleList';
 import DesktopArticleList from '../components/desktopArticleList';
+import LandingPageComponent from '../components/LandingPageComponent'
 
 const PaymentPage = (props) => {
   const [accounts, setaccounts] = useState([])
@@ -308,7 +309,7 @@ const PaymentPage = (props) => {
       <div className="desktopview">
           <IonList className="menu-list">
             <IonListHeader>
-            <IonAvatar className={"avatar"} onClick={() => props.history.push("/")}>
+            <IonAvatar className={"avatar"} onClick={() => props.history.push("/account")}>
               <ProfileIdenticon size={40} string={accounts[0]} />
             </IonAvatar>
             </IonListHeader>
@@ -404,30 +405,31 @@ const PaymentPage = (props) => {
                     </IonList>
                   </IonCard>
                 </div>
-              : 
-              <div className="market-cards">
-                  <IonCard className={`main-card ${selectedView === "Recent News" ? "news-card" : selectedView === "Current Prices" ? "price-card" : null} `}>
-                    <IonCardHeader>
-                      <IonCardTitle className={"accounts-title"} >
-                        Contacts
-                      </IonCardTitle>
-                    </IonCardHeader>
-                    <ContactsList openModal={openModal} openTransak={openTransak} />
-                  </IonCard>
-                  <IonCard className={`main-card ${selectedView === "Recent News" ? "news-card" : selectedView === "Current Prices" ? "price-card" : null} `}>
-                    <IonCardHeader>
-                      <IonCardTitle className={"accounts-title"} >
-                        Transactions
-                      </IonCardTitle>
-                    </IonCardHeader>
-                    <IonCardContent>
-                      <>
-                        Coming Soon
-                      </>
-                    </IonCardContent>
-                  </IonCard>
-                </div>
-
+              : user !== null ? 
+                <div className="market-cards">
+                    <IonCard className={`main-card ${selectedView === "Recent News" ? "news-card" : selectedView === "Current Prices" ? "price-card" : null} `}>
+                      <IonCardHeader>
+                        <IonCardTitle className={"accounts-title"} >
+                          Contacts
+                        </IonCardTitle>
+                      </IonCardHeader>
+                      <ContactsList openModal={openModal} openTransak={openTransak} />
+                    </IonCard>
+                    <IonCard className={`main-card ${selectedView === "Recent News" ? "news-card" : selectedView === "Current Prices" ? "price-card" : null} `}>
+                      <IonCardHeader>
+                        <IonCardTitle className={"accounts-title"} >
+                          Transactions
+                        </IonCardTitle>
+                      </IonCardHeader>
+                      <IonCardContent>
+                        <>
+                          Coming Soon
+                        </>
+                      </IonCardContent>
+                    </IonCard>
+                  </div>
+                : 
+                <LandingPageComponent />
               }
               {/* <IonCard className={`main-card ${selectedView === "Recent News" ? "news-card" : selectedView === "Current Prices" ? "price-card" : null} `}>
                 {selectedView !== "Recent News" ?
