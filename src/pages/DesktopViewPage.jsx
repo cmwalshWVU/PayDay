@@ -375,11 +375,8 @@ const PaymentPage = (props) => {
                         Recent News
                       </IonCardTitle>
                     </IonCardHeader>
-                    <IonCardContent>
-
-                    <div className="current-prices">
+                    <IonCardContent className="article-list">
                       <DesktopArticleList  news={news} />
-                    </div>
                     </IonCardContent>
                   </IonCard>
                   <IonCard className={`main-card ${selectedView === "Recent News" ? "news-card" : selectedView === "Current Prices" ? "price-card" : null} `}>
@@ -388,30 +385,29 @@ const PaymentPage = (props) => {
                         Current Prices
                       </IonCardTitle>
                     </IonCardHeader>
-                    <IonCardContent>
-
                     <IonSearchbar value={searchString} onIonChange={e => setSearchString(e.detail.value)}></IonSearchbar>
-                    <IonList className="current-prices">
-                      {currentPrices.length > 0 ?
-                        currentPrices.filter(it => it.name.toLowerCase().includes(searchString.toLowerCase()))
-                          .map((token) => {
-                            console.log(token)
-                            return(
-                              <TokenItem token={token} />
-                            )
-                          })
-                      : 
+                    <IonCardContent className="price-list">
+                      <IonList>
+                        {currentPrices.length > 0 ?
+                          currentPrices.filter(it => it.name.toLowerCase().includes(searchString.toLowerCase()))
+                            .map((token) => {
+                              console.log(token)
+                              return(
+                                <TokenItem token={token} />
+                              )
+                            })
+                        :
                           <IonItem>
                             <IonLabel>
                               <center>No Current Market Data</center>
                             </IonLabel>
                           </IonItem>
-                      }
-                    </IonList>
+                        }
+                      </IonList>
                     </IonCardContent>
                   </IonCard>
                 </div>
-              : user !== null ? 
+              : user !== null ?
                 <div className="market-cards">
                     <IonCard className={`main-card ${selectedView === "Recent News" ? "news-card" : selectedView === "Current Prices" ? "price-card" : null} `}>
                       <IonCardHeader>
