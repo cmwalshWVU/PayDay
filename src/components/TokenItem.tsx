@@ -16,9 +16,7 @@ const TokenItem: React.FC<Props> = ({token}) => {
       return (            
         <IonItem className="holding-item">
             <IonLabel className={"holding-list-label"}>
-              <IonAvatar className={"holding-avatar"} slot="start">
-                  <img className={"holding-icon"} src={token.image}/>
-              </IonAvatar>
+              <img className={"holding-icon"} src={token.image}/>
               <div className="token-name">
                 <div>
                     {token.name}

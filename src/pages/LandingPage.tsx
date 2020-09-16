@@ -33,11 +33,6 @@ const LandingPage: React.FC<OwnProps> = ({  history }) => {
           <img className={"logo"} src={`assets/icon/logo.png`} alt="Ionic logo" />
         </div>
         <div className="col s12 center-align">
-          {/* <h4>
-            <span style={{ fontFamily: "monospace" }}>Is it {" "}
-            <b>PayDay</b>
-            {" "} yet?</span> 
-          </h4> */}
           <h2 className="about-title">
             <span style={{ fontFamily: "monospace" }}>New to Crypto? Long term HODLer?</span> 
           </h2>
@@ -87,14 +82,10 @@ const LandingPage: React.FC<OwnProps> = ({  history }) => {
             </div>
           </IonCol>
         </IonRow>  
-        
-        
         </div>
-
       </IonContent>
-
     </IonPage>
-    );
+  );
 };
 
 export default withRouter(LandingPage);
