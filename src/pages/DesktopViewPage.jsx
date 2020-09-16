@@ -462,7 +462,6 @@ const PaymentPage = (props) => {
                               }
                             })
                             .map((token) => {
-                              console.log(token)
                               return(
                                 <TokenItem token={token} />
                               )

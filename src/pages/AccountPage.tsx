@@ -106,25 +106,22 @@ const AccountPage: React.FC<OwnProps> = ({history}) => {
       </IonToolbar>
       </IonHeader>
       <IonContent>
-        {Firebase.auth().currentUser &&
-          (<div className="ion-padding-top ion-text-center">
-              <ProfileIdenticon size={140} address={account} />
-            {/* <h2>{ user }</h2> */}
-            <IonList inset>
-              {user !== null ?
-                <>
-                  <IonItem onClick={() => clicked('Update Picture')}>Update Picture (Coming Soon!)</IonItem>
-                  <IonItem className={"account-button"} onClick={() => logout()}>Logout</IonItem>
-                </>
-                :
-                <IonItem>
-                  <IonLabel>Use Dark Theme</IonLabel>
-                  <IonToggle checked={useDarkMode} onClick={() => dispatch(setUseDarkMode(!useDarkMode))} />
-                </IonItem>
-              }
-            </IonList>
-          </div>)
-        }
+        <div className="ion-padding-top ion-text-center">
+          <ProfileIdenticon size={140} address={account} />
+          <IonList inset>
+            {user !== null ?
+              <>
+                <IonItem onClick={() => clicked('Update Picture')}>Update Picture (Coming Soon!)</IonItem>
+                <IonItem className={"account-button"} onClick={() => logout()}>Logout</IonItem>
+              </>
+              :
+              <IonItem>
+                <IonLabel>Use Dark Theme</IonLabel>
+                <IonToggle checked={useDarkMode} onClick={() => dispatch(setUseDarkMode(!useDarkMode))} />
+              </IonItem>
+            }
+          </IonList>
+        </div>
       </IonContent>
     </IonPage>
     );
