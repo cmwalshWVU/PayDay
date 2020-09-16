@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { IonFab, IonIcon, IonFabButton, IonItem, IonLabel, IonListHeader, IonList, IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonModal, IonInput, IonButtons, IonFooter, IonSelectOption, IonSelect, IonSegment, IonSegmentButton, IonSearchbar, IonAvatar } from '@ionic/react';
 import './PaymentPage.scss';
 import transakSDK from '@transak/transak-sdk'
-import { add } from 'ionicons/icons';
+import { add, chevronDown, chevronUp } from 'ionicons/icons';
 import { useSelector, useDispatch } from 'react-redux';
 import AccountItem from '../components/accountItem';
 import NewAccountItem from '../components/NewAccountItem';
@@ -39,15 +39,14 @@ const PaymentPage = (props) => {
 
   const web3 = useSelector((state) => state.user.web3)
 
-  const [dependentAccounts, setDependentAccounts] = useState([])
   const [fortmaticLoggedIn, setFortmaticLoggedIn] = useState(fortmatic ? fortmatic.user.isLoggedIn() : false)
 
-  const [addNewUser, setAddNewUser] = useState(false)
   const [open, setOpen] = useState(false)
   const [transferToAddress, setTransferToAddress] = useState("")
-  const [selectedTab, setSelectedTab] = useState("contacts")
+  const [selectedTab, setSelectedTab] = useState("all")
 
   const [searchString, setSearchString] = useState("")
+  const [sortingDirection, setSortingDirection] = useState("")
 
   const [selectedView, setSelectedView] = useState("Market")
 
@@ -386,10 +385,82 @@ const PaymentPage = (props) => {
                       </IonCardTitle>
                     </IonCardHeader>
                     <IonSearchbar value={searchString} onIonChange={e => setSearchString(e.detail.value)}></IonSearchbar>
+                    <IonSegment value={selectedTab} onIonChange={e => {
+                      console.log("clickced")
+                                                                    // if (selectedTab === e.detail.value) {
+                                                                    //   if (sortingDirection === "asc") {
+                                                                    //     setSortingDirection("desc")
+                                                                    //   } else if (sortingDirection === "desc") {
+                                                                    //     setSortingDirection("asc")
+                                                                    //   } else {
+                                                                    //     setSortingDirection("")
+                                                                    //   }
+                                                                    // }
+                                                                    // setSelectedTab(e.detail.value)
+                                                                  }
+                                                                  }>
+                      <IonSegmentButton value="all" onClick={() => {
+                        setSelectedTab("all")
+                        setSortingDirection("desc")}
+                      }>
+                        All
+                      </IonSegmentButton>
+                      <IonSegmentButton value="priceChange" onClick={() => {
+                        if (selectedTab === "priceChange") {
+                          if (sortingDirection === "asc") {
+                            setSortingDirection("desc")
+                          } else if (sortingDirection === "desc") {
+                            setSortingDirection("asc")
+                          } else {
+                            setSortingDirection("desc")
+                          }
+                        } else {
+                          setSelectedTab("priceChange")
+                          setSortingDirection("desc")
+                        }
+                      }}>
+                        <div>
+                        Price Change {selectedTab  === "priceChange" ? sortingDirection === "desc" ? <IonIcon icon={chevronDown} /> : sortingDirection === "asc" ? <IonIcon icon={chevronUp}/> : null : null}
+                        </div>
+                      </IonSegmentButton>
+                      <IonSegmentButton value="marketCap" onClick={() => {
+                        if (selectedTab === "marketCap") {
+                          if (sortingDirection === "asc") {
+                            setSortingDirection("desc")
+                          } else if (sortingDirection === "desc") {
+                            setSortingDirection("asc")
+                          } else {
+                            setSortingDirection("desc")
+                          }
+                        } else {
+                          setSelectedTab("marketCap")
+                          setSortingDirection("desc")
+                        }
+                      }}>
+                        <div>
+                        Market Cap {selectedTab  === "marketCap" ? sortingDirection === "desc" ? <IonIcon icon={chevronDown} /> : sortingDirection === "asc" ? <IonIcon icon={chevronUp}/> : null : null}
+                        </div>
+                      </IonSegmentButton>
+                    </IonSegment>
                     <IonCardContent className="price-list">
                       <IonList>
                         {currentPrices.length > 0 ?
                           currentPrices.filter(it => it.name.toLowerCase().includes(searchString.toLowerCase()))
+                            .sort((a,b) => {
+                              if (selectedTab === "priceChange") {
+                                if (sortingDirection === "desc") {
+                                  return a.current_price > b.current_price ? -1 : 1
+                                } else {
+                                  return a.current_price > b.current_price ? 1 : -1
+                                }
+                              } if (selectedTab === "marketCap") {
+                                if (sortingDirection === "desc") {
+                                  return a.market_cap > b.market_cap ? -1 : 1
+                                } else {
+                                  return a.market_cap > b.market_cap ? 1 : -1
+                                }
+                              }
+                            })
                             .map((token) => {
                               console.log(token)
                               return(
