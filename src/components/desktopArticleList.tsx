@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { IonCard, IonCardContent, IonContent, IonList, IonGrid, IonRow, IonCol } from '@ionic/react';
+import { IonCard, IonCardContent, IonContent, IonList, IonGrid, IonRow, IonCol, IonItem } from '@ionic/react';
 import Article from './NewArticle';
 import Pusher from 'pusher-js';
 import pushid from 'unique-push-id';
@@ -76,20 +76,12 @@ const DesktopArticleList: React.FC<Props> = ({ news }) => {
 }
 
 const noData = (
-        <IonList className={"default-background"}>
-            <IonGrid fixed>
-                <IonRow align-items-stretch>
-                <IonCol size="12" size-md="4">
-                <IonCard className="speaker-card">
-                    <IonCardContent className="card-content grey-text text-darken-3">
-                    <div className="card-content">
-                        <span >No recent news </span>
-                    </div>
-                    </IonCardContent>
-                </IonCard> 
-                </IonCol>                        
-                </IonRow>
-            </IonGrid>
+        <IonList>
+            <IonItem>
+                <div className="card-content">
+                    <span >No recent news </span>
+                </div>
+            </IonItem>
         </IonList>
     );
 

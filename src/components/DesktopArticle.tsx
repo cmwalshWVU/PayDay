@@ -21,19 +21,18 @@ const DesktopArticle: React.FC<Props> = ({article, id}) => {
                 <IonCardSubtitle>
                     {article.source_info ? article.source_info.name : article.source.name}
                 </IonCardSubtitle>
-                    
                 <IonCardTitle className={"articleTitle"}>
                     {article.title} 
                 </IonCardTitle>
                 <IonCardSubtitle>
                     <div className="articleDate">{date}</div>
                 </IonCardSubtitle>
-                <IonCardSubtitle className="article-body">
-                    {article.body ? article.body.substring(0, 150) + "..." : article.description ? article.description.substring(0, 150) + "..." : ""}
+                <p className="article-body">
+                    {article.body ? article.body.substring(0, 250) + "..." : article.description ? article.description.substring(0, 250) + "..." : ""}
                     <div className={"read-more"}>
                         <a className="readMore" href={`${article.url}`} target="_blank">Read More</a>
                     </div>
-                </IonCardSubtitle>
+                </p>
             </IonLabel>
         </IonItem>
     )

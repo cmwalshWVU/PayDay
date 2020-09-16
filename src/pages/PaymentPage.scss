@@ -103,6 +103,18 @@ ion-content ion-toolbar {
     height: 100%;
   }
 
+  .news-list {
+    display: flex;
+    flex-direction: column;
+    border-radius: 16px;
+    max-width: 80%;
+    margin: auto;
+
+    .articles {
+      overflow: scroll;
+    }
+  }
+
   .menu-list {
     
     padding: 20px;
@@ -139,10 +151,30 @@ ion-content ion-toolbar {
     flex-grow: 1;
     width: 95% !important;
     padding: 0 !important;
-  }
 
+  }
+  .read-more {
+    text-align: right;
+  }
   .price-card {
-    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    border-radius: 16px;
+    width: 80%;
+    margin: auto;
+
+    .price-list {
+      overflow: scroll;
+    }
+
+    .price-tab {
+      display: flex;
+
+      .segment-icon {
+        align-self: center;
+        padding-left: 4px;
+      }
+    }
   }
 }
 
