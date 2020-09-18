@@ -124,27 +124,32 @@ const AccountItem = ({tokens, openModal, ownersAccount, account, openTransak}) =
       </IonItem>
     )
   } return (
-    <IonItemSliding id="item100">
+    <IonItemSliding>
       <IonItem >
-        <IonAvatar className={"avatar"} slot="start">
-          <Identicon size={40} string={account.address} />
-        </IonAvatar>
-        <IonLabel>
-          <div className="account-name">{account.name}</div>
-          <CopyToClipboard text={account.address}>
-            <div className={"account-flex"} >
-              <IonIcon className={"copy-icon"} icon={copy}/>
-              <p className={"account"}>
-                {account.address}
-              </p>
-            </div>
-          </CopyToClipboard>
-          <h2 onClick={() => setShowBalances(!showBalances)}>Balances: <IonIcon className={"collapse-balances-icon"} icon={showBalances ? chevronUp : chevronDown}/></h2>
-        </IonLabel>
+        <div className={"account-item"}>
+        <div className={"main-content"} >
+          <IonAvatar className={"avatar"} slot="start">
+            <Identicon size={40} string={account.address} />
+          </IonAvatar>
+          <IonLabel>
+            <div className="account-name">{account.name}</div>
+            <CopyToClipboard text={account.address}>
+              <div className={"account-flex"} >
+                <IonIcon className={"copy-icon"} icon={copy}/>
+                <p className={"account"}>
+                  {account.address}
+                </p>
+              </div>
+            </CopyToClipboard>
+            <h2 onClick={() => setShowBalances(!showBalances)}>Balances: <IonIcon className={"collapse-balances-icon"} icon={showBalances ? chevronUp : chevronDown}/></h2>
+          </IonLabel>
+        </div>
+        {balances && showBalances &&           <IonLabel>
+        <HoldingsList balances={balances} balance={balance} />
+        </IonLabel>}
+        </div>
       </IonItem>
-      {balances && showBalances ?
-          <HoldingsList balances={balances} balance={balance} />
-        : null}
+     
       {ownersAccount ?
         null 
         :

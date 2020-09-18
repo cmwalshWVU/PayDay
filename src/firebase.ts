@@ -142,19 +142,27 @@ export async function signInWithCustomToken(token: any) {
   const accessToken = await FirebaseAdmin.auth().createCustomToken(token)
     .then(function(customToken) {
       return Firebase.auth().signInWithCustomToken(customToken).then((response) => {
+        console.log("signed in to firebase")
+
+        console.log(response.user)
         return response.user
         // dispatch({ type: 'COINBASE_LOGIN_SUCCESS', token: accessToken});
       }).catch((err: any) => {
+        console.log("ERRRR signing in to firebase")
+
         console.log(err)
         return null
       })
     }).catch((err) => {
+      console.log("ERRRR signing in to firebase")
+
         console.log(err)
         return null
     })
+  console.log("token")
+  console.log(accessToken)
   return accessToken
 }
-
 
 export async function loginUser(userData: {email: string, password: string}) {
   try {

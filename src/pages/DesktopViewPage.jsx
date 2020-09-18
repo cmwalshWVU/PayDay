@@ -417,9 +417,9 @@ const PaymentPage = (props) => {
                             .sort((a,b) => {
                               if (selectedTab === "priceChange") {
                                 if (sortingDirection === "desc") {
-                                  return a.current_price > b.current_price ? -1 : 1
+                                  return a.price_change_percentage_24h > b.price_change_percentage_24h ? -1 : 1
                                 } else {
-                                  return a.current_price > b.current_price ? 1 : -1
+                                  return a.price_change_percentage_24h > b.price_change_percentage_24h ? 1 : -1
                                 }
                               } if (selectedTab === "marketCap") {
                                 if (sortingDirection === "desc") {
@@ -465,7 +465,7 @@ const PaymentPage = (props) => {
                           Contacts
                         </IonCardTitle>
                       </IonCardHeader>
-                      <IonCardContent>
+                      <IonCardContent className="contacts-content">
                         <ContactsList openModal={openModal} openTransak={openTransak} />
                       </IonCardContent>
                     </IonCard>
