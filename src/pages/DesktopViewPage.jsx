@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { IonFab, IonIcon, IonFabButton, IonItem, IonLabel, IonListHeader, IonList, IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonModal, IonInput, IonButtons, IonFooter, IonSelectOption, IonSelect, IonSegment, IonSegmentButton, IonSearchbar, IonAvatar } from '@ionic/react';
 import './PaymentPage.scss';
 import transakSDK from '@transak/transak-sdk'
-import { add, chevronDown, chevronUp } from 'ionicons/icons';
+import { add, chevronDown, chevronUp, logoTwitter, logoGooglePlaystore } from 'ionicons/icons';
 import { useSelector, useDispatch } from 'react-redux';
 import AccountItem from '../components/accountItem';
 import NewAccountItem from '../components/NewAccountItem';
@@ -48,7 +48,7 @@ const PaymentPage = (props) => {
   const [searchString, setSearchString] = useState("")
   const [sortingDirection, setSortingDirection] = useState("")
 
-  const [selectedView, setSelectedView] = useState("Wallet")
+  const [selectedView, setSelectedView] = useState("Recent News")
 
   const dispatch = useDispatch()
 
@@ -323,9 +323,14 @@ const PaymentPage = (props) => {
                 Wallet
               </IonItem>
             </div>
+            <div className="icons">
+            <IonItem className={"logos"}>
+              <IonIcon className={"twitter"} icon={logoTwitter} onClick={() => window.open("https://twitter.com/PayDayWallet", '_blank')} />
+              <IonIcon className={"google"} icon={logoGooglePlaystore} onClick={() => window.open("https://play.google.com/store/apps/details?id=payday.wallet", '_blank')} />
+            </IonItem>
+            </div>
           </IonList>
           <IonContent className={"ion-padding home-page"} >
-
             <div className="main-content">
               { selectedView !== "Wallet" || (selectedView === "Wallet" && user) ?
                 <IonCard className={"owners-acount"} >
@@ -366,7 +371,7 @@ const PaymentPage = (props) => {
                       </IonCardTitle>
                     </IonCardHeader>
                     <IonSearchbar value={searchString} onIonChange={e => setSearchString(e.detail.value)}></IonSearchbar>
-                    <IonSegment value={selectedTab} >
+                    <IonSegment className="pricelist-tabs" value={selectedTab} >
                       <IonSegmentButton value="all" onClick={() => {
                         setSelectedTab("all")
                         setSortingDirection("desc")}

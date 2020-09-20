@@ -41,7 +41,7 @@ const LandingPage: React.FC<OwnProps> = ({  history }) => {
           </h5>
           <IonRow>
           <IonCol>
-            <IonButton className={"black-text"} onClick={() => signin()} expand="block">Login / Sign Up</IonButton>
+            <IonButton className={"login-button"} onClick={() => signin()} expand="block">Login / Sign Up</IonButton>
           </IonCol>
         </IonRow>
           <IonRow>
