@@ -22,6 +22,7 @@ import ProfileIdenticon from '../components/indenticton';
 import ArticleList from '../components/ArticleList';
 import DesktopArticleList from '../components/desktopArticleList';
 import LandingPageComponent from '../components/LandingPageComponent'
+import HoldingsPieChart from '../components/HoldingsPieChart';
 
 const PaymentPage = (props) => {
   const [accounts, setaccounts] = useState([])
@@ -333,6 +334,15 @@ const PaymentPage = (props) => {
           <IonContent className={"ion-padding home-page"} >
             <div className="main-content">
               { selectedView !== "Wallet" || (selectedView === "Wallet" && user) ?
+              <div className="personal-account-header" >
+                {accounts.length > 0 ?
+                  <IonCard className="holdings-chart">
+                    <div className="pie-chart-wrapper">
+                    <HoldingsPieChart address={accounts[0]} />
+                    </div>
+                  </IonCard>
+                : null
+                }
                 <IonCard className={"owners-acount"} >
                   <IonCardHeader>
                     <IonCardTitle className={"accounts-title"} >
@@ -361,6 +371,7 @@ const PaymentPage = (props) => {
                     }
                   </IonCardContent>
                 </IonCard>
+                </div>
                 : null
               }
               { selectedView === "Market" ?

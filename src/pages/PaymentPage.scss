@@ -58,13 +58,7 @@ ion-content ion-toolbar {
   border-radius: 16px;
 }
 
-.owners-acount {
-  border-radius: 16px;
-  max-width: 600px;
-  margin: 20px auto 20px auto;
-  height: fit-content;
-  overflow: visible;
-}
+
 
 .avatar {
   cursor: pointer;
@@ -103,6 +97,25 @@ ion-content ion-toolbar {
     flex-direction: column;
     height: 100%;
     overflow: scroll;
+
+    .personal-account-header {
+      display: flex;
+      justify-content: space-evenly;
+
+      .holdings-chart {
+        border-radius: 16px;
+        overflow: visible;
+        .pie-chart-wrapper {
+          padding: 10px;
+        }
+      }
+      .owners-acount {
+        border-radius: 16px;
+        max-width: 600px;
+        height: fit-content;
+        overflow: visible;
+      }
+    }
   }
 
   .news-list {
