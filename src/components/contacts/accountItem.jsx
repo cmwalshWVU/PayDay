@@ -1,21 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { IonItem, IonAvatar, IonLabel, IonItemSliding, IonItemOptions, IonItemOption, IonIcon, IonInput, IonButtons, IonButton, IonList } from "@ionic/react";
+import { IonItem, IonAvatar, IonLabel, IonItemSliding, IonItemOptions, IonItemOption, IonIcon, IonInput, IonButtons, IonButton } from "@ionic/react";
 import Identicon from 'react-identicons';
 import { chevronUp, chevronDown, cashOutline, copy, trash, pencil, sendOutline, save, close} from 'ionicons/icons';
-import { deleteAccount, saveNewAccount } from '../firebase';
+import { deleteAccount, saveNewAccount } from '../../firebase';
 import { useSelector } from 'react-redux';
-import numbro from 'numbro'
 import {CopyToClipboard} from 'react-copy-to-clipboard'
 import './accountItem.scss'
-import { promised } from 'q';
-import { toast } from './toast';
-import HoldingsList from './HoldingsList';
+import { toast } from '../toast';
+import HoldingsList from '../holdings/HoldingsList';
 
 const AccountItem = ({tokens, openModal, ownersAccount, account, openTransak}) => {
 
   const [balance, setBalance] = useState("0")
   const web3 = useSelector((state) => state.user.web3)
-  const [open, setOpen] = useState(false)
   const [balances, setTokenBalances] = useState(null)
   const [showBalances, setShowBalances] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
@@ -78,7 +75,11 @@ const AccountItem = ({tokens, openModal, ownersAccount, account, openTransak}) =
         let bal = await contract.methods.balanceOf(account.address).call()
         bal = bal / (10**dec).toString();
 
-        return [bal, token.symbol, token.name]
+        if (currentPrices.filter((it) => it.symbol === token.symbol.toLowerCase())[0]) {
+          const currentHoldings = currentPrices.filter((it) => it.symbol === token.symbol.toLowerCase())[0].current_price * bal
+          return [bal, currentHoldings, token.symbol, token.name]
+        }
+        return [0]
       })
       Promise.all(bals).then((finalBalances) => {
         setTokenBalances(finalBalances.filter((it) => Number(it[0]) > 0 ))

@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { IonHeader, IonToolbar, IonTitle, IonContent, IonPage, IonButtons, IonMenuButton, IonRefresher, IonRefresherContent } from '@ionic/react';
-import ArticleList from '../components/ArticleList';
-import ArticleListSlides from '../components/ArticleSlides';
+import ArticleList from '../components/articles/ArticleList';
 
 import { RefresherEventDetail, isPlatform } from '@ionic/core';
 

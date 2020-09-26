@@ -1,9 +1,10 @@
+import FortmaticClient from "../../fortmatic";
 
 const initData = {
     user: null,
     useDarkMode: true,
     portis: undefined,
-    fortmatic: undefined,
+    fortmatic: FortmaticClient,
     contacts: []
 }
 

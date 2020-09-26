@@ -2,8 +2,7 @@ import { IonList, IonButton, IonItem, IonLabel } from "@ionic/react";
 import React, { useState } from "react";
 import NewAccountItem from "./NewAccountItem";
 import AccountItem from "./accountItem";
-import { ERC20TOKENS } from "./Erc20Tokens";
-import web3 from "../web3";
+import { ERC20TOKENS } from "../Erc20Tokens";
 import { useSelector } from "react-redux";
 import './ContactsList.scss'
 

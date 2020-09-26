@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Redirect, Route } from 'react-router-dom';
 import {
   IonApp,
@@ -10,7 +10,7 @@ import {
   isPlatform
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { person, send, wallet, newspaperOutline, newspaper, walletOutline, personOutline } from 'ionicons/icons';
+import { newspaperOutline, walletOutline, personOutline } from 'ionicons/icons';
 import PaymentPage from './pages/PaymentPage';
 
 /* Core CSS required for Ionic components to work properly */
@@ -32,13 +32,10 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 import LandingPage from './pages/LandingPage';
-import Signup from './pages/Signup';
-import Login from './pages/Login';
 import AccountPage from './pages/AccountPage';
 import { useSelector, useDispatch } from 'react-redux';
 import { setWeb3, setFortmatic, setUser } from './store/actions/userActions';
 import Web3 from 'web3';
-import FortmaticClient from './fortmatic';
 import { provider } from 'web3-core';
 import { WidgetModeConfiguration } from 'fortmatic';
 import { signInWithCustomToken } from './firebase';
@@ -51,8 +48,8 @@ import DesktopViewPage from './pages/DesktopViewPage';
 const App: React.FC = () => {
 
   const user = useSelector((state: any) => state.user.user)
+  const fortmatic = useSelector((state: any) => state.user.fortmatic)
 
-  const [currentUser, setCurrentUser] = useState(user)
   const useDarkMode = useSelector((state: any) => state.user.useDarkMode)
 
   const dispatch = useDispatch()
@@ -60,21 +57,18 @@ const App: React.FC = () => {
   dispatch(getCurrentPrices())
   
   useEffect(() => {
-    setCurrentUser(user)
-  }, [user])
-  
-  useEffect(() => {
-    FortmaticClient.configure({ primaryLoginOption: 'phone' } as WidgetModeConfiguration).then(() => {
-      FortmaticClient.user.login().then((response: any) => {
+    const fort = fortmatic
+    fort.configure({ primaryLoginOption: 'phone' } as WidgetModeConfiguration).then(() => {
+      fort.user.login().then((response: any) => {
         signInWithCustomToken(response[0]).then((user: any) => {
           dispatch(setUser(user))
           return <Redirect to="/wallet" />
         })
       });
     });
-    dispatch(setFortmatic(FortmaticClient))
-    dispatch(setWeb3(new Web3(FortmaticClient.getProvider() as provider)))
-  }, [FortmaticClient])
+    dispatch(setFortmatic(fort))
+    dispatch(setWeb3(new Web3(fort.getProvider() as provider)))
+  }, [])
 
   useEffect(() => {
     fetch('https://mighty-dawn-74394.herokuapp.com/live')
@@ -104,8 +98,6 @@ const App: React.FC = () => {
             <Route path="/landing" component={LandingPage} exact={true} />
             <Route path="/news" component={NewsPage} />
             <Route render={() => <Redirect to="/" />} />
-            {/* <Route path="/login" component={Login} exact={true} />
-            <Route path="/signup" component={Signup} exact={true} /> */}
           </IonRouterOutlet>
           <IonTabBar slot="bottom">
             <IonTabButton tab="main" href="/wallet">
@@ -124,8 +116,6 @@ const App: React.FC = () => {
             <Route path="/" component={DesktopViewPage} exact={true} />
             <Route path="/account" component={AccountPage} exact={true} />
             <Route render={() => <Redirect to="/" />} />
-            {/* <Route path="/login" component={Login} exact={true} />
-            <Route path="/signup" component={Signup} exact={true} /> */}
           </IonRouterOutlet>
         }
     </IonReactRouter>

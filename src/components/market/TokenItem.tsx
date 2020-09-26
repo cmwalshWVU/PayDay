@@ -1,10 +1,7 @@
-import { useState, useEffect } from "react";
 import React from "react";
-import { useSelector } from "react-redux";
-import { IonList, IonItem, IonAvatar, IonLabel, IonGrid, IonRow, IonCol, IonCard } from "@ionic/react";
+import { IonItem, IonLabel } from "@ionic/react";
 import numbro from "numbro";
-import "./HoldingsList.scss"
-import { isPlatform } from "@ionic/core";
+import "../holdings/HoldingsList.scss"
 
 interface Props {
     token: any
@@ -16,7 +13,7 @@ const TokenItem: React.FC<Props> = ({token}) => {
       return (            
         <IonItem className="holding-item">
             <IonLabel className={"holding-list-label"}>
-              <img className={"holding-icon"} src={token.image}/>
+              <img className={"holding-icon"} src={token.image} alt="N/A" />
               <div className="token-name">
                 <div>
                     {token.name}

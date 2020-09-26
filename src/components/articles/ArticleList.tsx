@@ -1,10 +1,8 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { IonCard, IonCardContent, IonContent, IonList, IonGrid, IonRow, IonCol } from '@ionic/react';
 import Article from './NewArticle';
-import Pusher from 'pusher-js';
 import pushid from 'unique-push-id';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateFeed } from '../store/actions/newsActions';
 import './Article.scss'
 
 interface Props {
@@ -13,18 +11,6 @@ interface Props {
   
 const ArticleList: React.FC<Props> = ({ news }) => {
     const newsFeed = useSelector((state: any) => state.news.newsArticles)
-    const dispatch = useDispatch()
-
-    // useEffect(() => {
-    //     const pusher = new Pusher('5994b268d4758d733605', {
-    //         cluster: 'us2',
-    //         encrypted: true
-    //     });
-    //     pusher.subscribe('news-channel').bind('update-news', (data: any) => {
-    //         // news.push(data.articles)
-    //         dispatch(updateFeed(data.articles))
-    //     })
-    // }, [])
    
     function newArray(x: any, y: any) {
         let d: any[] = []

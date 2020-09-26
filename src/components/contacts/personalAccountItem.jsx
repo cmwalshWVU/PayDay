@@ -1,20 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { IonItem, IonAvatar, IonLabel, IonItemSliding, IonItemOptions, IonItemOption, IonIcon, IonList } from "@ionic/react";
+import { IonItem, IonAvatar, IonLabel, IonItemSliding, IonIcon } from "@ionic/react";
 import Identicon from 'react-identicons';
-import { chevronDown, chevronUp, copy} from 'ionicons/icons';
+import { copy} from 'ionicons/icons';
 import { useSelector } from 'react-redux';
-import numbro from 'numbro'
 import {CopyToClipboard} from 'react-copy-to-clipboard'
 import './accountItem.scss'
-import HoldingsList from './HoldingsList';
 
 const PersonalAccountItem = ({tokens, openModal, ownersAccount, account, openTransak}) => {
 
     const [balance, setBalance] = useState("0")
     const web3 = useSelector((state) => state.user.web3)
-    const [open, setOpen] = useState(false)
     const [balances, setTokenBalances] = useState(null)
-    const [showBalances, setShowBalances] = useState(false)
 
     let minABI = [
         // balanceOf
@@ -94,12 +90,12 @@ const PersonalAccountItem = ({tokens, openModal, ownersAccount, account, openTra
                 </p>
                 </div>
             </CopyToClipboard>
-            <h2 onClick={() => setShowBalances(!showBalances)}>Balances: <IonIcon className={"copy-icon"} icon={showBalances ? chevronUp: chevronDown }/></h2>
+            {/* <h2 onClick={() => setShowBalances(!showBalances)}>Balances: <IonIcon className={"copy-icon"} icon={showBalances ? chevronUp: chevronDown }/></h2> */}
             </IonLabel>
         </IonItem>
-        {balances && showBalances ?
+        {/* {balances && showBalances ?
               <HoldingsList balances={balances} balance={balance} />
-            : null}
+            : null} */}
         </IonItemSliding>
     )
 }

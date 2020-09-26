@@ -3,9 +3,9 @@ import { IonItem, IonLabel, IonInput, IonAvatar, IonIcon, IonButtons, IonButton 
 import Identicon from 'react-identicons';
 import { save, close } from "ionicons/icons";
 import './NewAccountItem.scss'
-import { saveNewAccount } from '../firebase';
+import { saveNewAccount } from '../../firebase';
 import { useSelector } from 'react-redux';
-import { toast } from './toast';
+import { toast } from '../toast';
 
 const NewAccountItem = ({setAddNewUser}) => {
 
@@ -21,7 +21,7 @@ const NewAccountItem = ({setAddNewUser}) => {
 
   const onSave = async () => {
     if (web3.utils.isAddress(address)) {
-      const success = await saveNewAccount({name: name, address: address})
+      await saveNewAccount({name: name, address: address})
       setName("")
       setAddress("")
       setAddNewUser(false)
