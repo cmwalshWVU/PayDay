@@ -98,14 +98,14 @@ const PersonalAccountHeader: React.FC<Props> = ({accounts, openTransak, openModa
                 return [0]
             })
             Promise.all(bals).then((finalBalances) => {
-                const fake = fakeHoldings()
-                finalBalances.push(...fake)
+                // const fake = fakeHoldings()
+                // finalBalances.push(...fake)
                 const filteredSet = finalBalances.filter((it) => Number(it[0]) > 0 )
                 
                 setTokenBalances(finalBalances.filter((it) => Number(it[0]) > 0 ))
                 dispatch(setHoldings(finalBalances.filter((it) => Number(it[0]) > 0 )))
                 if (Number(ethBal) > 0) {
-                    filteredSet.push([ethBal * 100, ethBal * 100, "ETH", "Ethereum"])
+                    filteredSet.push([ethBal, ethBal, "ETH", "Ethereum"])
                 }
                 setSeries(filteredSet.map((it: any) => it[1]))
                 setLabels(filteredSet.map((it: any) => it[2]))
