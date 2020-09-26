@@ -1,6 +1,6 @@
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import React, { useState } from 'react';
-import { IonContent, IonPage,IonRow, IonCol, IonButton, IonList, IonItem, IonCard, IonCardTitle, IonCardContent, IonIcon } from '@ionic/react';
+import { IonRow, IonCol, IonButton, IonCardTitle, IonCardContent, IonIcon } from '@ionic/react';
 import '../pages/LandingPage.scss'
 import { useSelector, useDispatch } from "react-redux";
 import { signInWithCustomToken } from "../firebase";
@@ -17,7 +17,7 @@ const LandingPageComponent: React.FC<OwnProps> = ({  history }) => {
 
   const dispatch = useDispatch()
   const signin = () => {
-    FortmaticClient.user.login().then((response: any) => {
+    fortmatic.user.login().then((response: any) => {
       history.push("/wallet")
       signInWithCustomToken(response[0]).then((user: any) => {
         dispatch(setUser(user))

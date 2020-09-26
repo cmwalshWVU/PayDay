@@ -43,9 +43,12 @@ ion-content ion-toolbar {
 
 }
 
+.current-prices {
+  overflow: scroll;
+}
+
 .current-prices, .contacts-list {
   max-height: 600px;
-  overflow: scroll;
 }
 
 .accounts-title {
@@ -97,25 +100,6 @@ ion-content ion-toolbar {
     flex-direction: column;
     height: 100%;
     overflow: scroll;
-
-    .personal-account-header {
-      display: flex;
-      justify-content: space-evenly;
-
-      .holdings-chart {
-        border-radius: 16px;
-        overflow: visible;
-        .pie-chart-wrapper {
-          padding: 10px;
-        }
-      }
-      .owners-acount {
-        border-radius: 16px;
-        max-width: 600px;
-        height: fit-content;
-        overflow: visible;
-      }
-    }
   }
 
   .news-list {
@@ -134,7 +118,7 @@ ion-content ion-toolbar {
     display: flex;
     flex-direction: column;
     padding: 20px;
-    width: 200px;
+    width: 160px;
 
     .icons {
       flex-grow: 1;
@@ -172,7 +156,7 @@ ion-content ion-toolbar {
   .main-card {
     border-radius: 10px;
     width: 45%;
-    margin: 30px auto 10px auto;
+    margin: 10px auto 10px auto;
     padding: 10px;
     display: flex;
     flex-direction: column;
@@ -194,6 +178,10 @@ ion-content ion-toolbar {
     width: 80%;
     margin: auto;
 
+    .searchbar-input-container {
+      max-width: 600px;
+      margin: auto;
+    }
     .price-list {
       overflow: scroll;
     }
@@ -210,7 +198,7 @@ ion-content ion-toolbar {
 }
 
 .market-cards {
-  max-height: 70%;
+  max-height: 40%;
   display: flex;
   flex-direction: row;
 

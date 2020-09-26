@@ -1,31 +1,29 @@
 import React, { useEffect } from 'react';
-import { IonCard, IonCardContent, IonContent, IonList, IonGrid, IonRow, IonCol, IonItem } from '@ionic/react';
-import Article from './NewArticle';
-import Pusher from 'pusher-js';
+import { IonCard, IonCardContent, IonContent, IonList, IonGrid, IonRow, IonCol, IonSlides, IonSlide } from '@ionic/react';
+import Article from './ArticleSlide';
+import Pusher, { Options } from 'pusher-js';
 import pushid from 'unique-push-id';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateFeed } from '../store/actions/newsActions';
-import './Article.scss'
-import DesktopArticle from './DesktopArticle';
+import { updateFeed } from '../../store/actions/newsActions';
 
 interface Props {
     news: any[]
 } 
   
-const DesktopArticleList: React.FC<Props> = ({ news }) => {
+const ArticleListSlides: React.FC<Props> = ({ news }) => {
     const newsFeed = useSelector((state: any) => state.news.newsArticles)
     const dispatch = useDispatch()
 
-    // useEffect(() => {
-    //     const pusher = new Pusher('5994b268d4758d733605', {
-    //         cluster: 'us2',
-    //         encrypted: true
-    //     });
-    //     pusher.subscribe('news-channel').bind('update-news', (data: any) => {
-    //         // news.push(data.articles)
-    //         dispatch(updateFeed(data.articles))
-    //     })
-    // }, [])
+    useEffect(() => {
+        const pusher = new Pusher('5994b268d4758d733605', {
+            cluster: 'us2',
+            encrypted: true
+        } as Options);
+        pusher.subscribe('news-channel').bind('update-news', (data: any) => {
+            // news.push(data.articles)
+            dispatch(updateFeed(data.articles))
+        })
+    }, [])
    
     function newArray(x: any, y: any) {
         let d: any[] = []
@@ -60,7 +58,9 @@ const DesktopArticleList: React.FC<Props> = ({ news }) => {
                         return a.published_on < b.published_on ? 1 : -1
                     }
                 }).map((article, index)  => (
-                    <DesktopArticle key={index} article={article} id={pushid()} />
+                    <IonSlide>
+                        <Article key={index} article={article} id={pushid()} />
+                    </IonSlide>
                     )
                 )
             }
@@ -68,21 +68,38 @@ const DesktopArticleList: React.FC<Props> = ({ news }) => {
         }
     }
 
+    const slideOpts = {
+        direction: 'vertical',
+        
+    };
+      
     return (
-        <IonList>
-            {buildList()}
-        </IonList>
+        <IonContent>
+            <IonSlides options={slideOpts}>
+                {buildList()}
+            </IonSlides>
+        </IonContent>
     );
 }
 
 const noData = (
-        <IonList>
-            <IonItem>
-                <div className="card-content">
-                    <span >No recent news </span>
-                </div>
-            </IonItem>
+    <IonSlide>
+        <IonList className={"default-background"}>
+            <IonGrid fixed>
+                <IonRow align-items-stretch>
+                <IonCol size="12" size-md="4">
+                <IonCard className="speaker-card">
+                    <IonCardContent className="card-content grey-text text-darken-3">
+                    <div className="card-content">
+                        <span >No recent news </span>
+                    </div>
+                    </IonCardContent>
+                </IonCard> 
+                </IonCol>                        
+                </IonRow>
+            </IonGrid>
         </IonList>
+    </IonSlide>
     );
 
-export default DesktopArticleList
+export default ArticleListSlides

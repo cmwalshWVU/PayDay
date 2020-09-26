@@ -1,29 +1,23 @@
 import React, { useEffect, useState } from 'react';
-import { IonFab, IonIcon, IonFabButton, IonItem, IonLabel, IonListHeader, IonList, IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonModal, IonInput, IonButtons, IonFooter, IonSelectOption, IonSelect, IonSegment, IonSegmentButton, IonSearchbar } from '@ionic/react';
+import { IonItem, IonLabel, IonList, IonContent, IonPage, IonToolbar, IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonSegment, IonSegmentButton, IonSearchbar } from '@ionic/react';
 import './PaymentPage.scss';
 import transakSDK from '@transak/transak-sdk'
-import { add } from 'ionicons/icons';
 import { useSelector, useDispatch } from 'react-redux';
-import AccountItem from '../components/accountItem';
-import NewAccountItem from '../components/NewAccountItem';
-import Firebase, { signout } from '../firebase';
-import { setUser, setContacts } from '../store/actions/userActions';
+import Firebase from '../firebase';
+import { setContacts } from '../store/actions/userActions';
 import { withRouter } from 'react-router';
-import FortmaticClient from '../fortmatic';
-import { DAI, MKR, ERC20TOKENS } from '../components/Erc20Tokens';
-import PersonalAccountItem from '../components/personalAccountItem'
+import { ERC20TOKENS } from '../components/Erc20Tokens';
+import PersonalAccountItem from '../components/contacts/personalAccountItem'
 import { erc20ContractAbi } from '../components/Erc20TokenAbi';
 import { isString } from 'util';
-import TokenItem from '../components/TokenItem';
-import PurchaseModal from '../components/PurchaseModal';
-import ContactsList from '../components/ContactsList';
-import TransferModal from '../components/TransferModal';
+import TokenItem from '../components/market/TokenItem';
+import PurchaseModal from '../components/modals/PurchaseModal';
+import ContactsList from '../components/contacts/ContactsList';
+import TransferModal from '../components/modals/TransferModal';
 
 const PaymentPage = (props) => {
   const [accounts, setaccounts] = useState([])
   const [account, setAccount] = useState([])
-  const [amount, setAmount] = useState("0.0");
-  const [gas, setGas] = useState("0.0");
   const [balance, setBalance] = useState("0");
   const [tokenToSend, setTokenToSend] = useState("ETH")
 
@@ -31,14 +25,11 @@ const PaymentPage = (props) => {
   const [purchaseAmount, setPurchaseAmount] = useState(0);
 
   const fortmatic = useSelector((state) => state.user.fortmatic)
-  const contacts = useSelector((state) => state.user.contacts)
 
   const web3 = useSelector((state) => state.user.web3)
 
-  const [dependentAccounts, setDependentAccounts] = useState([])
   const [fortmaticLoggedIn, setFortmaticLoggedIn] = useState(fortmatic ? fortmatic.user.isLoggedIn() : false)
 
-  const [addNewUser, setAddNewUser] = useState(false)
   const [open, setOpen] = useState(false)
   const [transferToAddress, setTransferToAddress] = useState("")
   const [selectedTab, setSelectedTab] = useState("contacts")
@@ -309,7 +300,7 @@ const PaymentPage = (props) => {
                 </IonButton>
               </>
               : 
-                <IonButton onClick={() => FortmaticClient.user.login()}>
+                <IonButton onClick={() => fortmatic.user.login()}>
                   Login / Sign Up To Fortmatic
                 </IonButton>
               }

@@ -1,5 +1,4 @@
 import React from 'react';
-import './ExploreContainer.css';
 import Identicon from 'react-identicons';
 
 const ProfileIdenticon = ({ size, address }) => {

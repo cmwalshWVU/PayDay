@@ -1,5 +1,5 @@
 import { IonModal, IonContent, IonHeader, IonTitle, IonList, IonItem, IonLabel, IonSelect, IonSelectOption, IonInput, IonButton } from "@ionic/react";
-import { ERC20TOKENS } from "./Erc20Tokens";
+import { ERC20TOKENS } from "../Erc20Tokens";
 import React, { useState } from "react";
 
 interface Props {

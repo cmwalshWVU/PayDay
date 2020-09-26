@@ -1,13 +1,12 @@
 import { RouteComponentProps, withRouter } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
 import React, { useEffect, useState } from "react";
-import { IonPage, IonContent, IonHeader, IonTitle, IonToolbar, IonButton, IonCard, IonItem, IonList, IonInput, IonLabel, IonRow, IonCol, IonToggle, isPlatform, IonIcon } from "@ionic/react";
+import { IonPage, IonContent, IonHeader, IonTitle, IonToolbar, IonItem, IonList, IonLabel, IonToggle, isPlatform, IonIcon } from "@ionic/react";
 import "./AccountPage.scss"
 import { toast } from "../components/toast";
 import Firebase, { updateUsersEmail, updateUsersPassword, signout } from "../firebase";
 import { setUser, setUseDarkMode } from "../store/actions/userActions";
 import ProfileIdenticon from "../components/indenticton";
-import FortmaticClient from "../fortmatic";
 import { arrowBack } from "ionicons/icons";
 
 interface OwnProps extends RouteComponentProps {}
@@ -22,11 +21,9 @@ const AccountPage: React.FC<OwnProps> = ({history}) => {
   const useDarkMode = useSelector((state: any) => state.user.useDarkMode)
   const web3 = useSelector((state: any) => state.user.web3)
 
-  const [showEditPassword, setShowEditPassword] = useState(false);
   const [updatedPassword, setUpdatedPassword] = useState("")
   const [updatedPasswordConfirmed, setUpdatedPasswordConfirmed] = useState("")
 
-  const [showEditEmail, setShowEditEmail] = useState(false);
   const [updatedEmail, setUpdatedEmail] = useState("")
   const [updatedEmailConfirmed, setUpdatedEmailConfirmed] = useState("")
   const [account, setAccount] = useState("")
@@ -84,7 +81,7 @@ const AccountPage: React.FC<OwnProps> = ({history}) => {
   }
 
   const logout = () => {
-    FortmaticClient.user.logout().then(() => {
+    fortmatic.user.logout().then(() => {
       signout().then(() => {
         dispatch(setUser(null))
         history.push("/")
@@ -113,6 +110,10 @@ const AccountPage: React.FC<OwnProps> = ({history}) => {
               <>
                 <IonItem onClick={() => clicked('Update Picture')}>Update Picture (Coming Soon!)</IonItem>
                 <IonItem className={"account-button"} onClick={() => logout()}>Logout</IonItem>
+                <IonItem>
+                  <IonLabel>Use Dark Theme</IonLabel>
+                  <IonToggle checked={useDarkMode} onClick={() => dispatch(setUseDarkMode(!useDarkMode))} />
+                </IonItem>
               </>
               :
               <IonItem>

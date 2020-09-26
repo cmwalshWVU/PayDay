@@ -1,0 +1,84 @@
+.address-header {
+    width: fit-content;
+    margin: auto;
+    padding: 0 10px;
+}
+
+.loading-wallets-card {
+    height: 100px;
+    width: 300px;
+    margin: 10px auto;
+
+    .loading-wallets-text {
+        font-size: 20px;
+        font-weight: 600;
+        color: "#FFFFFF"
+    }
+}
+.personal-account-header {
+    display: flex;
+    justify-content: space-evenly;
+    // align-items: center;
+    padding-bottom: 4px;
+    max-height: 60%;
+
+    #holdings-card-header {
+        padding-bottom: 0;
+    }
+    
+    .holdings-list-card {
+        overflow: scroll;
+    }
+
+    .personal-account {
+        display: flex;
+        flex-direction: column;
+        min-width: 160px;
+        align-self: flex-start;
+        margin-top: 20px;
+
+        .header-buttons{
+            align-items: center
+        }
+    }
+
+    .pie-chart-wrapper {
+        padding: 10px;
+        min-width: 200px;
+    }
+    
+
+    .personal-holdings-list {
+        min-width: 240px;
+        padding: 0;
+    }
+}
+.owners-acount {
+    border-radius: 10px;
+    width: 45%;
+    margin: 10px auto 10px auto;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    max-height: 100%;
+}
+
+.not-logged-in {
+    margin: 0 auto 10px;
+    width: fit-content;
+    padding: 10px;
+}
+
+.holdings-card {
+    max-height: 100%;
+    border-radius: 10px;
+    width: 45%;
+    margin: 10px auto 10px auto;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+
+    .holdings-card-header {
+        padding-bottom: 0px;
+    }
+}
