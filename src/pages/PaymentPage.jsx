@@ -14,6 +14,7 @@ import TokenItem from '../components/market/TokenItem';
 import PurchaseModal from '../components/modals/PurchaseModal';
 import ContactsList from '../components/contacts/ContactsList';
 import TransferModal from '../components/modals/TransferModal';
+import LandingPageComponent from '../components/LandingPageComponent';
 
 const PaymentPage = (props) => {
   const [accounts, setaccounts] = useState([])
@@ -275,8 +276,9 @@ const PaymentPage = (props) => {
   }, [])
 
   return (
-    <IonPage>
-      <IonContent>
+    <IonPage id="mobile-view">
+      { user !== null ?
+
         <IonContent className={"ion-padding home-page"} >
           <IonCard className={"owners-acount"} >
             <IonCardHeader>
@@ -285,7 +287,7 @@ const PaymentPage = (props) => {
               </IonCardTitle>
             </IonCardHeader>
             <IonCardContent>
-              {fortmatic.user.isLoggedIn() && accounts.length > 0 ? 
+              {accounts.length > 0 ? 
               <>
                 <IonList>
                   {accounts.map((account) => 
@@ -317,42 +319,22 @@ const PaymentPage = (props) => {
                 <IonSegmentButton value="transactions">
                   Transactions
                 </IonSegmentButton>
-                <IonSegmentButton value="prices">
-                  Prices
-                </IonSegmentButton>
               </IonSegment>
             </IonToolbar>
             {selectedTab === "contacts" ? 
               <ContactsList openModal={openModal} openTransak={openTransak} />
-
-            : selectedTab === "prices" ?
-            <IonList className="current-prices">
-              <IonSearchbar value={searchString} onIonChange={e => setSearchString(e.detail.value)}></IonSearchbar>
-
-              {currentPrices.length > 0 ?
-                currentPrices.filter(it => it.name.toLowerCase().includes(searchString.toLowerCase()))
-                  .map((token) => {
-                    console.log(token)
-                    return(
-                      <TokenItem token={token} />
-                    )
-                  })
-              : 
-                  <IonItem>
-                    <IonLabel>
-                      <center>No Current Market Data</center>
-                    </IonLabel>
-                  </IonItem>
-              }
-            </IonList>
             :
-              <>
+              <IonCardContent>
                 Coming Soon
-              </>
+              </IonCardContent>
             }
           </IonCard>
         </IonContent>
-      </IonContent>
+      : 
+        <IonContent className="ion-padding">
+          <LandingPageComponent />
+        </IonContent>}
+
       <PurchaseModal  open={purchaseModalOpen}
                       tokenToSend={tokenToSend}
                       amount={purchaseAmount}
