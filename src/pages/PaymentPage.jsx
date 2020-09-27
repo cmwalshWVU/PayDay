@@ -125,9 +125,23 @@ const PaymentPage = (props) => {
 
   const user = useSelector((state) => state.user.user)
 
+  const getAccounts = async () => {
+    web3.eth.getAccounts().then(async accounts => {
+      setAccount(accounts[0])
+      setaccounts(accounts)
+
+      const amount = await web3.eth.getBalance(accounts[0])
+      if (amount) {
+        return setBalance(web3.utils.fromWei(amount.toString(), 'ether'))
+      } else {
+        return 0
+      }
+    })
+  }
 
   useEffect(() => {
     if (user) {
+      getAccounts()
       const accounts = Firebase.firestore().collection('accounts').doc(user.uid).collection("accounts")
       accounts.onSnapshot(querySnapshot => {
           const accounts = []
@@ -247,19 +261,6 @@ const PaymentPage = (props) => {
   
   }
 
-  const getAccounts = async () => {
-    web3.eth.getAccounts().then(async accounts => {
-      setAccount(accounts[0])
-      setaccounts(accounts)
-
-      const amount = await web3.eth.getBalance(accounts[0])
-      if (amount) {
-        return setBalance(web3.utils.fromWei(amount.toString(), 'ether'))
-      } else {
-        return 0
-      }
-    })
-  }
 
   useEffect(() => {
     getAccounts()
