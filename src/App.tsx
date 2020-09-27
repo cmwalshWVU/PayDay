@@ -10,7 +10,7 @@ import {
   isPlatform
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { newspaperOutline, walletOutline, personOutline } from 'ionicons/icons';
+import { newspaperOutline, walletOutline, personOutline, statsChartOutline } from 'ionicons/icons';
 import PaymentPage from './pages/PaymentPage';
 
 /* Core CSS required for Ionic components to work properly */
@@ -44,6 +44,7 @@ import { setFeed, updateFeed } from './store/actions/newsActions';
 import Pusher, { Options } from 'pusher-js';
 import { getCurrentPrices } from './store/actions/currentPricesAction';
 import DesktopViewPage from './pages/DesktopViewPage';
+import MarketPage from './pages/MarketPage';
 
 const App: React.FC = () => {
 
@@ -94,7 +95,8 @@ const App: React.FC = () => {
         <IonTabs>
           <IonRouterOutlet>
             <Route path="/wallet" component={PaymentPage} exact={true} />
-            <Route path="/" render={() => user ? <AccountPage /> : <LandingPage />} exact={true} />
+            <Route path="/market" component={MarketPage} exact={true} />
+            <Route path="/" component={AccountPage} exact={true} />
             <Route path="/landing" component={LandingPage} exact={true} />
             <Route path="/news" component={NewsPage} />
             <Route render={() => <Redirect to="/" />} />
@@ -102,6 +104,9 @@ const App: React.FC = () => {
           <IonTabBar slot="bottom">
             <IonTabButton tab="main" href="/wallet">
               <IonIcon icon={walletOutline} />
+            </IonTabButton>
+            <IonTabButton tab="market" href="/market">
+              <IonIcon icon={statsChartOutline} />
             </IonTabButton>
             <IonTabButton tab="news" href="/news">
               <IonIcon icon={newspaperOutline} />

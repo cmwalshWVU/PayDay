@@ -1,0 +1,13 @@
+#market-page {
+
+    .price-card {
+        height: 97%;
+        border-radius: 12px;
+        text-align: center;
+
+        .price-list {
+            overflow: scroll;
+            height: 80%;
+        }
+    }
+}

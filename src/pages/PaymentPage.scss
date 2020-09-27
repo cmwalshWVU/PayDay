@@ -2,6 +2,26 @@ ion-content ion-toolbar {
   --background: translucent;
 }
 
+#mobile-view {
+  .owners-acount {
+    width: 95% !important;
+  }
+
+  .account-item {
+    padding-bottom: 6px;
+    padding-top: 6px;
+
+    .account-holdings-list {
+      padding-left: 20px;
+
+      .current-value {
+        font-size: 16px;
+        font-weight: 500;
+      }
+    }
+  }
+}
+
 #transfer-modal, #purchase-modal {
   --height: 350px;
   --width: 400px;
