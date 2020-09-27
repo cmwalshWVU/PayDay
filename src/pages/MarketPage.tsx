@@ -3,9 +3,7 @@ import { IonHeader, IonToolbar, IonTitle, IonContent, IonPage, IonButtons, IonMe
 import PriceList from '../components/market/PriceList';
 import "./MarketPage.scss"
 
-interface OwnProps { };
-
-
+interface OwnProps { }
 
 const MarketPage: React.FC<OwnProps> = ({}) => {
 

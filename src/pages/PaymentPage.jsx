@@ -10,7 +10,6 @@ import { ERC20TOKENS } from '../components/Erc20Tokens';
 import PersonalAccountItem from '../components/contacts/personalAccountItem'
 import { erc20ContractAbi } from '../components/Erc20TokenAbi';
 import { isString } from 'util';
-import TokenItem from '../components/market/TokenItem';
 import PurchaseModal from '../components/modals/PurchaseModal';
 import ContactsList from '../components/contacts/ContactsList';
 import TransferModal from '../components/modals/TransferModal';
@@ -35,11 +34,7 @@ const PaymentPage = (props) => {
   const [transferToAddress, setTransferToAddress] = useState("")
   const [selectedTab, setSelectedTab] = useState("contacts")
 
-  const [searchString, setSearchString] = useState("")
-
   const dispatch = useDispatch()
-
-  const currentPrices = useSelector((state) => state.prices.currentPrices)
 
   const openModal = (open, address) => {
     setTransferToAddress(address)
@@ -133,11 +128,6 @@ const PaymentPage = (props) => {
 
   useEffect(() => {
     if (user) {
-      // getAccounts().then((resp) => {
-      //   if (resp) {
-      //     dispatch(setContacts(resp))
-      //   }
-      // })
       const accounts = Firebase.firestore().collection('accounts').doc(user.uid).collection("accounts")
       accounts.onSnapshot(querySnapshot => {
           const accounts = []
@@ -275,10 +265,24 @@ const PaymentPage = (props) => {
     getAccounts()
   }, [])
 
+  const [news, setNews] = useState([])
+
+  function refresh(event) {
+    fetch('https://mighty-dawn-74394.herokuapp.com/live')
+        .then(response => response.json())
+        .then(articles => {
+            // dispatch(updateN(articles.articles))
+            setNews(articles);
+            event.detail.complete();
+        }).catch(error => {
+            event.detail.complete();
+        }
+    );
+  }
+
   return (
     <IonPage id="mobile-view">
       { user !== null ?
-
         <IonContent className={"ion-padding home-page"} >
           <IonCard className={"owners-acount"} >
             <IonCardHeader>

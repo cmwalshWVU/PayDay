@@ -31,7 +31,6 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
-import LandingPage from './pages/LandingPage';
 import AccountPage from './pages/AccountPage';
 import { useSelector, useDispatch } from 'react-redux';
 import { setWeb3, setFortmatic, setUser } from './store/actions/userActions';
@@ -94,15 +93,14 @@ const App: React.FC = () => {
       {isPlatform("mobile") ? 
         <IonTabs>
           <IonRouterOutlet>
-            <Route path="/wallet" component={PaymentPage} exact={true} />
+            <Route path="/" component={PaymentPage} exact={true} />
             <Route path="/market" component={MarketPage} exact={true} />
-            <Route path="/" component={AccountPage} exact={true} />
-            <Route path="/landing" component={LandingPage} exact={true} />
-            <Route path="/news" component={NewsPage} />
+            <Route path="/account" component={AccountPage} exact={true} />
+            <Route path="/news" component={NewsPage} exact={true} />
             <Route render={() => <Redirect to="/" />} />
           </IonRouterOutlet>
           <IonTabBar slot="bottom">
-            <IonTabButton tab="main" href="/wallet">
+            <IonTabButton tab="main" href="/">
               <IonIcon icon={walletOutline} />
             </IonTabButton>
             <IonTabButton tab="market" href="/market">
@@ -111,7 +109,7 @@ const App: React.FC = () => {
             <IonTabButton tab="news" href="/news">
               <IonIcon icon={newspaperOutline} />
             </IonTabButton>
-            <IonTabButton tab="account" href="/">
+            <IonTabButton tab="account" href="/account">
               <IonIcon icon={personOutline} />
             </IonTabButton>
           </IonTabBar>
