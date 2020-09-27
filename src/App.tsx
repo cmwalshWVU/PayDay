@@ -93,14 +93,14 @@ const App: React.FC = () => {
       {isPlatform("mobile") ? 
         <IonTabs>
           <IonRouterOutlet>
-            <Route path="/" component={PaymentPage} exact={true} />
+            <Route path="/wallet" component={PaymentPage} exact={true} />
             <Route path="/market" component={MarketPage} exact={true} />
             <Route path="/account" component={AccountPage} exact={true} />
             <Route path="/news" component={NewsPage} exact={true} />
-            <Route render={() => <Redirect to="/" />} />
+            <Route render={() => <Redirect to="/wallet" />} />
           </IonRouterOutlet>
           <IonTabBar slot="bottom">
-            <IonTabButton tab="main" href="/">
+            <IonTabButton tab="main" href="/wallet">
               <IonIcon icon={walletOutline} />
             </IonTabButton>
             <IonTabButton tab="market" href="/market">
