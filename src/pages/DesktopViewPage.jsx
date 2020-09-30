@@ -36,7 +36,6 @@ const PaymentPage = (props) => {
 
   const dispatch = useDispatch()
 
-
   const openModal = (open, address) => {
     setTransferToAddress(address)
     setOpen(true)
