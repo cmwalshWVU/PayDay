@@ -18,86 +18,85 @@ const HoldingsPieChart = ({series, labels}) => {
 
     const [chart, setChart] = useState(spinner)
 
-    const buildChart = useCallback((chartSeries, chartLabels, loading) => {
-        const options = {
-            chart: {
-                type: 'donut',
+    const options = {
+        chart: {
+            type: 'donut',
+        },
+        dataLabels: {
+            enabled: false,
+        },
+        tooltip: {
+            labels: {
+                colors: ["#FFFFFF"]
             },
-            dataLabels: {
-                enabled: false,
-            },
-            tooltip: {
-                labels: {
-                    colors: ["#FFFFFF"]
-                },
-                y: {
-                    formatter: function(value) {
-                        const amount = numbro(value).format({
-                            thousandSeparated: true,
-                            mantissa: 2,
-                        })
-                        return "$" + amount
-                    }
+            y: {
+                formatter: function(value) {
+                    const amount = numbro(value).format({
+                        thousandSeparated: true,
+                        mantissa: 2,
+                    })
+                    return "$" + amount
                 }
-            },
-            plotOptions: {
-              pie: {
-                donut: {
-                    labels: {
-                        show: true,
-                        color: "#FFFFFF",
-                        value: {
-                            color: "#FFFFFF",
-                            formatter: function (w) {
-                                console.log(w)
-                                return "$" +  numbro(w).format({
-                                                thousandSeparated: true,
-                                                mantissa: 2,
-                                            })
-                                        }
-                        },
-                        total: {
-                            show: true,
-                            label: "Total",
-                            color: "#FFFFFF",
-                            formatter: function (w) {
-                                return "$" +  numbro(w.globals.seriesTotals.reduce((a, b) => {
-                                    return a + b
-                                    }, 0)).format({
-                                    thousandSeparated: true,
-                                    mantissa: 2,
-                                })
-                            }
-                        },
-                    },
-                    size: '75%',
-                },
-                offset: 20
-              },
-              stroke: {
-                colors: undefined
-              }
-            },
-            colors: colorPalette,
-            labels: chartLabels,
-            legend: {
-                labels: {
-                    colors: ["#FFFFFF"]
-                },
-                position: 'bottom'
             }
+        },
+        plotOptions: {
+          pie: {
+            donut: {
+                labels: {
+                    show: true,
+                    color: "#FFFFFF",
+                    value: {
+                        color: "#FFFFFF",
+                        formatter: function (w) {
+                            return "$" +  numbro(w).format({
+                                            thousandSeparated: true,
+                                            mantissa: 2,
+                                        })
+                                    }
+                    },
+                    total: {
+                        show: true,
+                        label: "Total",
+                        color: "#FFFFFF",
+                        formatter: function (w) {
+                            return "$" +  numbro(w.globals.seriesTotals.reduce((a, b) => {
+                                return a + b
+                                }, 0)).format({
+                                thousandSeparated: true,
+                                mantissa: 2,
+                            })
+                        }
+                    },
+                },
+                size: '75%',
+            },
+            offset: 20
+          },
+          stroke: {
+            colors: undefined
+          }
+        },
+        colors: colorPalette,
+        labels: [],
+        legend: {
+            labels: {
+                colors: ["#FFFFFF"]
+            },
+            position: 'bottom'
         }
+    }
+    const buildChart = useCallback((chartSeries, chartLabels, loading) => {
+        options.labels = chartLabels
 
         if (chartSeries.length > 0) {
             return <Chart options={options} series={chartSeries} type="donut" />
         } else {
             return spinner
         }
-    }, [])
+    }, [options, spinner])
 
     useEffect(() => {
         setChart(buildChart(series, labels, loadingBalances))
-
     }, [series, labels, ethBal, loadingBalances])
 
     return chart

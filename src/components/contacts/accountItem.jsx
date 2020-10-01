@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { IonItem, IonAvatar, IonLabel, IonItemSliding, IonItemOptions, IonItemOption, IonIcon, IonInput, IonButtons, IonButton } from "@ionic/react";
 import Identicon from 'react-identicons';
 import { chevronUp, chevronDown, cashOutline, copy, trash, pencil, sendOutline, save, close} from 'ionicons/icons';
@@ -22,7 +22,7 @@ const AccountItem = ({tokens, openModal, ownersAccount, account, openTransak}) =
 
   const currentPrices = useSelector((state) => state.prices.currentPrices)
 
-  const getBalance = async (address) => {
+  const getBalance = useCallback(async (address) => {
     try {
       const amount = await web3.eth.getBalance(address)
       if (amount) {
@@ -33,19 +33,15 @@ const AccountItem = ({tokens, openModal, ownersAccount, account, openTransak}) =
     } catch (ex) {
       return "0"
     }
-  }
+  }, [web3])
 
   useEffect(() => {
     getBalance(account.address).then((res) => {
       setBalance(res)
     })
-  }, [account])
+  }, [account, getBalance])
 
-  useEffect(() => {
-    tokenBalances()
-  }, [tokens])
-
-  const tokenBalances = async () => {
+  const tokenBalances = useCallback(async () => {
 
     if (tokens) {
       const bals = tokens.map(async (token) => {
@@ -67,7 +63,11 @@ const AccountItem = ({tokens, openModal, ownersAccount, account, openTransak}) =
         setTokenBalances(finalBalances.filter((it) => Number(it[0]) > 0 ))
       })  
     }
-  }
+  }, [tokens, account.address, currentPrices, web3])
+
+  useEffect(() => {
+    tokenBalances()
+  }, [tokens, tokenBalances])
 
   const updateContact = async () => {
     if (web3.utils.isAddress(updatedAddress)) {

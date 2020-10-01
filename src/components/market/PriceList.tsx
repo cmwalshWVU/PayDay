@@ -69,17 +69,19 @@ const PriceList: React.FC = () => {
                     currentPrices.filter((it: any) => it.name.toLowerCase().includes(searchString.toLowerCase()))
                     .sort((a: any, b: any) => {
                         if (selectedTab === "priceChange") {
-                        if (sortingDirection === "desc") {
-                            return a.price_change_percentage_24h > b.price_change_percentage_24h ? -1 : 1
-                        } else {
-                            return a.price_change_percentage_24h > b.price_change_percentage_24h ? 1 : -1
-                        }
+                            if (sortingDirection === "desc") {
+                                return a.price_change_percentage_24h > b.price_change_percentage_24h ? -1 : 1
+                            } else {
+                                return a.price_change_percentage_24h > b.price_change_percentage_24h ? 1 : -1
+                            }
                         } if (selectedTab === "marketCap") {
-                        if (sortingDirection === "desc") {
-                            return a.market_cap > b.market_cap ? -1 : 1
+                            if (sortingDirection === "desc") {
+                                return a.market_cap > b.market_cap ? -1 : 1
+                            } else {
+                                return a.market_cap > b.market_cap ? 1 : -1
+                            }
                         } else {
-                            return a.market_cap > b.market_cap ? 1 : -1
-                        }
+                            return a.market_cap > b.market_cap ? -1 : 1
                         }
                     })
                     .map((token: any) => {

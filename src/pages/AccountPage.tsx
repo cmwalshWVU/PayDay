@@ -1,10 +1,9 @@
 import { RouteComponentProps, withRouter } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { IonPage, IonContent, IonHeader, IonTitle, IonToolbar, IonItem, IonList, IonLabel, IonToggle, isPlatform, IonIcon } from "@ionic/react";
 import "./AccountPage.scss"
-import { toast } from "../components/toast";
-import Firebase, { updateUsersEmail, updateUsersPassword, signout } from "../firebase";
+import { signout } from "../firebase";
 import { setUser, setUseDarkMode, setWeb3 } from "../store/actions/userActions";
 import ProfileIdenticon from "../components/indenticton";
 import { arrowBack } from "ionicons/icons";
@@ -26,17 +25,17 @@ const AccountPage: React.FC<OwnProps> = ({history}) => {
     console.log(`Clicked ${text}`);
   }
 
-  const getAccounts = async () => {
+  const getAccounts = useCallback(async () => {
     if (web3) {
       web3.eth.getAccounts().then((accounts: any) => {
         setAccount(accounts[0])
       })
     }
-  }
+  }, [web3])
 
   useEffect(() => {
       getAccounts()
-    }, [web3])
+    }, [getAccounts, web3])
 
   const logout = async () => {
     if (web3 && web3.currentProvider && web3.currentProvider.close) {

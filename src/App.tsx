@@ -59,7 +59,7 @@ const App: React.FC = () => {
         dispatch(setWeb3(new Web3(provider)))
       });
     }
-  }, [])
+  }, [dispatch, walletConnector])
 
   useEffect(() => {
     fetch('https://mighty-dawn-74394.herokuapp.com/live')
@@ -76,7 +76,7 @@ const App: React.FC = () => {
         // news.push(data.articles)
         dispatch(updateFeed(data.articles))
     })
-  }, [])
+  }, [dispatch])
 
   return (
   <IonApp className={useDarkMode ? 'dark-theme' : 'light-mode'} >

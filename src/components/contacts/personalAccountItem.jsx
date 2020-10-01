@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { IonItem, IonAvatar, IonLabel, IonItemSliding, IonIcon } from "@ionic/react";
+import React from 'react';
+import { IonItem, IonAvatar, IonLabel, IonIcon } from "@ionic/react";
 import Identicon from 'react-identicons';
 import { copy} from 'ionicons/icons';
 import {CopyToClipboard} from 'react-copy-to-clipboard'
 import './accountItem.scss'
 
 const PersonalAccountItem = ({ account}) => {
-
 
     return (
         <IonItem className="personal-account" >

@@ -52,7 +52,7 @@ export function updateContact(email: string) {
 }
 export async function saveNewAccount(newAccount: {name: string, address: string}) {
   const user = Firebase.auth().currentUser
-  var docRef = Firebase.firestore().collection('accounts').doc(user!.uid).collection("accounts").doc(newAccount.address)
+  // var docRef = Firebase.firestore().collection('accounts').doc(user!.uid).collection("accounts").doc(newAccount.address)
 
   Firebase.firestore().collection('accounts').doc(user!.uid).collection("accounts").doc(newAccount.address).set({
     name: newAccount.name,

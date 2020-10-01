@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import React from "react";
 import { useSelector } from "react-redux";
 import { IonList, IonItem, IonAvatar, IonLabel } from "@ionic/react";
@@ -18,11 +18,7 @@ const HoldingsList: React.FC<Props> = ({balance, balances, personalAccount}) => 
 
     const [list, setList] = useState(null)
 
-    useEffect(() => {
-        setList(buildList())
-    }, [balances, balance, currentPrices])
-
-    const buildList = () => {
+    const buildList = useCallback(() => {
         // if (isPlatform('mobile')) {
             return (
                 balances && balances.map((holding: any, index: number) => {
@@ -36,7 +32,7 @@ const HoldingsList: React.FC<Props> = ({balance, balances, personalAccount}) => 
                         <IonItem key={index} className="holding-item">
                             <IonLabel className={"holding-list-label"}>
                                 <IonAvatar className={"holding-avatar"} slot="start">
-                                    <img className={"holding-icon"} src={icon}/>
+                                    <img className={"holding-icon"} src={icon} alt="N/A"/>
                                 </IonAvatar>
                                 <div className="token-name">
                                     <div>
@@ -67,8 +63,12 @@ const HoldingsList: React.FC<Props> = ({balance, balances, personalAccount}) => 
                     )
                 })
             )
-    }
+    }, [balances, currentPrices])
     
+    useEffect(() => {
+        setList(buildList())
+    }, [balances, balance, currentPrices, buildList])
+
     let icon = require(`cryptocurrency-icons/32/icon/generic.png`); 
     try {
         icon = require(`cryptocurrency-icons/32/icon/eth.png`); 
@@ -81,7 +81,7 @@ const HoldingsList: React.FC<Props> = ({balance, balances, personalAccount}) => 
             <IonItem className="holding-item">
                 <IonLabel className={"holding-list-label"}>
                     <IonAvatar className={"holding-avatar"} slot="start">
-                        <img className={"holding-icon"} src={icon}/>
+                        <img className={"holding-icon"} src={icon} alt="N/A"/>
                     </IonAvatar>
                     <div className="token-name">
                         <div>

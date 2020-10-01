@@ -1,7 +1,6 @@
 import React from 'react'
 import { IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonButton, IonCardSubtitle } from '@ionic/react';
 import PersonalAccountItem from '../contacts/personalAccountItem';
-import { ERC20TOKENS } from '../Erc20Tokens';
 import { useSelector } from 'react-redux';
 import HoldingsList from './HoldingsList';
 import '../personalAccountHeader.scss'

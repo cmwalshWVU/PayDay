@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonButton } from '@ionic/react';
 import HoldingsPieChart from './holdings/HoldingsPieChart';
 import { ERC20TOKENS } from './Erc20Tokens';
@@ -34,7 +34,7 @@ const PersonalAccountHeader: React.FC<Props> = ({accounts, openTransak, openModa
     const ethBal = useSelector((state: any) => state.holdings.ethBalance)
 
     const dispatch = useDispatch()
-    const getEthBalance = async () => {
+    const getEthBalance = useCallback(async () => {
         try {
             const amount = await web3.eth.getBalance(accounts[0])
             if (amount) {
@@ -47,7 +47,7 @@ const PersonalAccountHeader: React.FC<Props> = ({accounts, openTransak, openModa
             } catch (ex) {
             return 0
         }
-    }
+    }, [accounts, currentPrices, dispatch, web3])
     
     const fakeList = ["LINK", "BAT", "BAND", "LEND", "USDC"]
     const fakeHoldings = () => {
@@ -90,7 +90,7 @@ const PersonalAccountHeader: React.FC<Props> = ({accounts, openTransak, openModa
 
     }
 
-    const buildHoldingsList = () => {
+    const buildHoldingsList = useCallback(() => {
 
         if (accounts[0]) {
             dispatch(setLoadingBalances(true))
@@ -125,15 +125,15 @@ const PersonalAccountHeader: React.FC<Props> = ({accounts, openTransak, openModa
                 setLabels(filteredSet.map((it: any) => it[2]))
             })
         }
-    }
+    }, [accounts, currentPrices, dispatch, ethBal, web3])
 
     useEffect(() => {
         buildHoldingsList()
-    }, [accounts, currentPrices, ethBal])
+    }, [accounts, currentPrices, ethBal, buildHoldingsList])
 
     useEffect(() => {
         getEthBalance()
-    }, [accounts, currentPrices])
+    }, [accounts, currentPrices, getEthBalance])
     
 
     if (web3) {

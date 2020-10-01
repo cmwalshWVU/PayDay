@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { IonList, IonContent, IonPage, IonToolbar, IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonSegment, IonSegmentButton } from '@ionic/react';
 import './PaymentPage.scss';
 import transakSDK from '@transak/transak-sdk'
@@ -125,7 +125,7 @@ const PaymentPage = (props) => {
 
   const user = useSelector((state) => state.user.user)
 
-  const getAccounts = async () => {
+  const getAccounts = useCallback(async () => {
     web3.eth.getAccounts().then(async accounts => {
       setAccount(accounts[0])
       setaccounts(accounts)
@@ -137,7 +137,7 @@ const PaymentPage = (props) => {
         return 0
       }
     })
-  }
+  }, [web3])
 
   useEffect(() => {
     if (user) {
@@ -154,7 +154,7 @@ const PaymentPage = (props) => {
           console.log(`Encountered error: ${err}`);
       });
     }
-  }, [user]);
+  }, [user, dispatch, getAccounts]);
   
   const openTransak = (address) => {
     let transak = new transakSDK({
@@ -247,28 +247,11 @@ const PaymentPage = (props) => {
         transak.close();
         setPurchaseModalOpen(false)
     });
-  
   }
-
 
   useEffect(() => {
     getAccounts()
-  }, [])
-
-  const [news, setNews] = useState([])
-
-  function refresh(event) {
-    fetch('https://mighty-dawn-74394.herokuapp.com/live')
-        .then(response => response.json())
-        .then(articles => {
-            // dispatch(updateN(articles.articles))
-            setNews(articles);
-            event.detail.complete();
-        }).catch(error => {
-            event.detail.complete();
-        }
-    );
-  }
+  }, [getAccounts])
 
   return (
     <IonPage id="mobile-view">

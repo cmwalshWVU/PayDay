@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { IonIcon, IonItem, IonListHeader, IonList, IonContent, IonPage, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonAvatar } from '@ionic/react';
 import './PaymentPage.scss';
 import transakSDK from '@transak/transak-sdk'
@@ -119,6 +119,28 @@ const PaymentPage = (props) => {
 
   const user = useSelector((state) => state.user.user)
 
+  const getAccounts = useCallback(async () => {
+    if (web3 && web3.eth) {
+      dispatch(setLoadingBalances(true))
+      web3.eth.getAccounts().then(async accounts => {
+        setAccount(accounts[0])
+        setaccounts(accounts)
+
+        if (!user) {
+          signInWithCustomToken(accounts[0]).then((user) => {
+            dispatch(setUser(user))
+            // return <Redirect to="/wallet" />
+          })
+        }
+        const amount = await web3.eth.getBalance(accounts[0])
+        if (amount) {
+          return setBalance(web3.utils.fromWei(amount.toString(), 'ether'))
+        } else {
+          return 0
+        }
+      })
+    }
+  }, [dispatch, user, web3])
 
   useEffect(() => {
     if (user) {
@@ -136,7 +158,7 @@ const PaymentPage = (props) => {
     } else {
       
     }
-  }, [user]);
+  }, [dispatch, user, getAccounts]);
   
   const openTransak = (address) => {
     let transak = new transakSDK({
@@ -232,47 +254,9 @@ const PaymentPage = (props) => {
   
   }
 
-  const getAccounts = async () => {
-    if (web3 && web3.eth) {
-      dispatch(setLoadingBalances(true))
-      web3.eth.getAccounts().then(async accounts => {
-        setAccount(accounts[0])
-        setaccounts(accounts)
-
-        if (!user) {
-          signInWithCustomToken(accounts[0]).then((user) => {
-            dispatch(setUser(user))
-            // return <Redirect to="/wallet" />
-          })
-        }
-        const amount = await web3.eth.getBalance(accounts[0])
-        if (amount) {
-          return setBalance(web3.utils.fromWei(amount.toString(), 'ether'))
-        } else {
-          return 0
-        }
-      })
-    }
-  }
-
   useEffect(() => {
     getAccounts()
-  }, [web3])
-
-  const [news, setNews] = useState([])
-
-  function refresh(event) {
-    fetch('https://mighty-dawn-74394.herokuapp.com/live')
-        .then(response => response.json())
-        .then(articles => {
-            // dispatch(updateN(articles.articles))
-            setNews(articles);
-            event.detail.complete();
-        }).catch(error => {
-            event.detail.complete();
-        }
-    );
-}
+  }, [web3, getAccounts])
 
   return (
     <IonPage>
@@ -313,7 +297,7 @@ const PaymentPage = (props) => {
                     </IonCardTitle>
                   </IonCardHeader>
                   <IonCardContent className="articles">
-                    <DesktopArticleList  news={news} />
+                    <DesktopArticleList  news={[]} />
                   </IonCardContent>
                 </IonCard>
               :
