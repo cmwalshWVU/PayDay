@@ -36,7 +36,6 @@ const PersonalAccountHeader: React.FC<Props> = ({accounts, openTransak, openModa
     const dispatch = useDispatch()
     const getEthBalance = async () => {
         try {
-            console.log("getting eth bal")
             const amount = await web3.eth.getBalance(accounts[0])
             if (amount) {
                 const holdings =  Number(currentPrices.filter((it:any) => it.symbol === "eth")[0].current_price) * Number(web3.utils.fromWei(amount, 'ether'))
@@ -93,7 +92,6 @@ const PersonalAccountHeader: React.FC<Props> = ({accounts, openTransak, openModa
 
     const buildHoldingsList = () => {
 
-        console.log(currentPrices)
         if (accounts[0]) {
             dispatch(setLoadingBalances(true))
             const bals = [...ERC20TOKENS, ].map(async (token) => {
@@ -115,6 +113,8 @@ const PersonalAccountHeader: React.FC<Props> = ({accounts, openTransak, openModa
             Promise.all(bals).then((finalBalances) => {
                 // const fake = fakeHoldings()
                 // finalBalances.push(...fake)
+                dispatch(setLoadingBalances(false))
+
                 const filteredSet = finalBalances.filter((it) => Number(it[0]) > 0 )
                 
                 dispatch(setHoldings(finalBalances.filter((it) => Number(it[0]) > 0 )))
@@ -123,7 +123,6 @@ const PersonalAccountHeader: React.FC<Props> = ({accounts, openTransak, openModa
                 }
                 setSeries(filteredSet.map((it: any) => it[1]))
                 setLabels(filteredSet.map((it: any) => it[2]))
-                dispatch(setLoadingBalances(false))
             })
         }
     }
@@ -134,7 +133,7 @@ const PersonalAccountHeader: React.FC<Props> = ({accounts, openTransak, openModa
 
     useEffect(() => {
         getEthBalance()
-    }, [accounts])
+    }, [accounts, currentPrices])
     
 
     if (web3) {

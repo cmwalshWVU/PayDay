@@ -25,15 +25,15 @@ const PurchaseModal: React.FC<Props> = ({account, setPurchaseModalOpen, amount, 
                 <IonLabel>Crypto To Purchase</IonLabel>
                 <IonSelect value={tokenToSend} okText="Okay" cancelText="Dismiss"  onIonChange={e => setTokenToSend(e.detail.value)}>
                     <IonSelectOption value={"ETH"} >Ethereum</IonSelectOption>
-                    {ERC20TOKENS.map((token)  => {
-                    return <IonSelectOption value={token.symbol}>{token.name}</IonSelectOption>
+                    {ERC20TOKENS.map((token, index)  => {
+                    return <IonSelectOption key={index} value={token.symbol}>{token.name}</IonSelectOption>
                     })}
                 </IonSelect>
                 </IonItem>
                 <IonItem>
-                <IonLabel position="stacked" color="primary">Amount:</IonLabel>
+                <IonLabel position="stacked" color="primary">USD Amount:</IonLabel>
                 <IonInput clearInput name="transferToAddress" value={amount} onIonChange={(e: any) => {
-                    setAmount(parseInt(e.detail.value))}}/>
+                    setAmount(parseInt(e.detail.value) ? parseInt(e.detail.value) : 0)}}/>
                 </IonItem> 
             </IonList>
             <div className="modal-buttons">

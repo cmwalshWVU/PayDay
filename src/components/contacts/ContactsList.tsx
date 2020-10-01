@@ -26,10 +26,10 @@ const ContactsList: React.FC<Props> = ({openModal, openTransak}) => {
                     </IonButton>
                     {addNewUser && <NewAccountItem setAddNewUser={setAddNewUser} />}
                     {contacts.length > 0 ?
-                      contacts.map((account: any) => (
-                        <AccountItem tokens={ERC20TOKENS} openModal={openModal} ownersAccount={false} account={account} openTransak={openTransak} />
+                      contacts.map((account: any, index: number) => (
+                        <AccountItem key={index} tokens={ERC20TOKENS} openModal={openModal} ownersAccount={false} account={account} openTransak={openTransak} />
                       )) : 
-                        <IonItem>
+                        <IonItem key={0} >
                           <IonLabel className="center">
                             Add some contacts!
                           </IonLabel>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import Chart from 'react-apexcharts'
 import numbro from 'numbro';
 import { useSelector } from 'react-redux';
@@ -12,95 +12,95 @@ const HoldingsPieChart = ({series, labels}) => {
     
     const loadingBalances = useSelector((state) => state.user.loadingBalances)
 
-    const [chartSeries, setChartSeries] = useState(series)
+    const spinner = <ClipLoader size={150}
+                                color={"#123abc"}
+                                loading={true} />
+
+    const [chart, setChart] = useState(spinner)
+
+    const buildChart = useCallback((chartSeries, chartLabels, loading) => {
+        const options = {
+            chart: {
+                type: 'donut',
+            },
+            dataLabels: {
+                enabled: false,
+            },
+            tooltip: {
+                labels: {
+                    colors: ["#FFFFFF"]
+                },
+                y: {
+                    formatter: function(value) {
+                        const amount = numbro(value).format({
+                            thousandSeparated: true,
+                            mantissa: 2,
+                        })
+                        return "$" + amount
+                    }
+                }
+            },
+            plotOptions: {
+              pie: {
+                donut: {
+                    labels: {
+                        show: true,
+                        color: "#FFFFFF",
+                        value: {
+                            color: "#FFFFFF",
+                            formatter: function (w) {
+                                console.log(w)
+                                return "$" +  numbro(w).format({
+                                                thousandSeparated: true,
+                                                mantissa: 2,
+                                            })
+                                        }
+                        },
+                        total: {
+                            show: true,
+                            label: "Total",
+                            color: "#FFFFFF",
+                            formatter: function (w) {
+                                return "$" +  numbro(w.globals.seriesTotals.reduce((a, b) => {
+                                    return a + b
+                                    }, 0)).format({
+                                    thousandSeparated: true,
+                                    mantissa: 2,
+                                })
+                            }
+                        },
+                    },
+                    size: '75%',
+                },
+                offset: 20
+              },
+              stroke: {
+                colors: undefined
+              }
+            },
+            colors: colorPalette,
+            labels: chartLabels,
+            legend: {
+                labels: {
+                    colors: ["#FFFFFF"]
+                },
+                position: 'bottom'
+            }
+        }
+
+        if (chartSeries.length > 0) {
+            return <Chart options={options} series={chartSeries} type="donut" />
+        } else {
+            return spinner
+        }
+    }, [])
 
     useEffect(() => {
-        console.log("Updating")
-        console.log(series)
-        console.log(labels)
-        setChartSeries(series)
+        setChart(buildChart(series, labels, loadingBalances))
 
-    }, [series, labels, ethBal])
-    
+    }, [series, labels, ethBal, loadingBalances])
 
-    const options = {
-        chart: {
-            type: 'donut',
-        },
-        dataLabels: {
-            enabled: false,
-        },
-        tooltip: {
-            labels: {
-                colors: ["#FFFFFF"]
-            },
-            y: {
-                formatter: function(value) {
-                    const amount = numbro(value).format({
-                        thousandSeparated: true,
-                        mantissa: 2,
-                    })
-                    return "$" + amount
-                }
-            }
-        },
-        plotOptions: {
-          pie: {
-            donut: {
-                labels: {
-                    show: true,
-                    color: "#FFFFFF",
-                    value: {
-                        color: "#FFFFFF",
-                        formatter: function (w) {
-                            console.log(w)
-                            return "$" +  numbro(w).format({
-                                            thousandSeparated: true,
-                                            mantissa: 2,
-                                        })
-                                    }
-                    },
-                    total: {
-                        show: true,
-                        label: "Total",
-                        color: "#FFFFFF",
-                        formatter: function (w) {
-                            return "$" +  numbro(w.globals.seriesTotals.reduce((a, b) => {
-                                return a + b
-                                }, 0)).format({
-                                thousandSeparated: true,
-                                mantissa: 2,
-                            })
-                        }
-                    },
-                },
-                size: '75%',
-            },
-            offset: 20
-          },
-          stroke: {
-            colors: undefined
-          }
-        },
-        colors: colorPalette,
-        labels: labels,
-        legend: {
-            labels: {
-                colors: ["#FFFFFF"]
-            },
-            position: 'bottom'
-        }
-    }
-    if (series.length > 0 && !loadingBalances) {
-        return <Chart options={options} series={chartSeries} type="donut" /> 
-    } else {
-        return <ClipLoader
-        size={150}
-        color={"#123abc"}
-        loading={true}
-      />
-
-    }
+    return chart
 
 }
 

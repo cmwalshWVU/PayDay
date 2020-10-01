@@ -18,7 +18,6 @@ const HoldingsListCard: React.FC<Props> = ({accounts, openTransak, setPurchaseMo
     const ethHoldings = useSelector((state: any) => state.holdings.ethHoldings)
     const holdings = useSelector((state: any) => state.holdings.holdings)
 
-    console.log(holdings)
     return (
         <IonCard className={"holdings-card"} >
             <IonCardHeader id={"holdings-card-header"}>
@@ -26,8 +25,8 @@ const HoldingsListCard: React.FC<Props> = ({accounts, openTransak, setPurchaseMo
                     Holdings
                 </IonCardTitle>
                 <IonCardSubtitle>
-                    {accounts.map((account: any) => 
-                        <PersonalAccountItem account={{name: "", address: account}} />
+                    {accounts.map((account: any, index: number) =>
+                        <PersonalAccountItem key={index} account={{name: "", address: account}} />
                     )}
                 </IonCardSubtitle>
             </IonCardHeader>

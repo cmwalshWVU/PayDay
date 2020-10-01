@@ -1,6 +1,7 @@
 import { IonModal, IonContent, IonHeader, IonTitle, IonList, IonItem, IonLabel, IonSelect, IonSelectOption, IonInput, IonButton } from "@ionic/react";
 import { ERC20TOKENS } from "../Erc20Tokens";
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 
 interface Props {
     open: boolean
@@ -18,7 +19,8 @@ const TransferModal: React.FC<Props> = ({account, open, setOpen, setTokenToSend,
                                 setTransferToAddress, transferToAddress, balance, openFortmaticTransfer}) => {
     
     const [amount, setAmount] = useState("")
-    
+    const web3 = useSelector((state: any) => state.user.web3)
+
     return (
         <IonModal id={"transfer-modal"} isOpen={open} onDidDismiss={() => setOpen(false)}>
             <IonContent className={"transfer-modal-content ion-padding"}>
@@ -30,8 +32,8 @@ const TransferModal: React.FC<Props> = ({account, open, setOpen, setTokenToSend,
                 <IonLabel>Crypto to Send</IonLabel>
                 <IonSelect value={tokenToSend} okText="Okay" cancelText="Dismiss"  onIonChange={e => setTokenToSend(e.detail.value)}>
                     <IonSelectOption value={"ETH"} >Ethereum</IonSelectOption>
-                    {ERC20TOKENS.map((token)  => {
-                    return <IonSelectOption value={token}>{token.name}</IonSelectOption>
+                    {ERC20TOKENS.map((token, index)  => {
+                    return <IonSelectOption key={index} value={token}>{token.name}</IonSelectOption>
                     })}
                 </IonSelect>
                 </IonItem>
@@ -51,7 +53,7 @@ const TransferModal: React.FC<Props> = ({account, open, setOpen, setTokenToSend,
                 </IonItem> 
             </IonList>
             <div className="modal-buttons">
-                <IonButton color="primary" onClick={() => openFortmaticTransfer(amount, account, transferToAddress)}>Transfer</IonButton>
+                <IonButton disabled={parseInt(amount) > 0 && web3.utils.isAddress(transferToAddress)} color="primary" onClick={() => openFortmaticTransfer(amount, account, transferToAddress)}>Transfer</IonButton>
                 <IonButton color="light" onClick={() => setOpen(false)}>Cancel</IonButton>
             </div>
             </IonContent>

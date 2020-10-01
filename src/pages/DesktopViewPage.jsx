@@ -240,8 +240,6 @@ const PaymentPage = (props) => {
         setaccounts(accounts)
 
         if (!user) {
-          console.log("logging in to firebase")
-          console.log(accounts[0])
           signInWithCustomToken(accounts[0]).then((user) => {
             dispatch(setUser(user))
             // return <Redirect to="/wallet" />
@@ -259,7 +257,6 @@ const PaymentPage = (props) => {
 
   useEffect(() => {
     getAccounts()
-    console.log(web3)
   }, [web3])
 
   const [news, setNews] = useState([])

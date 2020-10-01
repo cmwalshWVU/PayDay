@@ -33,7 +33,7 @@ const HoldingsList: React.FC<Props> = ({balance, balances, personalAccount}) => 
                         console.log(`Using generic icon for ${holding[2]}`)
                     }
                     return (
-                        <IonItem className="holding-item">
+                        <IonItem key={index} className="holding-item">
                             <IonLabel className={"holding-list-label"}>
                                 <IonAvatar className={"holding-avatar"} slot="start">
                                     <img className={"holding-icon"} src={icon}/>
