@@ -23,6 +23,13 @@ export function setFortmatic(fortmatic: any) {
     }
 }
 
+export function setLoadingBalances(loadingBalances: any) {
+    return {
+        type: 'SET_LOADING_BALANCES',
+        loadingBalances
+    }
+}
+
 export function setWeb3(web3: any) {
     return {
         type: 'SET_WEB3',

@@ -2,7 +2,7 @@ import React from 'react';
 import { IonCard, IonCardContent, IonContent, IonList, IonGrid, IonRow, IonCol } from '@ionic/react';
 import Article from './NewArticle';
 import pushid from 'unique-push-id';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import './Article.scss'
 
 interface Props {

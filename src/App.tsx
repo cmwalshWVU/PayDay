@@ -33,41 +33,32 @@ import '@ionic/react/css/display.css';
 import './theme/variables.css';
 import AccountPage from './pages/AccountPage';
 import { useSelector, useDispatch } from 'react-redux';
-import { setWeb3, setFortmatic, setUser } from './store/actions/userActions';
-import Web3 from 'web3';
-import { provider } from 'web3-core';
-import { WidgetModeConfiguration } from 'fortmatic';
-import { signInWithCustomToken } from './firebase';
+
 import NewsPage from './pages/NewsPage';
 import { setFeed, updateFeed } from './store/actions/newsActions';
 import Pusher, { Options } from 'pusher-js';
 import { getCurrentPrices } from './store/actions/currentPricesAction';
 import DesktopViewPage from './pages/DesktopViewPage';
 import MarketPage from './pages/MarketPage';
+import { setWeb3 } from './store/actions/userActions';
+import Web3 from 'web3';
+
 
 const App: React.FC = () => {
 
-  const user = useSelector((state: any) => state.user.user)
-  const fortmatic = useSelector((state: any) => state.user.fortmatic)
-
   const useDarkMode = useSelector((state: any) => state.user.useDarkMode)
+  const walletConnector = useSelector((state: any) => state.user.walletConnector)
 
   const dispatch = useDispatch()
 
   dispatch(getCurrentPrices())
   
   useEffect(() => {
-    const fort = fortmatic
-    fort.configure({ primaryLoginOption: 'phone' } as WidgetModeConfiguration).then(() => {
-      fort.user.login().then((response: any) => {
-        signInWithCustomToken(response[0]).then((user: any) => {
-          dispatch(setUser(user))
-          return <Redirect to="/wallet" />
-        })
+    if (walletConnector.cachedProvider) {
+      walletConnector.connect().then((provider: any) => {
+        dispatch(setWeb3(new Web3(provider)))
       });
-    });
-    dispatch(setFortmatic(fort))
-    dispatch(setWeb3(new Web3(fort.getProvider() as provider)))
+    }
   }, [])
 
   useEffect(() => {

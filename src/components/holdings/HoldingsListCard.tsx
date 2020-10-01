@@ -27,7 +27,7 @@ const HoldingsListCard: React.FC<Props> = ({accounts, openTransak, setPurchaseMo
                 </IonCardTitle>
                 <IonCardSubtitle>
                     {accounts.map((account: any) => 
-                        <PersonalAccountItem tokens={ERC20TOKENS} openModal={openTransak} ownersAccount={true} openTransak={openTransak} account={{name: "", address: account}} />
+                        <PersonalAccountItem account={{name: "", address: account}} />
                     )}
                 </IonCardSubtitle>
             </IonCardHeader>

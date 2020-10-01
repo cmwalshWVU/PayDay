@@ -221,6 +221,7 @@ ion-content ion-toolbar {
   max-height: 40%;
   display: flex;
   flex-direction: row;
+  flex-grow: 1;
 
   .contacts-content {
     overflow: scroll;

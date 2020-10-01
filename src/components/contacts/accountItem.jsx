@@ -8,6 +8,7 @@ import {CopyToClipboard} from 'react-copy-to-clipboard'
 import './accountItem.scss'
 import { toast } from '../toast';
 import HoldingsList from '../holdings/HoldingsList';
+import MinAbi from '../../MinAbi';
 
 const AccountItem = ({tokens, openModal, ownersAccount, account, openTransak}) => {
 
@@ -20,25 +21,6 @@ const AccountItem = ({tokens, openModal, ownersAccount, account, openTransak}) =
   const [updatedAddress, setUpdatedAddress] = useState(account.address)
 
   const currentPrices = useSelector((state) => state.prices.currentPrices)
-
-  let minABI = [
-    // balanceOf
-    {
-      "constant":true,
-      "inputs":[{"name":"_owner","type":"address"}],
-      "name":"balanceOf",
-      "outputs":[{"name":"balance","type":"uint256"}],
-      "type":"function"
-    },
-    // decimals
-    {
-      "constant":true,
-      "inputs":[],
-      "name":"decimals",
-      "outputs":[{"name":"","type":"uint8"}],
-      "type":"function"
-    }
-  ];
 
   const getBalance = async (address) => {
     try {
@@ -68,7 +50,7 @@ const AccountItem = ({tokens, openModal, ownersAccount, account, openTransak}) =
     if (tokens) {
       const bals = tokens.map(async (token) => {
         // GET TOKEN contract and decimals
-        const contract = new web3.eth.Contract(minABI, token.address);
+        const contract = new web3.eth.Contract(MinAbi, token.address);
         const dec = await contract.methods.decimals().call()
 
         // GET ERC20 Token Balance and divide by decimals
