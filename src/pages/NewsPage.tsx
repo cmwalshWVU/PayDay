@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { IonHeader, IonToolbar, IonTitle, IonContent, IonPage, IonButtons, IonMenuButton, IonRefresher, IonRefresherContent } from '@ionic/react';
 import ArticleList from '../components/articles/ArticleList';
 
-import { RefresherEventDetail, isPlatform } from '@ionic/core';
+import { RefresherEventDetail } from '@ionic/core';
 
 interface OwnProps { };
 

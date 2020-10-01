@@ -52,7 +52,7 @@ export function updateContact(email: string) {
 }
 export async function saveNewAccount(newAccount: {name: string, address: string}) {
   const user = Firebase.auth().currentUser
-  var docRef = Firebase.firestore().collection('accounts').doc(user!.uid).collection("accounts").doc(newAccount.address)
+  // var docRef = Firebase.firestore().collection('accounts').doc(user!.uid).collection("accounts").doc(newAccount.address)
 
   Firebase.firestore().collection('accounts').doc(user!.uid).collection("accounts").doc(newAccount.address).set({
     name: newAccount.name,
@@ -142,25 +142,25 @@ export async function signInWithCustomToken(token: any) {
   const accessToken = await FirebaseAdmin.auth().createCustomToken(token)
     .then(function(customToken) {
       return Firebase.auth().signInWithCustomToken(customToken).then((response) => {
-        console.log("signed in to firebase")
+        // console.log("signed in to firebase")
 
-        console.log(response.user)
+        // console.log(response.user)
         return response.user
         // dispatch({ type: 'COINBASE_LOGIN_SUCCESS', token: accessToken});
       }).catch((err: any) => {
-        console.log("ERRRR signing in to firebase")
+        // console.log("ERRRR signing in to firebase")
 
-        console.log(err)
+        // console.log(err)
         return null
       })
     }).catch((err) => {
-      console.log("ERRRR signing in to firebase")
+      // console.log("ERRRR signing in to firebase")
 
-        console.log(err)
+        // console.log(err)
         return null
     })
-  console.log("token")
-  console.log(accessToken)
+  // console.log("token")
+  // console.log(accessToken)
   return accessToken
 }
 

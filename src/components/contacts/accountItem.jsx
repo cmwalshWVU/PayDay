@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { IonItem, IonAvatar, IonLabel, IonItemSliding, IonItemOptions, IonItemOption, IonIcon, IonInput, IonButtons, IonButton } from "@ionic/react";
 import Identicon from 'react-identicons';
 import { chevronUp, chevronDown, cashOutline, copy, trash, pencil, sendOutline, save, close} from 'ionicons/icons';
@@ -8,6 +8,7 @@ import {CopyToClipboard} from 'react-copy-to-clipboard'
 import './accountItem.scss'
 import { toast } from '../toast';
 import HoldingsList from '../holdings/HoldingsList';
+import MinAbi from '../../MinAbi';
 
 const AccountItem = ({tokens, openModal, ownersAccount, account, openTransak}) => {
 
@@ -21,26 +22,7 @@ const AccountItem = ({tokens, openModal, ownersAccount, account, openTransak}) =
 
   const currentPrices = useSelector((state) => state.prices.currentPrices)
 
-  let minABI = [
-    // balanceOf
-    {
-      "constant":true,
-      "inputs":[{"name":"_owner","type":"address"}],
-      "name":"balanceOf",
-      "outputs":[{"name":"balance","type":"uint256"}],
-      "type":"function"
-    },
-    // decimals
-    {
-      "constant":true,
-      "inputs":[],
-      "name":"decimals",
-      "outputs":[{"name":"","type":"uint8"}],
-      "type":"function"
-    }
-  ];
-
-  const getBalance = async (address) => {
+  const getBalance = useCallback(async (address) => {
     try {
       const amount = await web3.eth.getBalance(address)
       if (amount) {
@@ -51,24 +33,20 @@ const AccountItem = ({tokens, openModal, ownersAccount, account, openTransak}) =
     } catch (ex) {
       return "0"
     }
-  }
+  }, [web3])
 
   useEffect(() => {
     getBalance(account.address).then((res) => {
       setBalance(res)
     })
-  }, [account])
+  }, [account, getBalance])
 
-  useEffect(() => {
-    tokenBalances()
-  }, [tokens])
-
-  const tokenBalances = async () => {
+  const tokenBalances = useCallback(async () => {
 
     if (tokens) {
       const bals = tokens.map(async (token) => {
         // GET TOKEN contract and decimals
-        const contract = new web3.eth.Contract(minABI, token.address);
+        const contract = new web3.eth.Contract(MinAbi, token.address);
         const dec = await contract.methods.decimals().call()
 
         // GET ERC20 Token Balance and divide by decimals
@@ -85,7 +63,11 @@ const AccountItem = ({tokens, openModal, ownersAccount, account, openTransak}) =
         setTokenBalances(finalBalances.filter((it) => Number(it[0]) > 0 ))
       })  
     }
-  }
+  }, [tokens, account.address, currentPrices, web3])
+
+  useEffect(() => {
+    tokenBalances()
+  }, [tokens, tokenBalances])
 
   const updateContact = async () => {
     if (web3.utils.isAddress(updatedAddress)) {

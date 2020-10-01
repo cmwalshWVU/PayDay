@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { IonIcon, IonItem, IonListHeader, IonList, IonContent, IonPage, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonAvatar } from '@ionic/react';
 import './PaymentPage.scss';
 import transakSDK from '@transak/transak-sdk'
 import { logoTwitter, logoGooglePlaystore } from 'ionicons/icons';
 import { useSelector, useDispatch } from 'react-redux';
-import Firebase from '../firebase';
-import { setContacts } from '../store/actions/userActions';
+import Firebase, { signInWithCustomToken } from '../firebase';
+import { setContacts, setUser, setLoadingBalances } from '../store/actions/userActions';
 import { withRouter } from 'react-router';
 import { erc20ContractAbi } from '../components/Erc20TokenAbi';
 import { isString } from 'util';
@@ -20,10 +20,8 @@ import PriceList from '../components/market/PriceList';
 
 const PaymentPage = (props) => {
 
-  const fortmatic = useSelector((state) => state.user.fortmatic)
   const web3 = useSelector((state) => state.user.web3)
   
-  const [fortmaticLoggedIn, setFortmaticLoggedIn] = useState(fortmatic ? fortmatic.user.isLoggedIn() : false)
   const [accounts, setaccounts] = useState([])
   const [account, setAccount] = useState([])
   const [balance, setBalance] = useState("0");
@@ -32,7 +30,7 @@ const PaymentPage = (props) => {
   const [purchaseAmount, setPurchaseAmount] = useState(0);
   const [open, setOpen] = useState(false)
   const [transferToAddress, setTransferToAddress] = useState("")
-  const [selectedView, setSelectedView] = useState("Recent News")
+  const [selectedView, setSelectedView] = useState("Wallet")
 
   const dispatch = useDispatch()
 
@@ -44,10 +42,6 @@ const PaymentPage = (props) => {
   const closeModal = () => {
     setTransferToAddress("")
     setOpen(false)
-  }
-
-  const depositFortmatic = () => {
-    fortmatic.user.deposit();
   }
 
   let calculateHexValue = (value, decimals, BN) => {
@@ -125,6 +119,28 @@ const PaymentPage = (props) => {
 
   const user = useSelector((state) => state.user.user)
 
+  const getAccounts = useCallback(async () => {
+    if (web3 && web3.eth) {
+      dispatch(setLoadingBalances(true))
+      web3.eth.getAccounts().then(async accounts => {
+        setAccount(accounts[0])
+        setaccounts(accounts)
+
+        if (!user) {
+          signInWithCustomToken(accounts[0]).then((user) => {
+            dispatch(setUser(user))
+            // return <Redirect to="/wallet" />
+          })
+        }
+        const amount = await web3.eth.getBalance(accounts[0])
+        if (amount) {
+          return setBalance(web3.utils.fromWei(amount.toString(), 'ether'))
+        } else {
+          return 0
+        }
+      })
+    }
+  }, [dispatch, user, web3])
 
   useEffect(() => {
     if (user) {
@@ -140,18 +156,9 @@ const PaymentPage = (props) => {
           console.log(`Encountered error: ${err}`);
       });
     } else {
-      if (fortmaticLoggedIn !== fortmatic.user.isLoggedIn()) {
-        setFortmaticLoggedIn(fortmatic.user.isLoggedIn())
-        setaccounts([])
-      }
+      
     }
-  }, [user]);
-
-  useEffect(() => {
-    if (fortmaticLoggedIn !== fortmatic.user.isLoggedIn()) {
-      setFortmaticLoggedIn(fortmatic.user.isLoggedIn())
-    }
-  }, [fortmatic.user])
+  }, [dispatch, user, getAccounts]);
   
   const openTransak = (address) => {
     let transak = new transakSDK({
@@ -247,38 +254,9 @@ const PaymentPage = (props) => {
   
   }
 
-  const getAccounts = async () => {
-    web3.eth.getAccounts().then(async accounts => {
-      setAccount(accounts[0])
-      setaccounts(accounts)
-
-      const amount = await web3.eth.getBalance(accounts[0])
-      if (amount) {
-        return setBalance(web3.utils.fromWei(amount.toString(), 'ether'))
-      } else {
-        return 0
-      }
-    })
-  }
-
   useEffect(() => {
     getAccounts()
-  }, [])
-
-  const [news, setNews] = useState([])
-
-  function refresh(event) {
-    fetch('https://mighty-dawn-74394.herokuapp.com/live')
-        .then(response => response.json())
-        .then(articles => {
-            // dispatch(updateN(articles.articles))
-            setNews(articles);
-            event.detail.complete();
-        }).catch(error => {
-            event.detail.complete();
-        }
-    );
-}
+  }, [web3, getAccounts])
 
   return (
     <IonPage>
@@ -319,11 +297,11 @@ const PaymentPage = (props) => {
                     </IonCardTitle>
                   </IonCardHeader>
                   <IonCardContent className="articles">
-                    <DesktopArticleList  news={news} />
+                    <DesktopArticleList  news={[]} />
                   </IonCardContent>
                 </IonCard>
               :
-              user !== null ?
+              web3 ?
                 <>
                   <PersonalAccountHeader  accounts={accounts}
                                           openTransak={openTransak}

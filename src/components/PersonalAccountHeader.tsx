@@ -1,12 +1,18 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonButton } from '@ionic/react';
 import HoldingsPieChart from './holdings/HoldingsPieChart';
 import { ERC20TOKENS } from './Erc20Tokens';
-import FortmaticClient from '../fortmatic';
 import { useSelector, useDispatch } from 'react-redux';
 import './personalAccountHeader.scss'
 import { setEthHoldings, setHoldings } from '../store/actions/holdingsActions';
 import HoldingsListCard from './holdings/HoldingsListCard';
+import WalletConnectProvider from '@walletconnect/web3-provider';
+import Fortmatic from 'fortmatic';
+import { setWeb3, setLoadingBalances } from '../store/actions/userActions';
+import Web3 from 'web3';
+import Web3Modal from "web3modal";
+import ClipLoader from "react-spinners/ClipLoader";
+import MinAbi from '../MinAbi';
 
 interface Props {
     accounts: any
@@ -15,23 +21,21 @@ interface Props {
     openModal: (open: boolean, address: string) => void
 }
 
+
 const PersonalAccountHeader: React.FC<Props> = ({accounts, openTransak, openModal, setPurchaseModalOpen}) => {
     
-    const fortmatic = useSelector((state: any) => state.user.fortmatic)
       
     const web3 = useSelector((state: any) => state.user.web3)
     const currentPrices = useSelector((state: any) => state.prices.currentPrices)
     
-    const [balances, setTokenBalances] = useState<any>(null)
     const [series, setSeries] = useState<any>([])
     const [labels, setLabels] = useState<any>([])
 
     const ethBal = useSelector((state: any) => state.holdings.ethBalance)
 
     const dispatch = useDispatch()
-    const getEthBalance = async () => {
+    const getEthBalance = useCallback(async () => {
         try {
-            console.log("getting eth bal")
             const amount = await web3.eth.getBalance(accounts[0])
             if (amount) {
                 const holdings =  Number(currentPrices.filter((it:any) => it.symbol === "eth")[0].current_price) * Number(web3.utils.fromWei(amount, 'ether'))
@@ -43,26 +47,7 @@ const PersonalAccountHeader: React.FC<Props> = ({accounts, openTransak, openModa
             } catch (ex) {
             return 0
         }
-    }
-
-    let minABI = [
-        // balanceOf
-        {
-        "constant":true,
-        "inputs":[{"name":"_owner","type":"address"}],
-        "name":"balanceOf",
-        "outputs":[{"name":"balance","type":"uint256"}],
-        "type":"function"
-        },
-        // decimals
-        {
-        "constant":true,
-        "inputs":[],
-        "name":"decimals",
-        "outputs":[{"name":"","type":"uint8"}],
-        "type":"function"
-        }
-    ];
+    }, [accounts, currentPrices, dispatch, web3])
     
     const fakeList = ["LINK", "BAT", "BAND", "LEND", "USDC"]
     const fakeHoldings = () => {
@@ -77,13 +62,41 @@ const PersonalAccountHeader: React.FC<Props> = ({accounts, openTransak, openModa
         })
     }
 
-    const buildHoldingsList = () => {
+    const login = async () => {
+        const providerOptions = {
+          walletconnect: {
+            package: WalletConnectProvider, // required
+            options: {
+              infuraId: "fe144c9b7ccd44fc9f4ef53807df0bc5" // required
+            }
+          },
+          fortmatic: {
+            package: Fortmatic, // required
+            options: {
+              key: "pk_live_633916DC39808625" // required
+            }
+          }
+        };
 
-        console.log(currentPrices)
+        const web3Modal = new Web3Modal({
+          network: "mainnet", // optional
+          // cacheProvider: true, // optional
+          theme: "dark",
+          providerOptions // required
+        });
+
+        const provider = await web3Modal.connect()
+        dispatch(setWeb3(new Web3(provider)))
+
+    }
+
+    const buildHoldingsList = useCallback(() => {
+
         if (accounts[0]) {
+            dispatch(setLoadingBalances(true))
             const bals = [...ERC20TOKENS, ].map(async (token) => {
                 // GET TOKEN contract and decimals
-                const contract = new web3.eth.Contract(minABI, token.address);
+                const contract = new web3.eth.Contract(MinAbi, token.address);
                 const dec = await contract.methods.decimals().call()
 
                 // GET ERC20 Token Balance and divide by decimals
@@ -100,9 +113,10 @@ const PersonalAccountHeader: React.FC<Props> = ({accounts, openTransak, openModa
             Promise.all(bals).then((finalBalances) => {
                 // const fake = fakeHoldings()
                 // finalBalances.push(...fake)
+                dispatch(setLoadingBalances(false))
+
                 const filteredSet = finalBalances.filter((it) => Number(it[0]) > 0 )
                 
-                setTokenBalances(finalBalances.filter((it) => Number(it[0]) > 0 ))
                 dispatch(setHoldings(finalBalances.filter((it) => Number(it[0]) > 0 )))
                 if (Number(ethBal) > 0) {
                     filteredSet.push([ethBal, ethBal, "ETH", "Ethereum"])
@@ -111,19 +125,19 @@ const PersonalAccountHeader: React.FC<Props> = ({accounts, openTransak, openModa
                 setLabels(filteredSet.map((it: any) => it[2]))
             })
         }
-    }
+    }, [accounts, currentPrices, dispatch, ethBal, web3])
 
     useEffect(() => {
         buildHoldingsList()
-    }, [accounts, currentPrices, ethBal])
+    }, [accounts, currentPrices, ethBal, buildHoldingsList])
 
     useEffect(() => {
         getEthBalance()
-    }, [accounts])
+    }, [accounts, currentPrices, getEthBalance])
     
 
-    if (fortmatic.user.isLoggedIn()) {
-       if(accounts.length > 0 && balances) {
+    if (web3) {
+       if(accounts.length > 0) {
         return (
             <div className="personal-account-header">
                 <HoldingsListCard accounts={accounts} openTransak={openTransak} setPurchaseModalOpen={setPurchaseModalOpen} openModal={openModal}/>
@@ -139,7 +153,12 @@ const PersonalAccountHeader: React.FC<Props> = ({accounts, openTransak, openModa
                 <IonCard className="loading-wallets-card">
                     <IonCardContent>
                         <div className="loading-wallets-text">
-                            Loading Wallet...
+                            Loading Wallet
+                            <ClipLoader
+          size={150}
+          color={"#123abc"}
+          loading={true}
+        />
                         </div>
                     </IonCardContent>
                 </IonCard>)
@@ -153,7 +172,7 @@ const PersonalAccountHeader: React.FC<Props> = ({accounts, openTransak, openModa
                     </IonCardTitle>
                 </IonCardHeader>
                 <IonCardContent className="personal-account-header">
-                    <IonButton onClick={() => fortmatic.user.login()}>
+                    <IonButton onClick={() => login()}>
                         Sign Up /Login To Fortmatic
                     </IonButton>
                 </IonCardContent>

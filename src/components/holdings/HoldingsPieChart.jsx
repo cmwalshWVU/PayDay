@@ -1,21 +1,22 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import Chart from 'react-apexcharts'
 import numbro from 'numbro';
+import { useSelector } from 'react-redux';
+import ClipLoader from "react-spinners/ClipLoader";
 
-interface Props {
-    series: number[]
-    labels: string[]
-}
 
-const HoldingsPieChart: React.FC<Props> = ({series, labels}) => {
+const HoldingsPieChart = ({series, labels}) => {
     // var colorPalette = ['#00D8B6','#008FFB',  '#FEB019', '#FF4560', '#775DD0']
     var colorPalette = ['#00D8B6','#008FFB', '#FEB019', '#FF4560', '#775DD0', "#A300D6", "#7D02EB", "#5653FE", "#2983FF", "#00B1F2", "#6851FF", "#F0C808", "#93E1D8", "#FFA69E", "#DDFFF7"]
-    useEffect(() => {
-        console.log("Updating")
-        console.log(series)
-        console.log(labels)
-    }, [series, labels])
+    const ethBal = useSelector((state) => state.holdings.ethBalance)
     
+    const loadingBalances = useSelector((state) => state.user.loadingBalances)
+
+    const spinner = <ClipLoader size={150}
+                                color={"#123abc"}
+                                loading={true} />
+
+    const [chart, setChart] = useState(spinner)
 
     const options = {
         chart: {
@@ -29,7 +30,7 @@ const HoldingsPieChart: React.FC<Props> = ({series, labels}) => {
                 colors: ["#FFFFFF"]
             },
             y: {
-                formatter: function(value: any) {
+                formatter: function(value) {
                     const amount = numbro(value).format({
                         thousandSeparated: true,
                         mantissa: 2,
@@ -46,8 +47,7 @@ const HoldingsPieChart: React.FC<Props> = ({series, labels}) => {
                     color: "#FFFFFF",
                     value: {
                         color: "#FFFFFF",
-                        formatter: function (w: any) {
-                            console.log(w)
+                        formatter: function (w) {
                             return "$" +  numbro(w).format({
                                             thousandSeparated: true,
                                             mantissa: 2,
@@ -58,8 +58,8 @@ const HoldingsPieChart: React.FC<Props> = ({series, labels}) => {
                         show: true,
                         label: "Total",
                         color: "#FFFFFF",
-                        formatter: function (w: any) {
-                            return "$" +  numbro(w.globals.seriesTotals.reduce((a: any, b: any) => {
+                        formatter: function (w) {
+                            return "$" +  numbro(w.globals.seriesTotals.reduce((a, b) => {
                                 return a + b
                                 }, 0)).format({
                                 thousandSeparated: true,
@@ -77,7 +77,7 @@ const HoldingsPieChart: React.FC<Props> = ({series, labels}) => {
           }
         },
         colors: colorPalette,
-        labels: labels,
+        labels: [],
         legend: {
             labels: {
                 colors: ["#FFFFFF"]
@@ -85,7 +85,22 @@ const HoldingsPieChart: React.FC<Props> = ({series, labels}) => {
             position: 'bottom'
         }
     }
-    return <Chart options={options} series={series} type="donut" /> 
+    const buildChart = useCallback((chartSeries, chartLabels, loading) => {
+        options.labels = chartLabels
+
+        if (chartSeries.length > 0) {
+            return <Chart options={options} series={chartSeries} type="donut" />
+        } else {
+            return spinner
+        }
+    }, [options, spinner])
+
+    useEffect(() => {
+        setChart(buildChart(series, labels, loadingBalances))
+    }, [series, labels, ethBal, loadingBalances])
+
+    return chart
+
 }
 
 export default HoldingsPieChart

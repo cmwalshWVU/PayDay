@@ -4,25 +4,23 @@ import { IonContent, IonPage,IonRow, IonCol, IonButton, IonCardTitle, IonCardCon
 import './LandingPage.scss'
 import { useSelector, useDispatch } from "react-redux";
 import { signInWithCustomToken } from "../firebase";
-import { setUser } from "../store/actions/userActions";
+import { setUser, setWeb3 } from "../store/actions/userActions";
 import { chevronUp, chevronDown } from "ionicons/icons";
+import Web3 from "web3";
 
 interface OwnProps extends RouteComponentProps {}
 
 const LandingPage: React.FC<OwnProps> = ({  history }) => {
 
-  const fortmatic = useSelector((state: any) => state.user.fortmatic)
-  const [showInfo, setShowInfo] = useState(false)
-
   const dispatch = useDispatch()
-  const signin = () => {
-    fortmatic.user.login().then((response: any) => {
-      history.push("/wallet")
-      signInWithCustomToken(response[0]).then((user: any) => {
-        dispatch(setUser(user))
-      }).then(() => {
-      })
-    })
+
+  const walletConnector = useSelector((state: any) => state.user.walletConnector)
+
+  const [showInfo, setShowInfo] = useState(true)
+
+  const login = async () => {
+    const provider = await walletConnector.connect()
+    dispatch(setWeb3(new Web3(provider)))
   }
 
   return (
@@ -40,7 +38,7 @@ const LandingPage: React.FC<OwnProps> = ({  history }) => {
           </h5>
           <IonRow>
           <IonCol>
-            <IonButton className={"login-button"} onClick={() => signin()} expand="block">Login / Sign Up</IonButton>
+            <IonButton className={"login-button"} onClick={() => login()} expand="block">Login / Sign Up</IonButton>
           </IonCol>
         </IonRow>
           <IonRow>

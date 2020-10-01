@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { IonItem, IonLabel, IonList, IonContent, IonPage, IonToolbar, IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonSegment, IonSegmentButton, IonSearchbar } from '@ionic/react';
+import React, { useEffect, useState, useCallback } from 'react';
+import { IonList, IonContent, IonPage, IonToolbar, IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonSegment, IonSegmentButton } from '@ionic/react';
 import './PaymentPage.scss';
 import transakSDK from '@transak/transak-sdk'
 import { useSelector, useDispatch } from 'react-redux';
 import Firebase from '../firebase';
-import { setContacts } from '../store/actions/userActions';
+import { setContacts, setWeb3 } from '../store/actions/userActions';
 import { withRouter } from 'react-router';
 import { ERC20TOKENS } from '../components/Erc20Tokens';
 import PersonalAccountItem from '../components/contacts/personalAccountItem'
@@ -14,6 +14,7 @@ import PurchaseModal from '../components/modals/PurchaseModal';
 import ContactsList from '../components/contacts/ContactsList';
 import TransferModal from '../components/modals/TransferModal';
 import LandingPageComponent from '../components/LandingPageComponent';
+import Web3 from 'web3';
 
 const PaymentPage = (props) => {
   const [accounts, setaccounts] = useState([])
@@ -24,17 +25,19 @@ const PaymentPage = (props) => {
   const [purchaseModalOpen, setPurchaseModalOpen] = useState(false)
   const [purchaseAmount, setPurchaseAmount] = useState(0);
 
-  const fortmatic = useSelector((state) => state.user.fortmatic)
-
   const web3 = useSelector((state) => state.user.web3)
-
-  const [fortmaticLoggedIn, setFortmaticLoggedIn] = useState(fortmatic ? fortmatic.user.isLoggedIn() : false)
 
   const [open, setOpen] = useState(false)
   const [transferToAddress, setTransferToAddress] = useState("")
   const [selectedTab, setSelectedTab] = useState("contacts")
 
   const dispatch = useDispatch()
+  const walletConnector = useSelector((state) => state.user.walletConnector)
+
+  const login = async () => {
+    const provider = await walletConnector.connect()
+    dispatch(setWeb3(new Web3(provider)))
+  }
 
   const openModal = (open, address) => {
     setTransferToAddress(address)
@@ -46,9 +49,6 @@ const PaymentPage = (props) => {
     setOpen(false)
   }
 
-  const depositFortmatic = () => {
-    fortmatic.user.deposit();
-  }
 
   let calculateHexValue = (value, decimals, BN) => {
     if (!isString(value)) {
@@ -125,7 +125,7 @@ const PaymentPage = (props) => {
 
   const user = useSelector((state) => state.user.user)
 
-  const getAccounts = async () => {
+  const getAccounts = useCallback(async () => {
     web3.eth.getAccounts().then(async accounts => {
       setAccount(accounts[0])
       setaccounts(accounts)
@@ -137,7 +137,7 @@ const PaymentPage = (props) => {
         return 0
       }
     })
-  }
+  }, [web3])
 
   useEffect(() => {
     if (user) {
@@ -153,19 +153,8 @@ const PaymentPage = (props) => {
       }, err => {
           console.log(`Encountered error: ${err}`);
       });
-    } else {
-      if (fortmaticLoggedIn !== fortmatic.user.isLoggedIn()) {
-        setFortmaticLoggedIn(fortmatic.user.isLoggedIn())
-        setaccounts([])
-      }
     }
-  }, [user]);
-
-  useEffect(() => {
-    if (fortmaticLoggedIn !== fortmatic.user.isLoggedIn()) {
-      setFortmaticLoggedIn(fortmatic.user.isLoggedIn())
-    }
-  }, [fortmatic.user])
+  }, [user, dispatch, getAccounts]);
   
   const openTransak = (address) => {
     let transak = new transakSDK({
@@ -258,28 +247,11 @@ const PaymentPage = (props) => {
         transak.close();
         setPurchaseModalOpen(false)
     });
-  
   }
-
 
   useEffect(() => {
     getAccounts()
-  }, [])
-
-  const [news, setNews] = useState([])
-
-  function refresh(event) {
-    fetch('https://mighty-dawn-74394.herokuapp.com/live')
-        .then(response => response.json())
-        .then(articles => {
-            // dispatch(updateN(articles.articles))
-            setNews(articles);
-            event.detail.complete();
-        }).catch(error => {
-            event.detail.complete();
-        }
-    );
-  }
+  }, [getAccounts])
 
   return (
     <IonPage id="mobile-view">
@@ -307,7 +279,7 @@ const PaymentPage = (props) => {
                 </IonButton>
               </>
               : 
-                <IonButton onClick={() => fortmatic.user.login()}>
+                <IonButton onClick={() => login()}>
                   Login / Sign Up To Fortmatic
                 </IonButton>
               }
