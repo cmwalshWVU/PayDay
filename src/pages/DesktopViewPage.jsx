@@ -166,6 +166,7 @@ const PaymentPage = (props) => {
         environment: 'PRODUCTION', // STAGING/PRODUCTION
         hostURL: window.location.origin,
         defaultCryptoCurrency: 'ETH',
+        networks: 'ethereum',
         walletAddress: address, // Your customer's wallet address
         themeColor: '6851ff', // App theme color
         fiatCurrency: 'USD', // INR/GBP

@@ -6,7 +6,7 @@ import HoldingsList from './HoldingsList';
 import '../personalAccountHeader.scss'
 
 interface Props {
-    openTransak: () => void
+    openTransak: (address: string) => void
     setPurchaseModalOpen: any
     openModal: (open: boolean, address: string) => void
     accounts: any
@@ -31,7 +31,7 @@ const HoldingsListCard: React.FC<Props> = ({accounts, openTransak, setPurchaseMo
             </IonCardHeader>
             <IonCardContent className="holdings-list-card">
                 <div className="header-buttons">
-                    <IonButton onClick={() => setPurchaseModalOpen(true)}>
+                    <IonButton onClick={() => openTransak(accounts[0])}>
                         Buy Crypto
                     </IonButton>
                     <IonButton size={"default"}  onClick={() => openModal(true, "")} >

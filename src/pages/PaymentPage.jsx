@@ -6,7 +6,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import Firebase from '../firebase';
 import { setContacts, setWeb3 } from '../store/actions/userActions';
 import { withRouter } from 'react-router';
-import { ERC20TOKENS } from '../components/Erc20Tokens';
 import PersonalAccountItem from '../components/contacts/personalAccountItem'
 import { erc20ContractAbi } from '../components/Erc20TokenAbi';
 import { isString } from 'util';
@@ -15,6 +14,7 @@ import ContactsList from '../components/contacts/ContactsList';
 import TransferModal from '../components/modals/TransferModal';
 import LandingPageComponent from '../components/LandingPageComponent';
 import Web3 from 'web3';
+import { ERC20TOKENS } from '../components/Erc20Tokens';
 
 const PaymentPage = (props) => {
   const [accounts, setaccounts] = useState([])

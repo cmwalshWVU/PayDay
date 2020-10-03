@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonButton } from '@ionic/react';
 import HoldingsPieChart from './holdings/HoldingsPieChart';
-import { ERC20TOKENS } from './Erc20Tokens';
 import { useSelector, useDispatch } from 'react-redux';
 import './personalAccountHeader.scss'
 import { setEthHoldings, setHoldings } from '../store/actions/holdingsActions';
@@ -13,10 +12,11 @@ import Web3 from 'web3';
 import Web3Modal from "web3modal";
 import ClipLoader from "react-spinners/ClipLoader";
 import MinAbi from '../MinAbi';
+import { ERC20TOKENS } from './Erc20Tokens';
 
 interface Props {
     accounts: any
-    openTransak: () => void
+    openTransak: (address: string) => void
     setPurchaseModalOpen: any
     openModal: (open: boolean, address: string) => void
 }
