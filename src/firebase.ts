@@ -52,14 +52,38 @@ export function updateContact(email: string) {
 }
 export async function saveNewAccount(newAccount: {name: string, address: string}) {
   const user = Firebase.auth().currentUser
-  // var docRef = Firebase.firestore().collection('accounts').doc(user!.uid).collection("accounts").doc(newAccount.address)
-
-  Firebase.firestore().collection('accounts').doc(user!.uid).collection("accounts").doc(newAccount.address).set({
-    name: newAccount.name,
-    address: newAccount.address
+  var docRef = Firebase.firestore().collection('accounts').doc(user!.uid)
+  return docRef.get().then(function(doc) {
+    if (doc.exists) {
+      docRef.collection("accounts").doc(newAccount.address).set({
+        name: newAccount.name,
+        address: newAccount.address
+      }).catch(function(error) {
+        return false
+      });
+      return true
+    } else {
+      Firebase.firestore().collection('accounts').doc(user!.uid).set({}).then(() => {
+        docRef.collection("accounts").doc(newAccount.address).set({
+          name: newAccount.name,
+          address: newAccount.address
+        }).catch(function(error) {
+          return false
+        });
+      })
+      return true
+    }
   }).catch(function(error) {
-    return false
+      console.log("Error getting document:", error);
+      return false
   });
+
+  // Firebase.firestore().collection('accounts').doc(user!.uid).collection("accounts").doc(newAccount.address).set({
+  //   name: newAccount.name,
+  //   address: newAccount.address
+  // }).catch(function(error) {
+  //   return false
+  // });
 
   // return docRef.get().then(function(doc) {
   //   if (doc.exists) {

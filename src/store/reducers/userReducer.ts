@@ -38,7 +38,8 @@ const initData = {
     fortmatic: undefined,
     contacts: [],
     walletConnector: WalletConnector,
-    loadingBalances: false
+    loadingBalances: false,
+    web3: null
 }
 
 const userReducer = ( state = initData, action: any ) => {
