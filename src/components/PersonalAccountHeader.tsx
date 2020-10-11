@@ -4,7 +4,6 @@ import HoldingsPieChart from './holdings/HoldingsPieChart';
 import { useSelector, useDispatch } from 'react-redux';
 import './personalAccountHeader.scss'
 import { setEthHoldings, setHoldings } from '../store/actions/holdingsActions';
-import HoldingsListCard from './holdings/HoldingsListCard';
 import WalletConnectProvider from '@walletconnect/web3-provider';
 import Fortmatic from 'fortmatic';
 import { setWeb3, setLoadingBalances } from '../store/actions/userActions';
@@ -13,6 +12,7 @@ import Web3Modal from "web3modal";
 import ClipLoader from "react-spinners/ClipLoader";
 import MinAbi from '../MinAbi';
 import { ERC20TOKENS } from './Erc20Tokens';
+import HoldingsHistoryChart from './holdings/HoldingsHistoryChart';
 
 interface Props {
     accounts: any
@@ -140,7 +140,11 @@ const PersonalAccountHeader: React.FC<Props> = ({accounts, openTransak, openModa
        if(accounts.length > 0) {
         return (
             <div className="personal-account-header">
-                <HoldingsListCard accounts={accounts} openTransak={openTransak} setPurchaseModalOpen={setPurchaseModalOpen} openModal={openModal}/>
+                <IonCard className={"owners-acount"} >
+                    <IonCardContent>
+                        <HoldingsHistoryChart />
+                    </IonCardContent>
+                </IonCard>
                 <IonCard className={"owners-acount"} >
                     <div className="pie-chart-wrapper">
                         <HoldingsPieChart series={series} labels={labels} />

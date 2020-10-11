@@ -4,7 +4,7 @@ import './PaymentPage.scss';
 import transakSDK from '@transak/transak-sdk'
 import { logoTwitter, logoGooglePlaystore } from 'ionicons/icons';
 import { useSelector, useDispatch } from 'react-redux';
-import Firebase, { signInWithCustomToken } from '../firebase';
+import Firebase, { signInWithCustomToken, createAccountCollectionIfNotExists } from '../firebase';
 import { setContacts, setUser, setLoadingBalances } from '../store/actions/userActions';
 import { withRouter } from 'react-router';
 import { erc20ContractAbi } from '../components/Erc20TokenAbi';
@@ -17,6 +17,8 @@ import DesktopArticleList from '../components/articles/desktopArticleList';
 import LandingPageComponent from '../components/LandingPageComponent'
 import PersonalAccountHeader from '../components/PersonalAccountHeader';
 import PriceList from '../components/market/PriceList';
+import HoldingsHistoryChart from '../components/holdings/HoldingsHistoryChart';
+import HoldingsListCard from '../components/holdings/HoldingsListCard';
 
 const PaymentPage = (props) => {
 
@@ -128,6 +130,7 @@ const PaymentPage = (props) => {
 
         if (!user) {
           signInWithCustomToken(accounts[0]).then((user) => {
+            createAccountCollectionIfNotExists(accounts[0])
             dispatch(setUser(user))
             // return <Redirect to="/wallet" />
           })
@@ -309,6 +312,7 @@ const PaymentPage = (props) => {
                                           setPurchaseModalOpen={setPurchaseModalOpen}
                                           openModal={openModal} />
                   <div className="market-cards">
+                      <HoldingsListCard accounts={accounts} openTransak={openTransak} setPurchaseModalOpen={setPurchaseModalOpen} openModal={openModal}/>
                       <IonCard className={`main-card ${selectedView === "Recent News" ? "news-card" : selectedView === "Current Prices" ? "price-card" : null} `}>
                         <IonCardHeader>
                           <IonCardTitle className={"accounts-title"} >
@@ -317,19 +321,6 @@ const PaymentPage = (props) => {
                         </IonCardHeader>
                         <IonCardContent className="contacts-content">
                           <ContactsList openModal={openModal} openTransak={openTransak} />
-                        </IonCardContent>
-                      </IonCard>
-                      {/* <HoldingsListCard /> */}
-                      <IonCard className={`main-card ${selectedView === "Recent News" ? "news-card" : selectedView === "Current Prices" ? "price-card" : null} `}>
-                        <IonCardHeader>
-                          <IonCardTitle className={"accounts-title"} >
-                            Transactions
-                          </IonCardTitle>
-                        </IonCardHeader>
-                        <IonCardContent>
-                          <>
-                            Coming Soon
-                          </>
                         </IonCardContent>
                       </IonCard>
                     </div>

@@ -17,8 +17,9 @@ const LandingPageComponent: React.FC<OwnProps> = ({  history }) => {
   const [showInfo, setShowInfo] = useState(true)
 
   const login = async () => {
-    const provider = await walletConnector.connect()
-    dispatch(setWeb3(new Web3(provider)))
+    walletConnector.connect().then((provider: any) => {
+      dispatch(setWeb3(new Web3(provider)))
+    });
   }
 
 

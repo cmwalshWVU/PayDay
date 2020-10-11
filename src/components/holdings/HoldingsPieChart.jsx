@@ -7,12 +7,12 @@ import ClipLoader from "react-spinners/ClipLoader";
 
 const HoldingsPieChart = ({series, labels}) => {
     // var colorPalette = ['#00D8B6','#008FFB',  '#FEB019', '#FF4560', '#775DD0']
-    var colorPalette = ['#00D8B6','#008FFB', '#FEB019', '#FF4560', '#775DD0', "#A300D6", "#7D02EB", "#5653FE", "#2983FF", "#00B1F2", "#6851FF", "#F0C808", "#93E1D8", "#FFA69E", "#DDFFF7"]
+    var colorPalette = ['#00D8B6', "#6851FF", '#008FFB', '#FEB019', '#FF4560', '#775DD0', "#A300D6", "#7D02EB", "#5653FE", "#2983FF", "#00B1F2", "#F0C808", "#93E1D8", "#FFA69E", "#DDFFF7"]
     const ethBal = useSelector((state) => state.holdings.ethBalance)
     
     const loadingBalances = useSelector((state) => state.user.loadingBalances)
 
-    const spinner = <ClipLoader size={150}
+    const spinner = <ClipLoader size={300}
                                 color={"#123abc"}
                                 loading={true} />
 

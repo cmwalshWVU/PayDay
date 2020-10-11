@@ -197,7 +197,8 @@ ion-content ion-toolbar {
     border-radius: 16px;
     width: 80%;
     margin: auto;
-
+    height: 100%;
+    
     .searchbar-input-container {
       max-width: 600px;
       margin: auto;
@@ -218,7 +219,7 @@ ion-content ion-toolbar {
 }
 
 .market-cards {
-  max-height: 40%;
+  max-height: 50%;
   display: flex;
   flex-direction: row;
   flex-grow: 1;

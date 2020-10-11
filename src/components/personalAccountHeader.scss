@@ -14,20 +14,21 @@
         color: "#FFFFFF"
     }
 }
+.holdings-list-card {
+    overflow: scroll;
+}
 .personal-account-header {
     display: flex;
     justify-content: space-evenly;
     // align-items: center;
     padding-bottom: 4px;
-    max-height: 60%;
+    max-height: 50%;
 
     #holdings-card-header {
         padding-bottom: 0;
     }
     
-    .holdings-list-card {
-        overflow: scroll;
-    }
+
 
     .personal-account {
         display: flex;
@@ -44,11 +45,15 @@
     .pie-chart-wrapper {
         padding: 10px;
         min-width: 200px;
+        margin: auto;
+        max-width: 534px;
+        width: 90%;
     }
     
 
     .personal-holdings-list {
         min-width: 240px;
+        overflow: scroll;
         padding: 0;
     }
 }
@@ -77,7 +82,8 @@
     display: flex;
     flex-direction: column;
 
-    .holdings-card-header {
-        padding-bottom: 0px;
+    #holdings-card-header {
+        padding-bottom: 4px;
+
     }
 }

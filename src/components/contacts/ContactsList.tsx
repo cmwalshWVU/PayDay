@@ -7,7 +7,7 @@ import './ContactsList.scss'
 import { ERC20TOKENS } from "../Erc20Tokens";
 
 interface Props {
-    openModal: boolean
+    openModal: (open: boolean, address: string) => void
     openTransak: any
 }
 

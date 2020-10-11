@@ -50,6 +50,26 @@ export function updateContact(email: string) {
         });
   }
 }
+
+export async function createAccountCollectionIfNotExists(address: string) {
+  var docRef = Firebase.firestore().collection('accounts').doc(address)
+  try {
+    const doc = await docRef.get();
+    if (doc.exists) {
+      return true;
+    }
+    else {
+      return Firebase.firestore().collection('accounts').doc(address).set({}).then(() => {
+        return true;
+      });
+    }
+  }
+  catch (error) {
+    console.log("Error getting document:", error);
+    return false;
+  }
+}
+
 export async function saveNewAccount(newAccount: {name: string, address: string}) {
   const user = Firebase.auth().currentUser
   var docRef = Firebase.firestore().collection('accounts').doc(user!.uid)

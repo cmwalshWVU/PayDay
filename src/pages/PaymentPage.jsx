@@ -1,20 +1,20 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { IonList, IonContent, IonPage, IonToolbar, IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonSegment, IonSegmentButton } from '@ionic/react';
+import { IonList, IonContent, IonPage, IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle } from '@ionic/react';
 import './PaymentPage.scss';
 import transakSDK from '@transak/transak-sdk'
 import { useSelector, useDispatch } from 'react-redux';
-import Firebase from '../firebase';
-import { setContacts, setWeb3 } from '../store/actions/userActions';
+import Firebase, { signInWithCustomToken, createAccountCollectionIfNotExists } from '../firebase';
+import { setContacts, setWeb3, setLoadingBalances, setUser } from '../store/actions/userActions';
 import { withRouter } from 'react-router';
 import PersonalAccountItem from '../components/contacts/personalAccountItem'
 import { erc20ContractAbi } from '../components/Erc20TokenAbi';
 import { isString } from 'util';
 import PurchaseModal from '../components/modals/PurchaseModal';
-import ContactsList from '../components/contacts/ContactsList';
 import TransferModal from '../components/modals/TransferModal';
 import LandingPageComponent from '../components/LandingPageComponent';
 import Web3 from 'web3';
 import { ERC20TOKENS } from '../components/Erc20Tokens';
+import MobileWalletCard from '../components/MobileWalletCard';
 
 const PaymentPage = (props) => {
   const [accounts, setaccounts] = useState([])
@@ -29,7 +29,6 @@ const PaymentPage = (props) => {
 
   const [open, setOpen] = useState(false)
   const [transferToAddress, setTransferToAddress] = useState("")
-  const [selectedTab, setSelectedTab] = useState("contacts")
 
   const dispatch = useDispatch()
   const walletConnector = useSelector((state) => state.user.walletConnector)
@@ -126,22 +125,35 @@ const PaymentPage = (props) => {
   const user = useSelector((state) => state.user.user)
 
   const getAccounts = useCallback(async () => {
-    web3.eth.getAccounts().then(async accounts => {
-      setAccount(accounts[0])
-      setaccounts(accounts)
+    if (web3 && web3.eth) {
+      dispatch(setLoadingBalances(true))
+      web3.eth.getAccounts().then(async accounts => {
+        setAccount(accounts[0])
+        setaccounts(accounts)
 
-      const amount = await web3.eth.getBalance(accounts[0])
-      if (amount) {
-        return setBalance(web3.utils.fromWei(amount.toString(), 'ether'))
-      } else {
-        return 0
-      }
-    })
-  }, [web3])
+        if (!user) {
+          signInWithCustomToken(accounts[0]).then((user) => {
+            createAccountCollectionIfNotExists(accounts[0])
+            dispatch(setUser(user))
+            // return <Redirect to="/wallet" />
+          })
+        }
+        const amount = await web3.eth.getBalance(accounts[0])
+        if (amount) {
+          return setBalance(web3.utils.fromWei(amount.toString(), 'ether'))
+        } else {
+          return 0
+        }
+      })
+    }
+  }, [dispatch, user, web3])
+
 
   useEffect(() => {
     if (user) {
       getAccounts()
+      const holdings = Firebase.firestore().collection('dailyHoldings').doc(user.uid).collection("holdingsHistory")
+      console.log(holdings.docs)
       const accounts = Firebase.firestore().collection('accounts').doc(user.uid).collection("accounts")
       accounts.onSnapshot(querySnapshot => {
           const accounts = []
@@ -154,19 +166,20 @@ const PaymentPage = (props) => {
           console.log(`Encountered error: ${err}`);
       });
     }
-  }, [user, dispatch, getAccounts]);
+  }, [web3, user, dispatch, getAccounts]);
   
   const openTransak = (address) => {
     let transak = new transakSDK({
-        apiKey: process.env.REACT_APP_TRANSAK_API_KEY,  // Your API Key
-        environment: 'PRODUCTION', // STAGING/PRODUCTION
-        hostURL: window.location.origin,
-        defaultCryptoCurrency: 'ETH',
-        walletAddress: address, // Your customer's wallet address
-        themeColor: '6851ff', // App theme color
-        fiatCurrency: 'USD', // INR/GBP
-        widgetHeight: '600px',
-        widgetWidth: '400px'
+      apiKey: process.env.REACT_APP_TRANSAK_API_KEY,  // Your API Key
+      environment: 'PRODUCTION', // STAGING/PRODUCTION
+      hostURL: window.location.origin,
+      defaultCryptoCurrency: 'ETH',
+      networks: 'ethereum',
+      walletAddress: address, // Your customer's wallet address
+      themeColor: '6851ff', // App theme color
+      fiatCurrency: 'USD', // INR/GBP
+      widgetHeight: '600px',
+      widgetWidth: '400px'
     });
     
     // let transak = new transakSDK({
@@ -251,7 +264,7 @@ const PaymentPage = (props) => {
 
   useEffect(() => {
     getAccounts()
-  }, [getAccounts])
+  }, [web3, getAccounts])
 
   return (
     <IonPage id="mobile-view">
@@ -271,7 +284,7 @@ const PaymentPage = (props) => {
                     <PersonalAccountItem tokens={ERC20TOKENS} openModal={openTransak} ownersAccount={true} openTransak={openTransak} account={{name: "", address: account}} />
                   )}
                 </IonList>
-                <IonButton onClick={() => setPurchaseModalOpen(true)}>
+                <IonButton onClick={() => openTransak(accounts[0])}>
                   Buy Crypto
                 </IonButton>
                 <IonButton size={"normal"}  onClick={() => openModal(true, "")} >
@@ -287,25 +300,7 @@ const PaymentPage = (props) => {
           </IonCard>
           
 
-          <IonCard className={"accounts-card"}>
-            <IonToolbar>
-              <IonSegment value={selectedTab} onIonChange={e => setSelectedTab(e.detail.value)}>
-                <IonSegmentButton value="contacts">
-                  Contacts
-                </IonSegmentButton>
-                <IonSegmentButton value="transactions">
-                  Transactions
-                </IonSegmentButton>
-              </IonSegment>
-            </IonToolbar>
-            {selectedTab === "contacts" ? 
-              <ContactsList openModal={openModal} openTransak={openTransak} />
-            :
-              <IonCardContent>
-                Coming Soon
-              </IonCardContent>
-            }
-          </IonCard>
+          <MobileWalletCard accounts={accounts} openTransak={openTransak} openModal={openModal} />
         </IonContent>
       : 
         <IonContent className="ion-padding">
