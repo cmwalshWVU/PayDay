@@ -112,10 +112,7 @@ const HoldingsHistoryChart: React.FC = () => {
     const buildChart = useCallback((history) => {
         // options.labels = history.map((hist: any) => new Date(hist.lastUpdated.seconds * 1000).toLocaleString())
 
-        console.log(history.map((hist: any) => hist.lastUpdated.seconds))
-        console.log(history.map((hist: any) => hist.totalHoldings))
         const s: any = series(history)
-        console.log(s)
         if (history.length > 0) {
             return (
                 <Chart options={options} series={[{
@@ -178,7 +175,6 @@ const HoldingsHistoryChart: React.FC = () => {
                 return data
             })
 
-            console.log(history)
             setChart(buildChart(history))
 
             // need to create store action/reducer for holdings history
