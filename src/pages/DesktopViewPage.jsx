@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { IonIcon, IonItem, IonListHeader, IonList, IonContent, IonPage, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonAvatar } from '@ionic/react';
+import { IonIcon, IonItem, IonListHeader, IonList, IonContent, IonPage, IonCard, IonCardContent, IonCardHeader, IonCardTitle } from '@ionic/react';
 import './PaymentPage.scss';
 import transakSDK from '@transak/transak-sdk'
 import { logoTwitter, logoGooglePlaystore } from 'ionicons/icons';
@@ -12,15 +12,14 @@ import { isString } from 'util';
 import PurchaseModal from '../components/modals/PurchaseModal';
 import ContactsList from '../components/contacts/ContactsList';
 import TransferModal from '../components/modals/TransferModal';
-import ProfileIdenticon from '../components/indenticton';
 import DesktopArticleList from '../components/articles/desktopArticleList';
 import LandingPageComponent from '../components/LandingPageComponent'
 import PersonalAccountHeader from '../components/PersonalAccountHeader';
 import PriceList from '../components/market/PriceList';
-import HoldingsHistoryChart from '../components/holdings/HoldingsHistoryChart';
 import HoldingsListCard from '../components/holdings/HoldingsListCard';
+import AccountView from '../components/account/AccountView';
 
-const PaymentPage = (props) => {
+const PaymentPage = () => {
 
   const web3 = useSelector((state) => state.user.web3)
   
@@ -266,10 +265,10 @@ const PaymentPage = (props) => {
     <IonPage>
       <div className="desktopview">
           <IonList className="menu-list">
-            <IonListHeader>
-            <IonAvatar className={"avatar"} onClick={() => props.history.push("/account")}>
-              <ProfileIdenticon size={40} string={accounts[0]} />
-            </IonAvatar>
+            <IonListHeader className="menu-header">
+            {/* <IonAvatar className={"avatar"} onClick={() => props.history.push("/account")}> */}
+              <img className={"icon"} src={`assets/icon/noTextLogo.png`} alt="Ionic logo" />
+            {/* </IonAvatar> */}
             </IonListHeader>
             <div className="list-items">
               <IonItem className={selectedView === "Recent News" ? "selected" : null} onClick={() => setSelectedView("Recent News")}>
@@ -280,6 +279,9 @@ const PaymentPage = (props) => {
               </IonItem>
               <IonItem className={selectedView === "Wallet" ? "selected" : null} onClick={() => setSelectedView("Wallet")}>
                 Wallet
+              </IonItem>
+              <IonItem className={selectedView === "Account" ? "selected" : null} onClick={() => setSelectedView("Account")}>
+                Account
               </IonItem>
             </div>
             <div className="icons">
@@ -293,6 +295,8 @@ const PaymentPage = (props) => {
             <div className="main-content">
               { selectedView === "Market" ?
                   <PriceList />
+              : selectedView === "Account" ?
+                <AccountView />
               : selectedView === "Recent News" ?
                 <IonCard className="news-list">
                   <IonCardHeader>

@@ -54,13 +54,10 @@ const LandingPage: React.FC<OwnProps> = ({  history }) => {
                       No Plugins/Extensions required
                     </div>
                     <div >
-                      No long pass phrases to remember
+                      Perforance Tracking for your holdings
                     </div>
                     <div>
-                      2 Factor Authentication
-                    </div>
-                    <div>
-                      Debit Card Access to 27 Cryptocurrencies 
+                      Debit Card Access to 320+ Cryptocurrencies
                     </div>
                     <div>
                       Save all of your contacts
@@ -69,7 +66,7 @@ const LandingPage: React.FC<OwnProps> = ({  history }) => {
                       Desktop and Mobile Support (Mobile app coming soon!)
                     </div>
                     <div>
-                      <b>Wallet Powered by Fortmatic</b>
+                      <b>Get More Out Of Your Wallet</b>
                     </div>
                   </>
                   : 
