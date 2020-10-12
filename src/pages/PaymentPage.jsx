@@ -293,7 +293,7 @@ const PaymentPage = (props) => {
               </>
               : 
                 <IonButton onClick={() => login()}>
-                  Login / Sign Up To Fortmatic
+                  Connect Wallet
                 </IonButton>
               }
             </IonCardContent>

@@ -3,6 +3,7 @@ import Chart from 'react-apexcharts'
 import numbro from 'numbro';
 import { useSelector } from 'react-redux';
 import ClipLoader from "react-spinners/ClipLoader";
+import { isPlatform } from '@ionic/react';
 
 
 const HoldingsPieChart = ({series, labels}) => {
@@ -82,7 +83,7 @@ const HoldingsPieChart = ({series, labels}) => {
             labels: {
                 colors: ["#FFFFFF"]
             },
-            position: 'left'
+            position: isPlatform("mobile") ? 'bottom' : 'left'
         }
     }
     const buildChart = useCallback((chartSeries, chartLabels, loading) => {

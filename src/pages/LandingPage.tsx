@@ -1,26 +1,23 @@
 import { RouteComponentProps, withRouter } from "react-router-dom";
-import React, { useState } from 'react';
-import { IonContent, IonPage,IonRow, IonCol, IonButton, IonCardTitle, IonCardContent, IonIcon } from '@ionic/react';
+import React from 'react';
+import { IonContent, IonPage,IonRow, IonCol, IonButton, IonCardTitle, IonCardContent } from '@ionic/react';
 import './LandingPage.scss'
 import { useSelector, useDispatch } from "react-redux";
-import { signInWithCustomToken } from "../firebase";
-import { setUser, setWeb3 } from "../store/actions/userActions";
-import { chevronUp, chevronDown } from "ionicons/icons";
+import { setWeb3 } from "../store/actions/userActions";
 import Web3 from "web3";
 
 interface OwnProps extends RouteComponentProps {}
 
-const LandingPage: React.FC<OwnProps> = ({  history }) => {
+const LandingPage: React.FC<OwnProps> = () => {
 
   const dispatch = useDispatch()
 
   const walletConnector = useSelector((state: any) => state.user.walletConnector)
 
-  const [showInfo, setShowInfo] = useState(true)
-
   const login = async () => {
-    const provider = await walletConnector.connect()
-    dispatch(setWeb3(new Web3(provider)))
+    walletConnector.connect().then((provider: any) => {
+      dispatch(setWeb3(new Web3(provider)))
+    });
   }
 
   return (
@@ -38,7 +35,7 @@ const LandingPage: React.FC<OwnProps> = ({  history }) => {
           </h5>
           <IonRow>
           <IonCol>
-            <IonButton className={"login-button"} onClick={() => login()} expand="block">Login / Sign Up</IonButton>
+            <IonButton className={"login-button"} onClick={() => login()} expand="block">Connect Wallet</IonButton>
           </IonCol>
         </IonRow>
           <IonRow>
@@ -46,32 +43,27 @@ const LandingPage: React.FC<OwnProps> = ({  history }) => {
             <div>
               <IonCardContent>
                 <IonCardTitle className={"about-header"} style={{ fontFamily: "monospace" }}>
-                  <u className={"show-info"} onClick={() => setShowInfo(!showInfo)}><b>Why PayDay?</b><IonIcon icon={showInfo ? chevronUp : chevronDown}/></u> 
+                  <u className={"show-info"}>
+                    <b>Why PayDay?</b>
+                  </u> 
                 </IonCardTitle>
-                {showInfo ? 
-                  <>
-                    <div>
-                      No Plugins/Extensions required
-                    </div>
-                    <div >
-                      Perforance Tracking for your holdings
-                    </div>
-                    <div>
-                      Debit Card Access to 320+ Cryptocurrencies
-                    </div>
-                    <div>
-                      Save all of your contacts
-                    </div>
-                    <div>
-                      Desktop and Mobile Support (Mobile app coming soon!)
-                    </div>
-                    <div>
-                      <b>Get More Out Of Your Wallet</b>
-                    </div>
-                  </>
-                  : 
-                  null
-                }
+                <>
+                  <div>
+                    Debit Card Access to 320+ Cryptocurrencies
+                  </div>
+                  <div >
+                    Perforance Tracking for your holdings
+                  </div>
+                  <div>
+                    Save all of your contacts
+                  </div>
+                  <div>
+                    No Plugins/Extensions required
+                  </div>
+                  <div>
+                    Desktop and Mobile Support (Mobile app coming soon!)
+                  </div>
+                </>
               </IonCardContent>
             </div>
           </IonCol>

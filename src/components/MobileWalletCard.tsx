@@ -10,8 +10,9 @@ import ClipLoader from "react-spinners/ClipLoader";
 import MinAbi from '../MinAbi';
 import { ERC20TOKENS } from './Erc20Tokens';
 import HoldingsHistoryChart from './holdings/HoldingsHistoryChart';
-import { peopleOutline, pieChartOutline, trendingUpOutline } from 'ionicons/icons';
+import { peopleOutline, pieChartOutline, trendingUpOutline, walletOutline } from 'ionicons/icons';
 import ContactsList from './contacts/ContactsList';
+import HoldingsList from './holdings/HoldingsList';
 
 interface Props {
     accounts: any
@@ -24,6 +25,9 @@ const MobileWalletCard: React.FC<Props> = ({accounts, openTransak, openModal}) =
     
     const [selectedTab, setSelectedTab] = useState("pieChart")
       
+    const ethHoldings = useSelector((state: any) => state.holdings.ethHoldings)
+    const holdings = useSelector((state: any) => state.holdings.holdings)
+
     const web3 = useSelector((state: any) => state.user.web3)
     const currentPrices = useSelector((state: any) => state.prices.currentPrices)
     
@@ -120,8 +124,8 @@ const MobileWalletCard: React.FC<Props> = ({accounts, openTransak, openModal}) =
             <IonCard className={"accounts-card"}>
                 <IonToolbar>
                     <IonSegment value={selectedTab} onIonChange={(e: any) => setSelectedTab(e.detail.value)}>
-                        <IonSegmentButton value="contacts">
-                            <IonIcon icon={peopleOutline} />
+                        <IonSegmentButton value="wallet">
+                            <IonIcon icon={walletOutline} />
                         </IonSegmentButton>
                         <IonSegmentButton value="pieChart">
                             <IonIcon icon={pieChartOutline} />
@@ -129,10 +133,15 @@ const MobileWalletCard: React.FC<Props> = ({accounts, openTransak, openModal}) =
                         <IonSegmentButton value="lineChart">
                             <IonIcon icon={trendingUpOutline} />
                         </IonSegmentButton>
+                        <IonSegmentButton value="contacts">
+                            <IonIcon icon={peopleOutline} />
+                        </IonSegmentButton>
                     </IonSegment>
                 </IonToolbar>
                 {selectedTab === "contacts" ? 
                     <ContactsList openModal={openModal} openTransak={openTransak} />
+                : selectedTab === "wallet" ?
+                    <HoldingsList balances={holdings} balance={ethHoldings} personalAccount={true} />
                 : selectedTab === "pieChart" ?
                     <IonCardContent>
                         <div className="pie-chart-wrapper">

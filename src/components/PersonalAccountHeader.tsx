@@ -177,7 +177,7 @@ const PersonalAccountHeader: React.FC<Props> = ({accounts, openTransak, openModa
                 </IonCardHeader>
                 <IonCardContent className="personal-account-header">
                     <IonButton onClick={() => login()}>
-                        Sign Up /Login To Fortmatic
+                        Connect Wallet
                     </IonButton>
                 </IonCardContent>
             </IonCard>

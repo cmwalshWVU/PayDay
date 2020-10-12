@@ -39,7 +39,7 @@ const ContactsList: React.FC<Props> = ({openModal, openTransak}) => {
                   : 
                   <IonItem>
                     <IonLabel className="center">
-                      Login to add contacts
+                      Connect Wallet to add contacts
                     </IonLabel>
                   </IonItem>
                 }
