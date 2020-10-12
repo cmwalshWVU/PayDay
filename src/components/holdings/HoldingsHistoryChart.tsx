@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react'
+import React, { useEffect, useState, useCallback, useMemo } from 'react'
 import { useSelector } from 'react-redux';
 import Firebase from '../../firebase';
 import Chart from 'react-apexcharts'
@@ -15,7 +15,7 @@ const HoldingsHistoryChart: React.FC = () => {
                         loading={true} />
     const [chart, setChart] = useState<any>(spinner)
 
-    const options = () => { 
+    const options = useMemo(() => {
         return {
             chart: {
                 type: 'area',
@@ -107,7 +107,7 @@ const HoldingsHistoryChart: React.FC = () => {
                 }
             },
           }
-    }
+    }, [])
 
     const buildChart = useCallback((history) => {
         // options.labels = history.map((hist: any) => new Date(hist.lastUpdated.seconds * 1000).toLocaleString())
@@ -118,7 +118,7 @@ const HoldingsHistoryChart: React.FC = () => {
         console.log(s)
         if (history.length > 0) {
             return (
-                <Chart options={options()} series={[{
+                <Chart options={options} series={[{
                     data: s[0].data,
                     name: "Holdings History"
                 }]} type="area" />

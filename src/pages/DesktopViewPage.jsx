@@ -271,17 +271,17 @@ const PaymentPage = () => {
             {/* </IonAvatar> */}
             </IonListHeader>
             <div className="list-items">
-              <IonItem className={selectedView === "Recent News" ? "selected" : null} onClick={() => setSelectedView("Recent News")}>
-                News
+              <IonItem className={selectedView === "Account" ? "selected" : null} onClick={() => setSelectedView("Account")}>
+                Account
               </IonItem>
               <IonItem className={selectedView === "Market" ? "selected" : null} onClick={() => setSelectedView("Market")}>
                 Market
               </IonItem>
+              <IonItem className={selectedView === "Recent News" ? "selected" : null} onClick={() => setSelectedView("Recent News")}>
+                News
+              </IonItem>
               <IonItem className={selectedView === "Wallet" ? "selected" : null} onClick={() => setSelectedView("Wallet")}>
                 Wallet
-              </IonItem>
-              <IonItem className={selectedView === "Account" ? "selected" : null} onClick={() => setSelectedView("Account")}>
-                Account
               </IonItem>
             </div>
             <div className="icons">

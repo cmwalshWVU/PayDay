@@ -82,7 +82,7 @@ const HoldingsPieChart = ({series, labels}) => {
             labels: {
                 colors: ["#FFFFFF"]
             },
-            position: 'bottom'
+            position: 'left'
         }
     }
     const buildChart = useCallback((chartSeries, chartLabels, loading) => {
