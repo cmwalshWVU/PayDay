@@ -1,0 +1,91 @@
+.market-list-desktopview {
+    margin: 20px 40px 20px 40px;
+    display: flex;
+    flex-direction: column;
+    max-height: 100%;
+    overflow: auto;
+
+    .market-header {
+        padding-bottom: 20px;
+
+        .market-title {
+            font-size: 60px;
+            padding-left: 0;
+
+            .market-title-content {
+                display: flex;
+                flex-wrap: wrap;
+                
+                .title {
+                    margin-right: 20px;
+                }
+
+                .search-bar {
+                    max-width: 300px;
+                    padding-left: 0;
+
+                    input {
+                        border-radius: 8px;
+                    }
+                }
+                .dark-bar {
+                    input {
+                        background-color: #1e1e1e;
+                        color: white;
+                    }
+                }
+            }
+        }
+    }
+
+
+
+    .table-container {
+        overflow: auto;
+
+        .holding-icon {
+            height: 40px;
+            width: 40px;
+        }
+
+        .positive {
+            color: #009e74;
+        }
+        .negative {
+            color: #d94040;
+        }
+
+        .MuiTableCell-stickyHeader {
+            font-size: 18px;
+        }
+
+        .dark-table {
+            .MuiTableCell-stickyHeader {
+                background-color: #1e1e1e;
+                font-size: 16px;
+            }
+        }
+
+        // .light-table {
+        //     .MuiTableCell-stickyHeader {
+        //         background-color: lightgray;
+        //         font-size: 16px;
+        //     }
+        // }
+        
+
+        .name {
+            font-size: 22px;
+
+            .name-cell {
+                display: flex;
+                flex-direction: column;
+
+                .symbol {
+                    font-size: 16px;
+                    color: gray;
+                }
+            }
+        }
+    }
+}

@@ -77,7 +77,7 @@ ion-content ion-toolbar {
 
 .accounts-card {
   max-width: 505px;
-  margin: auto;
+  margin: 20px auto;
   border-radius: 16px;
 }
 
@@ -136,11 +136,21 @@ ion-content ion-toolbar {
     }
   }
 
+  .menu-light {
+    background: lightgray;
+
+    .item-light {
+      --background: lightgray;
+    }
+  }
+
   .menu-list {
     display: flex;
     flex-direction: column;
     padding: 20px;
-    width: 160px;
+    width: 20vw;
+    max-width: 200px;
+    min-width: 100px;    
 
     .icons {
       flex-grow: 1;

@@ -15,14 +15,15 @@ import TransferModal from '../components/modals/TransferModal';
 import DesktopArticleList from '../components/articles/desktopArticleList';
 import LandingPageComponent from '../components/LandingPageComponent'
 import PersonalAccountHeader from '../components/PersonalAccountHeader';
-import PriceList from '../components/market/PriceList';
 import HoldingsListCard from '../components/holdings/HoldingsListCard';
 import AccountView from '../components/account/AccountView';
+import DesktopPriceList from '../components/market/DesktopPriceList';
 
 const PaymentPage = () => {
 
   const web3 = useSelector((state) => state.user.web3)
-  
+  const useDarkMode = useSelector((state) => state.user.useDarkMode)
+
   const [accounts, setaccounts] = useState([])
   const [account, setAccount] = useState([])
   const [balance, setBalance] = useState("0");
@@ -264,28 +265,28 @@ const PaymentPage = () => {
   return (
     <IonPage>
       <div className="desktopview">
-          <IonList className="menu-list">
+          <IonList className={`${useDarkMode ? 'menu-dark' : 'menu-light'} menu-list`}>
             <IonListHeader className="menu-header">
             {/* <IonAvatar className={"avatar"} onClick={() => props.history.push("/account")}> */}
               <img className={"icon"} src={`assets/icon/noTextLogo.png`} alt="Ionic logo" />
             {/* </IonAvatar> */}
             </IonListHeader>
             <div className="list-items">
-              <IonItem className={selectedView === "Account" ? "selected" : null} onClick={() => setSelectedView("Account")}>
+              <IonItem className={`${selectedView === "Account" ? "selected" : null} ${useDarkMode ? 'item-dark': 'item-light'}`} onClick={() => setSelectedView("Account")}>
                 Account
               </IonItem>
-              <IonItem className={selectedView === "Market" ? "selected" : null} onClick={() => setSelectedView("Market")}>
+              <IonItem className={`${selectedView === "Market" ? "selected" : null} ${useDarkMode ? 'item-dark': 'item-light'}`} onClick={() => setSelectedView("Market")}>
                 Market
               </IonItem>
-              <IonItem className={selectedView === "Recent News" ? "selected" : null} onClick={() => setSelectedView("Recent News")}>
+              <IonItem className={`${selectedView === "Recent News" ? "selected" : null} ${useDarkMode ? 'item-dark': 'item-light'}`} onClick={() => setSelectedView("Recent News")}>
                 News
               </IonItem>
-              <IonItem className={selectedView === "Wallet" ? "selected" : null} onClick={() => setSelectedView("Wallet")}>
+              <IonItem className={`${selectedView === "Wallet" ? "selected" : null} ${useDarkMode ? 'item-dark': 'item-light'}`} onClick={() => setSelectedView("Wallet")}>
                 Wallet
               </IonItem>
             </div>
             <div className="icons">
-            <IonItem className={"logos"}>
+            <IonItem className={"logos item-light"}>
               <IonIcon className={"twitter"} icon={logoTwitter} onClick={() => window.open("https://twitter.com/PayDayWallet", '_blank')} />
               <IonIcon className={"google"} icon={logoGooglePlaystore} onClick={() => window.open("https://play.google.com/store/apps/details?id=payday.wallet", '_blank')} />
             </IonItem>
@@ -294,7 +295,8 @@ const PaymentPage = () => {
           <IonContent className={"ion-padding home-page"} >
             <div className="main-content">
               { selectedView === "Market" ?
-                  <PriceList />
+                  // <PriceList />
+                  <DesktopPriceList />
               : selectedView === "Account" ?
                 <AccountView />
               : selectedView === "Recent News" ?

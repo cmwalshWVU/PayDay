@@ -11,6 +11,8 @@ const HoldingsPieChart = ({series, labels}) => {
     var colorPalette = ['#00D8B6', "#6851FF", '#008FFB', '#FEB019', '#FF4560', '#775DD0', "#A300D6", "#7D02EB", "#5653FE", "#2983FF", "#00B1F2", "#F0C808", "#93E1D8", "#FFA69E", "#DDFFF7"]
     const ethBal = useSelector((state) => state.holdings.ethBalance)
     
+    const useDarkMode = useSelector((state) => state.user.useDarkMode)
+
     const loadingBalances = useSelector((state) => state.user.loadingBalances)
 
     const spinner = <ClipLoader size={300}
@@ -45,9 +47,9 @@ const HoldingsPieChart = ({series, labels}) => {
             donut: {
                 labels: {
                     show: true,
-                    color: "#FFFFFF",
+                    color: useDarkMode ? "#FFFFFF" : "#000000",
                     value: {
-                        color: "#FFFFFF",
+                        color: useDarkMode ? "#FFFFFF" : "#000000",
                         formatter: function (w) {
                             return "$" +  numbro(w).format({
                                             thousandSeparated: true,
@@ -58,7 +60,7 @@ const HoldingsPieChart = ({series, labels}) => {
                     total: {
                         show: true,
                         label: "Total",
-                        color: "#FFFFFF",
+                        color: useDarkMode ? "#FFFFFF" : "#000000",
                         formatter: function (w) {
                             return "$" +  numbro(w.globals.seriesTotals.reduce((a, b) => {
                                 return a + b
@@ -81,7 +83,7 @@ const HoldingsPieChart = ({series, labels}) => {
         labels: [],
         legend: {
             labels: {
-                colors: ["#FFFFFF"]
+                colors: [useDarkMode ? "#FFFFFF" : "#000000"]
             },
             position: isPlatform("mobile") ? 'bottom' : 'left'
         }

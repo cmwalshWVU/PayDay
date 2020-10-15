@@ -9,6 +9,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 const HoldingsHistoryChart: React.FC = () => {
 
     const user = useSelector((state: any) => state.user.user)
+    const useDarkMode = useSelector((state: any) => state.user.useDarkMode)
 
     const spinner = <ClipLoader size={300}
                         color={"#123abc"}
@@ -38,7 +39,7 @@ const HoldingsHistoryChart: React.FC = () => {
                 show: false,
                 floating: true,
                 labels: {
-                    color: "#000000",
+                    color: useDarkMode ? "#FFFFFF" : "#000000",
                 }
             },
             // tooltip: {
@@ -71,7 +72,7 @@ const HoldingsHistoryChart: React.FC = () => {
                 // opposite: true,
                 labels: {
                     style: {
-                        colors: '#FFFFFF',
+                        colors: useDarkMode ? "#FFFFFF" : "#000000",
                         fontSize: '14px'
                     },
                     align: 'right',
@@ -95,7 +96,7 @@ const HoldingsHistoryChart: React.FC = () => {
             xaxis: {
                 labels: {
                     style: {
-                        colors: '#FFFFFF' 
+                        colors: useDarkMode ? "#FFFFFF" : "#000000" 
                     },
                     formatter: function (value: any) {
                         return moment(value).format('LT')
