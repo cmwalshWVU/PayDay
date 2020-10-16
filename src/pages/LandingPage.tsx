@@ -52,7 +52,7 @@ const LandingPage: React.FC<OwnProps> = () => {
                     Debit Card Access to 320+ Cryptocurrencies
                   </div>
                   <div >
-                    Perforance Tracking for your holdings
+                    Performance Tracking for your holdings
                   </div>
                   <div>
                     Save all of your contacts
