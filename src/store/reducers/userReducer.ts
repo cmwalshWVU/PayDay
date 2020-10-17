@@ -79,6 +79,11 @@ switch (action.type) {
             ...state,
             loadingBalances: action.loadingBalances
         }
+    case 'SET_WALLET_CONNECT':
+        return {
+            ...state,
+            walletConnector: action.walletConnector
+        }
     default:
         return {
             ...state

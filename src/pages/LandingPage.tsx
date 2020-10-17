@@ -5,6 +5,9 @@ import './LandingPage.scss'
 import { useSelector, useDispatch } from "react-redux";
 import { setWeb3 } from "../store/actions/userActions";
 import Web3 from "web3";
+import Fortmatic from "fortmatic";
+import Portis from "@portis/web3";
+import Web3Modal from 'web3modal'
 
 interface OwnProps extends RouteComponentProps {}
 
@@ -17,6 +20,44 @@ const LandingPage: React.FC<OwnProps> = () => {
   const login = async () => {
     walletConnector.connect().then((provider: any) => {
       dispatch(setWeb3(new Web3(provider)))
+    });
+  }
+
+  const createWallet = async () => {
+    const providerOptions = {
+      fortmatic: {
+        display: {
+          description: "Create a Fortmatic Wallet"
+        },
+        package: Fortmatic, // required
+        options: {
+          key: "pk_live_633916DC39808625" // required
+        }
+      },
+      portis: {
+        display: {
+          description: "Create a Portis Wallet"
+        },
+        package: Portis, // required
+        options: {
+          id: "03f7a85e-c77c-42d0-b307-ff74a0ef6ae6" // required
+        }
+      }
+    };
+
+    const WalletConnector = new Web3Modal({
+        network: "mainnet", // optional
+        cacheProvider: true, // optional
+        theme: "dark",
+        providerOptions // required
+    });
+
+    WalletConnector.connect().then((provider: any) => {
+      dispatch(setWeb3(new Web3(provider)))
+      dispatch({
+        type: 'SET_WALLET_CONNECT',
+        walletConnector: WalletConnector
+      })
     });
   }
 
@@ -33,11 +74,10 @@ const LandingPage: React.FC<OwnProps> = () => {
           <h5>
             <span style={{ fontFamily: "monospace" }}>This is wallet designed For Everyone!</span>
           </h5>
-          <IonRow>
-          <IonCol>
+          <IonRow className="login-button-container">
             <IonButton className={"login-button"} onClick={() => login()} expand="block">Connect Wallet</IonButton>
-          </IonCol>
-        </IonRow>
+            <IonButton className={"login-button"} onClick={() => createWallet()} expand="block">Create Wallet</IonButton>
+          </IonRow>
           <IonRow>
           <IonCol>
             <div>
@@ -61,7 +101,7 @@ const LandingPage: React.FC<OwnProps> = () => {
                     No Plugins/Extensions required
                   </div>
                   <div>
-                    Desktop and Mobile Support (Mobile app coming soon!)
+                    Desktop and Mobile Support
                   </div>
                 </>
               </IonCardContent>
