@@ -282,7 +282,7 @@ const PaymentPage = () => {
                 News
               </IonItem>
               <IonItem className={`${selectedView === "Wallet" ? "selected" : null} ${useDarkMode ? 'item-dark': 'item-light'}`} onClick={() => setSelectedView("Wallet")}>
-                Wallet
+                Dashboard
               </IonItem>
             </div>
             <div className="icons">
@@ -300,16 +300,7 @@ const PaymentPage = () => {
               : selectedView === "Account" ?
                 <AccountView />
               : selectedView === "Recent News" ?
-                <IonCard className="news-list">
-                  <IonCardHeader>
-                    <IonCardTitle className={"accounts-title"} >
-                      Recent News
-                    </IonCardTitle>
-                  </IonCardHeader>
-                  <IonCardContent className="articles">
-                    <DesktopArticleList  news={[]} />
-                  </IonCardContent>
-                </IonCard>
+                <DesktopArticleList  news={[]} />
               :
               web3 ?
                 <>

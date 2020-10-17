@@ -4,7 +4,7 @@ import React from "react"
 import "./Article.scss"
 
 interface Props {
-    article: any
+    article: any,
     id: any
 }
 

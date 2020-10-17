@@ -1,5 +1,5 @@
 import React from 'react';
-import { IonList, IonItem } from '@ionic/react';
+import { IonList, IonItem, IonHeader, IonToolbar, IonTitle, IonSearchbar } from '@ionic/react';
 import pushid from 'unique-push-id';
 import { useSelector } from 'react-redux';
 import './Article.scss'
@@ -11,7 +11,8 @@ interface Props {
   
 const DesktopArticleList: React.FC<Props> = ({ news }) => {
     const newsFeed = useSelector((state: any) => state.news.newsArticles)
-   
+    const useDarkMode = useSelector((state: any) => state.user.useDarkMode)
+
     function newArray(x: any, y: any) {
         let d: any[] = []
         x.concat(y).forEach((item: any) =>{
@@ -54,20 +55,31 @@ const DesktopArticleList: React.FC<Props> = ({ news }) => {
     }
 
     return (
-        <IonList>
-            {buildList()}
-        </IonList>
+        <>
+            <div className="market-list-desktopview">
+                <IonHeader className="market-header">
+                    <IonToolbar>
+                        <IonTitle className="market-title" size="large">
+                            <div className="market-title-content">
+                                <div className="title">News</div>
+                            </div>
+                        </IonTitle>
+                    </IonToolbar>
+                </IonHeader>
+                <IonList className="article-list">
+                    {buildList()}
+                </IonList>
+            </div>
+        </>
     );
 }
 
 const noData = (
-        <IonList>
-            <IonItem>
-                <div className="card-content">
-                    <span >No recent news </span>
-                </div>
-            </IonItem>
-        </IonList>
-    );
+    <IonItem>
+        <div className="card-content">
+            <span >No recent news </span>
+        </div>
+    </IonItem>
+);
 
 export default DesktopArticleList
