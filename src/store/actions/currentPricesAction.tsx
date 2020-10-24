@@ -1,9 +1,11 @@
 import axios from 'axios';
+import { isPlatform } from '@ionic/core';
 
-const getPricesByPage = (page: any = 1, prices: any = []): any => 
-  axios.get(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page=${page}&sparkline=false`)
+const getPricesByPage = (page: any = 1, prices: any = []): any => {
+  const maxPage = isPlatform("mobile") ? 3 : 5
+  return axios.get(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page=${page}&sparkline=false`)
   .then(res => {
-    if (res.data.length > 0 && page < 5) {
+    if (res.data.length > 0 && page < maxPage) {
         return getPricesByPage(
             page+1,
             prices.concat(res.data)
@@ -18,6 +20,7 @@ const getPricesByPage = (page: any = 1, prices: any = []): any =>
     } else
       return e
   });
+}
 
 export function getCurrentPrices() {
     return(dispatch: any) => {

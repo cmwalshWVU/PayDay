@@ -103,4 +103,4 @@ const PriceList: React.FC = () => {
 
 }
 
-export default PriceList
+export default React.memo(PriceList)

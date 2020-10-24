@@ -286,7 +286,7 @@ const PaymentPage = (props) => {
           <IonCard className={`owners-acount ${!useDarkMode ? "light-card" : null}`} >
             <IonCardHeader>
               <IonCardTitle className={"accounts-title"} >
-                Personal Account
+                Holdings
               </IonCardTitle>
             </IonCardHeader>
             <IonCardContent>
@@ -333,4 +333,4 @@ const PaymentPage = (props) => {
   );
 };
 
-export default withRouter(PaymentPage);
+export default withRouter(React.memo(PaymentPage))
