@@ -12,10 +12,10 @@ const PriceList: React.FC = () => {
     const currentPrices = useSelector((state: any) => state.prices.currentPrices)
 
     return (
-        <IonCard className={`price-card`}>
+        <div className={`price-card`}>
             <IonCardHeader>
                 <IonCardTitle className={"accounts-title"} >
-                Current Prices
+                    Market
                 </IonCardTitle>
             </IonCardHeader>
             <IonSearchbar value={searchString} onIonChange={(e: any) => setSearchString(e.detail.value)}></IonSearchbar>
@@ -98,7 +98,7 @@ const PriceList: React.FC = () => {
                 }
                 </IonList>
             </IonCardContent>
-            </IonCard>
+        </div>
     )
 
 }

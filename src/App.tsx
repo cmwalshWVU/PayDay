@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { Redirect, Route } from 'react-router-dom';
+import React, { useEffect, useCallback } from 'react';
+import { Redirect, Route, } from 'react-router-dom';
 import {
   IonApp,
   IonIcon,
@@ -38,16 +38,20 @@ import NewsPage from './pages/NewsPage';
 import { setFeed, updateFeed } from './store/actions/newsActions';
 import Pusher, { Options } from 'pusher-js';
 import { getCurrentPrices } from './store/actions/currentPricesAction';
-import DesktopViewPage from './pages/DesktopViewPage';
 import MarketPage from './pages/MarketPage';
-import { setWeb3 } from './store/actions/userActions';
+import { setWeb3, setLoadingBalances, setAccounts, setUser, setContacts } from './store/actions/userActions';
 import Web3 from 'web3';
+import DesktopApp from './pages/DesktopApp';
+import Firebase, { signInWithCustomToken, createAccountCollectionIfNotExists } from './firebase';
+import { toast } from './components/toast';
 
 
 const App: React.FC = () => {
 
   const useDarkMode = useSelector((state: any) => state.user.useDarkMode)
   const walletConnector = useSelector((state: any) => state.user.walletConnector)
+  const web3 = useSelector((state: any) => state.user.web3)
+  const user = useSelector((state: any) => state.user.user)
 
   const dispatch = useDispatch()
 
@@ -78,11 +82,64 @@ const App: React.FC = () => {
     })
   }, [dispatch])
 
+  const getAccounts = useCallback(async () => {
+    if (web3 && web3.eth) {
+    dispatch(setLoadingBalances(true))
+    web3.eth.getAccounts().then(async (accounts: string[]) => {
+        dispatch(setAccounts(accounts))
+        // setAccount(accounts[0])
+        // setaccounts(accounts)
+
+        if (!user) {
+            signInWithCustomToken(accounts[0]).then((user) => {
+                toast("Sucessfully Logged In")
+                createAccountCollectionIfNotExists(accounts[0])
+                dispatch(setUser(user))
+                // return <Redirect to="/wallet" />
+            })
+        }
+    })
+    }
+  }, [dispatch, user, web3])
+
+  useEffect(() => {
+      if (user) {
+      const accounts = Firebase.firestore().collection('accounts').doc(user.uid).collection("accounts")
+      accounts.onSnapshot(querySnapshot => {
+          const accounts: any = []
+          querySnapshot.docs.forEach(doc => {
+              const data = doc.data()
+              accounts.push(data)
+          });
+          dispatch(setContacts(accounts))
+      }, err => {
+          console.log(`Encountered error: ${err}`);
+      });
+      } else {
+      
+      }
+  }, [dispatch, user, getAccounts]);
+
+  useEffect(() => {
+      getAccounts()
+  }, [web3, getAccounts])
+
   return (
   <IonApp className={useDarkMode ? 'dark-theme' : 'light-mode'} >
-    <IonReactRouter>
       {isPlatform("mobile") ? 
-        <IonTabs>
+          mobileApp()
+        :
+         <DesktopApp />
+        }
+  </IonApp>
+  )
+};
+
+const mobileApp = () => {
+  return (
+    <IonReactRouter>
+
+      <IonTabs>
           <IonRouterOutlet>
             <Route path="/wallet" component={PaymentPage} exact={true} />
             <Route path="/market" component={MarketPage} exact={true} />
@@ -105,16 +162,8 @@ const App: React.FC = () => {
             </IonTabButton>
           </IonTabBar>
         </IonTabs>
-        : 
-          <IonRouterOutlet>
-            <Route path="/" component={DesktopViewPage} exact={true} />
-            <Route path="/account" component={AccountPage} exact={true} />
-            <Route render={() => <Redirect to="/" />} />
-          </IonRouterOutlet>
-        }
-    </IonReactRouter>
-  </IonApp>
+      </IonReactRouter>
   )
-};
+}
 
 export default App;

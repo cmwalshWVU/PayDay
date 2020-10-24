@@ -1,7 +1,9 @@
 const initData = {
     holdings: [],
     ethHoldings: "0",
-    ethBalance: 0
+    ethBalance: 0,
+    series: [],
+    labels: []
 }
 
 const holdingsReducer = ( state = initData, action: any ) => {
@@ -10,6 +12,12 @@ switch (action.type) {
         return {
             ...state,
             holdings: action.holdings
+        }
+    case 'UPDATE_PIE_CHART':
+        return {
+            ...state,
+            series: action.series,
+            labels: action.labels
         }
     case 'UPDATE_CURRENT_ETH_HOLDINGS':
         return {

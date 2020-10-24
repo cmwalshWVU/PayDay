@@ -7,23 +7,23 @@ import '../personalAccountHeader.scss'
 
 interface Props {
     openTransak: (address: string) => void
-    setPurchaseModalOpen: any
     openModal: (open: boolean, address: string) => void
     accounts: any
 }
 
-const HoldingsListCard: React.FC<Props> = ({accounts, openTransak, setPurchaseModalOpen, openModal}) => {
+const HoldingsListCard: React.FC<Props> = ({accounts, openTransak, openModal}) => {
     
     const ethHoldings = useSelector((state: any) => state.holdings.ethHoldings)
     const holdings = useSelector((state: any) => state.holdings.holdings)
+    const useDarkMode = useSelector((state: any) => state.user.useDarkMode)
 
     return (
-        <IonCard className={"holdings-card"} >
+        <IonCard className={`holdings-card ${!useDarkMode ? "light-card" : null}`} >
             <IonCardHeader id={"holdings-card-header"}>
                 <IonCardTitle className={"accounts-title"} >
                     Holdings
                 </IonCardTitle>
-                <IonCardSubtitle>
+                <IonCardSubtitle  color={"light"}>
                     {accounts.map((account: any, index: number) =>
                         <PersonalAccountItem key={index} account={{name: "", address: account}} />
                     )}

@@ -43,11 +43,7 @@ const NewsPage: React.FC<SpeakerListProps> = ({}) => {
                     <IonRefresherContent>
                     </IonRefresherContent>
                 </IonRefresher>
-                {/* {isPlatform("mobile") ?  */}
-                    {/* <ArticleListSlides news={news} /> */}
-                    {/* : */}
-                    <ArticleList news={news} />
-                {/* } */}
+                <ArticleList news={news} />
             </IonContent>
         </IonPage>
     );

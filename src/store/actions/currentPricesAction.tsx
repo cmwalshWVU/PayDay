@@ -1,12 +1,32 @@
 import axios from 'axios';
 
+const getPricesByPage = (page: any = 1, prices: any = []): any => 
+  axios.get(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page=${page}&sparkline=false`)
+  .then(res => {
+    if (res.data.length > 0 && page < 5) {
+        return getPricesByPage(
+            page+1,
+            prices.concat(res.data)
+          );
+    } else {
+        return prices
+    }
+  }).catch(e => {
+    if (e.response.status === 404) {
+      console.log('LAST PAGE REACHED')
+      return prices
+    } else
+      return e
+  });
+
 export function getCurrentPrices() {
-    return(dispatch: any) =>{
-        axios.get("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page=1&sparkline=false")
-        .then(response => {
-            dispatch(updateCurrentPrices(response.data))
-        })
-        .catch(err => console.log(err));
+    return(dispatch: any) => {
+        getPricesByPage()
+            .then((prices: any) =>
+                dispatch(updateCurrentPrices(prices))
+            ).catch((err: any) =>
+                console.log(err)
+            );
     }
 };
 

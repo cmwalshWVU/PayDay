@@ -13,3 +13,11 @@ export function setEthHoldings(ethHoldings: any, ethBalance: any) {
         ethBalance
     }
 }
+
+export function setPieChartData(series: any, labels: any) {
+    return {
+        type: 'UPDATE_PIE_CHART',
+        series,
+        labels
+    }
+}

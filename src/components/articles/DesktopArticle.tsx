@@ -12,9 +12,15 @@ const DesktopArticle: React.FC<Props> = ({article, id}) => {
     let url = article.urlToImage !== undefined ? article.urlToImage : article.imageurl;
     const date = article.publishedAt !== undefined ? moment(article.publishedAt).format("llll") :
       moment(article.published_on * 1000).format("llll")
+
+    function addDefaultSrc(ev: any){
+        console.log("IMG ERROR")
+        ev.target.src = 'https://via.placeholder.com/150'
+    }
+
     return (
         <IonItem className="article-item desktop-article">
-            <img className={"article-img"} src={url} alt="N/A" />
+            <img className={"article-img"} src={url} alt="N/A" onError={addDefaultSrc}  />
             <IonLabel className="article-content">
                 <IonCardSubtitle>
                     {article.source_info ? article.source_info.name : article.source.name}

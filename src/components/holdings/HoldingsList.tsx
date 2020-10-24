@@ -21,18 +21,12 @@ const HoldingsList: React.FC<Props> = ({balance, balances, personalAccount}) => 
     const buildList = useCallback(() => {
         // if (isPlatform('mobile')) {
             return (
-                balances && balances.map((holding: any, index: number) => {
-                    let icon = require(`cryptocurrency-icons/32/icon/generic.png`); 
-                    try {
-                        icon = require(`cryptocurrency-icons/32/icon/${holding[2].toLowerCase()}.png`); 
-                    } catch (ex) {
-                        console.log(`Using generic icon for ${holding[2]}`)
-                    }
+                balances && balances.sort((a: any, b: any) => a[1] > b[1] ? -1 : 1).map((holding: any, index: number) => {
                     return (
-                        <IonItem key={index} className="holding-item">
+                        <IonItem color={"light"} key={index} className="holding-item">
                             <IonLabel className={"holding-list-label"}>
                                 <IonAvatar className={"holding-avatar"} slot="start">
-                                    <img className={"holding-icon"} src={icon} alt="N/A"/>
+                                    <img className={"holding-icon"} src={currentPrices.filter((it:any) => it.symbol === holding[2].toLowerCase())[0].image} alt="N/A"/>
                                 </IonAvatar>
                                 <div className="token-name">
                                     <div>
@@ -78,7 +72,7 @@ const HoldingsList: React.FC<Props> = ({balance, balances, personalAccount}) => 
     // const list = holdingsList.map((holding: Holding) => <div>Test</div>)
     return (
         <IonList lines="full" className={`${personalAccount ? "personal-holdings-list" :    "holdings-list"} ion-padding default-background`}>
-            <IonItem className="holding-item">
+            <IonItem color={"light"} className="holding-item">
                 <IonLabel className={"holding-list-label"}>
                     <IonAvatar className={"holding-avatar"} slot="start">
                         <img className={"holding-icon"} src={icon} alt="N/A"/>

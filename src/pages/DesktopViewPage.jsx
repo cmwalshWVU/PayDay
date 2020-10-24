@@ -1,15 +1,12 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { IonIcon, IonItem, IonListHeader, IonList, IonContent, IonPage, IonCard, IonCardContent, IonCardHeader, IonCardTitle } from '@ionic/react';
+import { IonContent, IonPage, IonCard, IonCardContent, IonCardHeader, IonCardTitle } from '@ionic/react';
 import './PaymentPage.scss';
 import transakSDK from '@transak/transak-sdk'
-import { logoTwitter, logoGooglePlaystore } from 'ionicons/icons';
 import { useSelector, useDispatch } from 'react-redux';
 import Firebase, { signInWithCustomToken, createAccountCollectionIfNotExists } from '../firebase';
 import { setContacts, setUser, setLoadingBalances } from '../store/actions/userActions';
-import { withRouter } from 'react-router';
 import { erc20ContractAbi } from '../components/Erc20TokenAbi';
 import { isString } from 'util';
-import PurchaseModal from '../components/modals/PurchaseModal';
 import ContactsList from '../components/contacts/ContactsList';
 import TransferModal from '../components/modals/TransferModal';
 import DesktopArticleList from '../components/articles/desktopArticleList';
@@ -18,21 +15,21 @@ import PersonalAccountHeader from '../components/PersonalAccountHeader';
 import HoldingsListCard from '../components/holdings/HoldingsListCard';
 import AccountView from '../components/account/AccountView';
 import DesktopPriceList from '../components/market/DesktopPriceList';
+import Menu from '../components/Menu';
+import { toast } from '../components/toast';
 
 const PaymentPage = () => {
 
   const web3 = useSelector((state) => state.user.web3)
   const useDarkMode = useSelector((state) => state.user.useDarkMode)
+  const [selectedView, setSelectedView] = useState("dashboard")
 
   const [accounts, setaccounts] = useState([])
   const [account, setAccount] = useState([])
   const [balance, setBalance] = useState("0");
   const [tokenToSend, setTokenToSend] = useState("ETH")
-  const [purchaseModalOpen, setPurchaseModalOpen] = useState(false)
-  const [purchaseAmount, setPurchaseAmount] = useState(0);
   const [open, setOpen] = useState(false)
   const [transferToAddress, setTransferToAddress] = useState("")
-  const [selectedView, setSelectedView] = useState("Wallet")
 
   const dispatch = useDispatch()
 
@@ -130,6 +127,7 @@ const PaymentPage = () => {
 
         if (!user) {
           signInWithCustomToken(accounts[0]).then((user) => {
+            toast("Sucessfully Logged In")
             createAccountCollectionIfNotExists(accounts[0])
             dispatch(setUser(user))
             // return <Redirect to="/wallet" />
@@ -176,21 +174,7 @@ const PaymentPage = () => {
         widgetHeight: '600px',
         widgetWidth: '400px'
     });
-    
-    // let transak = new transakSDK({
-    //   apiKey: '08492b5f-b07c-46d1-86b4-0435a2cf7146',  // Your API Key
-    //   environment: 'STAGING', // STAGING/PRODUCTION
-    //   defaultCryptoCurrency: 'ETH',
 
-    //   walletAddress: address, // Your customer's wallet address
-    //   themeColor: '6851ff', // App theme color
-    //   fiatCurrency: 'USD', // INR/GBP
-    //   email: '', // Your customer's email address
-    //   redirectURL: '',
-    //   hostURL: window.location.origin,
-    //   widgetHeight: '600px',
-    //   widgetWidth: '400px'
-    // });
     transak.init();
     
     // To get all the events
@@ -206,54 +190,6 @@ const PaymentPage = () => {
     transak.on(transak.EVENTS.TRANSAK_ORDER_SUCCESSFUL, (orderData) => {
         console.log(orderData);
         transak.close();
-    });
-  
-  }
-
-  const openTransakModal = (address, amount, token) => {
-    let transak = new transakSDK({
-        apiKey: process.env.REACT_APP_TRANSAK_API_KEY,  // Your API Key
-        environment: 'PRODUCTION', // STAGING/PRODUCTION
-        hostURL: window.location.origin,
-        cryptoCurrencyCode: token,
-        fiatAmount: amount,
-        walletAddress: address, // Your customer's wallet address
-        themeColor: '6851ff', // App theme color
-        fiatCurrency: 'USD', // INR/GBP
-        widgetHeight: '600px',
-        widgetWidth: '400px'
-    });
-    
-    // let transak = new transakSDK({
-    //   apiKey: '08492b5f-b07c-46d1-86b4-0435a2cf7146',  // Your API Key
-    //   environment: 'STAGING', // STAGING/PRODUCTION
-    //   defaultCryptoCurrency: 'ETH',
-
-    //   walletAddress: address, // Your customer's wallet address
-    //   themeColor: '6851ff', // App theme color
-    //   fiatCurrency: 'USD', // INR/GBP
-    //   email: '', // Your customer's email address
-    //   redirectURL: '',
-    //   hostURL: window.location.origin,
-    //   widgetHeight: '600px',
-    //   widgetWidth: '400px'
-    // });
-    transak.init();
-    
-    // To get all the events
-    transak.on(transak.ALL_EVENTS, (data) => {
-        console.log(data)
-    });
-
-    transak.on(transak.EVENTS.TRANSAK_WIDGET_CLOSE, (data) => {
-      transak.close();
-    })
-    
-    // This will trigger when the user marks payment is made.
-    transak.on(transak.EVENTS.TRANSAK_ORDER_SUCCESSFUL, (orderData) => {
-        console.log(orderData);
-        transak.close();
-        setPurchaseModalOpen(false)
     });
   
   }
@@ -265,52 +201,22 @@ const PaymentPage = () => {
   return (
     <IonPage>
       <div className="desktopview">
-          <IonList className={`${useDarkMode ? 'menu-dark' : 'menu-light'} menu-list`}>
-            <IonListHeader className="menu-header">
-            {/* <IonAvatar className={"avatar"} onClick={() => props.history.push("/account")}> */}
-              <img className={"icon"} src={`assets/icon/noTextLogo.png`} alt="Ionic logo" />
-            {/* </IonAvatar> */}
-            </IonListHeader>
-            <div className="list-items">
-              <IonItem className={`${selectedView === "Account" ? "selected" : null} ${useDarkMode ? 'item-dark': 'item-light'}`} onClick={() => setSelectedView("Account")}>
-                Account
-              </IonItem>
-              <IonItem className={`${selectedView === "Market" ? "selected" : null} ${useDarkMode ? 'item-dark': 'item-light'}`} onClick={() => setSelectedView("Market")}>
-                Market
-              </IonItem>
-              <IonItem className={`${selectedView === "Recent News" ? "selected" : null} ${useDarkMode ? 'item-dark': 'item-light'}`} onClick={() => setSelectedView("Recent News")}>
-                News
-              </IonItem>
-              <IonItem className={`${selectedView === "Wallet" ? "selected" : null} ${useDarkMode ? 'item-dark': 'item-light'}`} onClick={() => setSelectedView("Wallet")}>
-                Dashboard
-              </IonItem>
-            </div>
-            <div className="icons">
-            <IonItem className={"logos item-light"}>
-              <IonIcon className={"twitter"} icon={logoTwitter} onClick={() => window.open("https://twitter.com/PayDayWallet", '_blank')} />
-              <IonIcon className={"google"} icon={logoGooglePlaystore} onClick={() => window.open("https://play.google.com/store/apps/details?id=payday.wallet", '_blank')} />
-            </IonItem>
-            </div>
-          </IonList>
+        <Menu setSelectedView={setSelectedView} selectedView={selectedView} />
           <IonContent className={"ion-padding home-page"} >
             <div className="main-content">
-              { selectedView === "Market" ?
-                  // <PriceList />
+              { selectedView === "market" ?
                   <DesktopPriceList />
-              : selectedView === "Account" ?
+              : selectedView === "account" ?
                 <AccountView />
-              : selectedView === "Recent News" ?
+              : selectedView === "news" ?
                 <DesktopArticleList  news={[]} />
               :
               web3 ?
                 <>
-                  <PersonalAccountHeader  accounts={accounts}
-                                          openTransak={openTransak}
-                                          setPurchaseModalOpen={setPurchaseModalOpen}
-                                          openModal={openModal} />
+                  <PersonalAccountHeader  accounts={accounts} />
                   <div className="market-cards">
-                      <HoldingsListCard accounts={accounts} openTransak={openTransak} setPurchaseModalOpen={setPurchaseModalOpen} openModal={openModal}/>
-                      <IonCard className={`main-card ${selectedView === "Recent News" ? "news-card" : selectedView === "Current Prices" ? "price-card" : null} `}>
+                      <HoldingsListCard accounts={accounts} openTransak={openTransak} openModal={openModal}/>
+                      <IonCard className={`main-card ${!useDarkMode ? "light-card" : null} `}>
                         <IonCardHeader>
                           <IonCardTitle className={"accounts-title"} >
                             Contacts
@@ -329,15 +235,6 @@ const PaymentPage = () => {
         </IonContent>
       </div>
 
-      <PurchaseModal  open={purchaseModalOpen}
-                      tokenToSend={tokenToSend}
-                      amount={purchaseAmount}
-                      setAmount={setPurchaseAmount}
-                      openTransakModal={openTransakModal}
-                      account={account}
-                      setPurchaseModalOpen={setPurchaseModalOpen}
-                      setTokenToSend={setTokenToSend} />
-
       <TransferModal  open={open}
                       setOpen={setOpen}
                       setTokenToSend={setTokenToSend}
@@ -351,4 +248,4 @@ const PaymentPage = () => {
   );
 };
 
-export default withRouter(PaymentPage);
+export default PaymentPage
