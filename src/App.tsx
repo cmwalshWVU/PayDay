@@ -65,22 +65,22 @@ const App: React.FC = () => {
     }
   }, [dispatch, walletConnector])
 
-  useEffect(() => {
-    fetch('https://mighty-dawn-74394.herokuapp.com/live')
-      .then(response => response.json())
-      .then(articles => {
-          // dispatch(updateN(articles.articles))
-          dispatch(setFeed(articles))
-      }).catch(error => console.log(error));
-    const pusher = new Pusher(process.env.REACT_APP_PUSHER_ID!, {
-        cluster: 'us2',
-        encrypted: true
-    } as Options);
-    pusher.subscribe('news-channel').bind('update-news', (data: any) => {
-        // news.push(data.articles)
-        dispatch(updateFeed(data.articles))
-    })
-  }, [dispatch])
+  // useEffect(() => {
+  //   fetch('https://mighty-dawn-74394.herokuapp.com/live')
+  //     .then(response => response.json())
+  //     .then(articles => {
+  //         // dispatch(updateN(articles.articles))
+  //         dispatch(setFeed(articles))
+  //     }).catch(error => console.log(error));
+  //   const pusher = new Pusher(process.env.REACT_APP_PUSHER_ID!, {
+  //       cluster: 'us2',
+  //       encrypted: true
+  //   } as Options);
+  //   pusher.subscribe('news-channel').bind('update-news', (data: any) => {
+  //       // news.push(data.articles)
+  //       dispatch(updateFeed(data.articles))
+  //   })
+  // }, [dispatch])
 
   const getAccounts = useCallback(async () => {
     if (web3 && web3.eth) {
@@ -119,6 +119,20 @@ const App: React.FC = () => {
       
       }
   }, [dispatch, user, getAccounts]);
+
+  useEffect(() => {
+      const articles = Firebase.firestore().collection('articles')
+      articles.onSnapshot(querySnapshot => {
+          const newsArticles: any = []
+          querySnapshot.docs.forEach(doc => {
+              const data = doc.data()
+              newsArticles.push(data.article)
+          });
+          dispatch(setFeed(newsArticles))
+      }, err => {
+          console.log(`Encountered error: ${err}`);
+      });
+}, [dispatch]);
 
   useEffect(() => {
       getAccounts()
