@@ -65,8 +65,8 @@ const DesktopApp: React.FC = () => {
                 return [0]
             })
             Promise.all(bals).then((finalBalances) => {
-                // const fake = fakeHoldings()
-                // finalBalances.push(...fake)
+                const fake = fakeHoldings()
+                finalBalances.push(...fake)
                 dispatch(setLoadingBalances(false))
 
                 const filteredSet = finalBalances.filter((it) => Number(it[0]) > 0 )

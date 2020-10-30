@@ -32,9 +32,9 @@ const HoldingsList: React.FC<Props> = ({balance, balances, personalAccount}) => 
                                     <div>
                                         {holding[2]}
                                     </div>
-                                    <p className="token-symbol">
+                                    <div className="token-symbol">
                                         {holding[3]}
-                                    </p>
+                                    </div>
                                 </div>
                             </IonLabel>
                             <div className={"holdings-list-amount"}>
@@ -45,13 +45,13 @@ const HoldingsList: React.FC<Props> = ({balance, balances, personalAccount}) => 
                                     })}
                                 </div>
                                 }
-                                <p>
+                                <div>
                                     {numbro(holding[0]).format({
                                             thousandSeparated: true,
                                             mantissa: 4
                                         })
                                     } 
-                                </p>
+                                </div>
                             </div>
                         </IonItem>
                     )
@@ -71,6 +71,7 @@ const HoldingsList: React.FC<Props> = ({balance, balances, personalAccount}) => 
     }
     // const list = holdingsList.map((holding: Holding) => <div>Test</div>)
     return (
+        <div className="mobile-holdings" >
         <IonList lines="full" className={`${personalAccount ? "personal-holdings-list" :    "holdings-list"} ion-padding default-background`}>
             <IonItem color={"light"} className="holding-item">
                 <IonLabel className={"holding-list-label"}>
@@ -81,9 +82,9 @@ const HoldingsList: React.FC<Props> = ({balance, balances, personalAccount}) => 
                         <div>
                             Ethereum
                         </div>
-                        <p className="token-symbol">
+                        <div className="token-symbol">
                             Eth
-                        </p>
+                        </div>
                     </div>
                 </IonLabel>
                 <div className={"holdings-list-amount"}>
@@ -96,17 +97,18 @@ const HoldingsList: React.FC<Props> = ({balance, balances, personalAccount}) => 
                             : "$ N/A"
                         }
                     </div>
-                    <p>
+                    <div>
                         {numbro(web3.utils.fromWei(balance, 'ether')).format({
                                 thousandSeparated: true,
                                 mantissa: 4
                             })
                         } 
-                    </p>
+                    </div>
                 </div>
             </IonItem>
             {list}
         </IonList>
+        </div>
     )
 }
 

@@ -33,6 +33,7 @@
 
 .light-card {
   background: #f4f5f8;
+  --background: #f4f5f8;
 }
 
 :root {
