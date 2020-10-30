@@ -49,4 +49,4 @@ const ContactsList: React.FC<Props> = ({openModal, openTransak}) => {
     )
 }
 
-export default ContactsList
+export default React.memo(ContactsList)

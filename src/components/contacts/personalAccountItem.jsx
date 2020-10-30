@@ -11,7 +11,7 @@ const PersonalAccountItem = ({ account}) => {
     return (
         <IonItem color={"light"} className="personal-account" >
             <IonAvatar className={"avatar"} slot="start">
-            <Identicon size={40} string={account.address} />
+            <Identicon size={30} string={account.address} />
             </IonAvatar>
             <IonLabel className={"personel-account-address"}>
             <div className="account-name">{account.name}</div>

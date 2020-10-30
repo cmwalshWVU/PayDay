@@ -45,7 +45,7 @@ const HoldingsList: React.FC<Props> = ({balance, balances, personalAccount}) => 
                                     })}
                                 </div>
                                 }
-                                <div>
+                                <div className="token-amount">
                                     {numbro(holding[0]).format({
                                             thousandSeparated: true,
                                             mantissa: 4
@@ -72,7 +72,7 @@ const HoldingsList: React.FC<Props> = ({balance, balances, personalAccount}) => 
     // const list = holdingsList.map((holding: Holding) => <div>Test</div>)
     return (
         <div className="mobile-holdings" >
-        <IonList lines="full" className={`${personalAccount ? "personal-holdings-list" :    "holdings-list"} ion-padding default-background`}>
+        <IonList lines="full" className={`${personalAccount ? "personal-holdings-list" :    "holdings-list"} default-background`}>
             <IonItem color={"light"} className="holding-item">
                 <IonLabel className={"holding-list-label"}>
                     <IonAvatar className={"holding-avatar"} slot="start">
@@ -97,7 +97,7 @@ const HoldingsList: React.FC<Props> = ({balance, balances, personalAccount}) => 
                             : "$ N/A"
                         }
                     </div>
-                    <div>
+                    <div className="token-amount">
                         {numbro(web3.utils.fromWei(balance, 'ether')).format({
                                 thousandSeparated: true,
                                 mantissa: 4

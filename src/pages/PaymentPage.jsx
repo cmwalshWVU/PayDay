@@ -290,7 +290,7 @@ const PaymentPage = (props) => {
     <IonPage id="mobile-view">
       <div className="wallet" >
       { user !== null ?
-        <IonContent className={"ion-padding home-page light-card"} >
+        <IonContent className={`ion-padding home-page ${useDarkMode ? "" : "light-card"}`} >
           {accounts.length > 0 ? 
             <>
               {/* <IonList style={{background: "transparent"}} className={"account-list"} > */}
