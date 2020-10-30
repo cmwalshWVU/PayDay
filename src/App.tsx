@@ -11,7 +11,7 @@ import {
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import { newspaperOutline, walletOutline, personOutline, statsChartOutline } from 'ionicons/icons';
-import PaymentPage from './pages/PaymentPage';
+import PaymentPage from './pages/NewPaymentPage';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';

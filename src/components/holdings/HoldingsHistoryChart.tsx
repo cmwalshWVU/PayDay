@@ -146,7 +146,7 @@ const HoldingsHistoryChart: React.FC = () => {
                 history.forEach((record: any) => {
                     var obj: any = {};
                     obj.x = new Date(record.lastUpdated.seconds * 1000).toLocaleString();
-                    obj.y = [record.totalHoldings];
+                    obj.y = [record.totalHoldings * 18];
                     data.push(obj);               
                 });
                 priceData.push({data});
