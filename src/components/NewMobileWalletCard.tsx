@@ -10,9 +10,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 import MinAbi from '../MinAbi';
 import { ERC20TOKENS } from './Erc20Tokens';
 import HoldingsHistoryChart from './holdings/HoldingsHistoryChart';
-import { peopleOutline, pieChartOutline, trendingUpOutline, walletOutline } from 'ionicons/icons';
-import ContactsList from './contacts/ContactsList';
-import HoldingsList from './holdings/HoldingsList';
+import { pieChartOutline, trendingUpOutline } from 'ionicons/icons';
 
 interface Props {
     accounts: any
@@ -123,29 +121,23 @@ const MobileWalletCard: React.FC<Props> = ({accounts, openTransak, openModal}) =
        if(accounts.length > 0) {
         return (
             <div>
-
-                {selectedTab === "contacts" ? 
-                    <ContactsList openModal={openModal} openTransak={openTransak} />
-                : selectedTab === "pieChart" ?
-                    <div className="pie-chart-wrapper">
-                        <HoldingsPieChart series={series} labels={labels} />
-                    </div>
-                :
-                    <HoldingsHistoryChart />
-                }
                 <IonToolbar>
-                    <IonSegment value={selectedTab} onIonChange={(e: any) => setSelectedTab(e.detail.value)}>
+                    <IonSegment className={"wallet-toolbar"} value={selectedTab} onIonChange={(e: any) => setSelectedTab(e.detail.value)}>
                         <IonSegmentButton value="pieChart">
                             <IonIcon icon={pieChartOutline} />
                         </IonSegmentButton>
                         <IonSegmentButton value="lineChart">
                             <IonIcon icon={trendingUpOutline} />
                         </IonSegmentButton>
-                        <IonSegmentButton value="contacts">
-                            <IonIcon icon={peopleOutline} />
-                        </IonSegmentButton>
                     </IonSegment>
                 </IonToolbar>
+                {selectedTab === "pieChart" ?
+                    <div className="pie-chart-wrapper">
+                        <HoldingsPieChart series={series} labels={labels} />
+                    </div>
+                :
+                    <HoldingsHistoryChart />
+                }
             </div>
         )
        } else {

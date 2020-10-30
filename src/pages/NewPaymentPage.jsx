@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { IonList, IonContent, IonPage, IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle } from '@ionic/react';
+import { IonList, IonContent, IonPage, IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonToolbar, IonSegment, IonSegmentButton, IonIcon } from '@ionic/react';
 import './PaymentPage.scss';
 import transakSDK from '@transak/transak-sdk'
 import { useSelector, useDispatch } from 'react-redux';
@@ -18,6 +18,8 @@ import { setEthHoldings, setHoldings, setPieChartData } from '../store/actions/h
 import MinAbi from '../MinAbi';
 import { toast } from '../components/toast';
 import HoldingsList from '../components/holdings/HoldingsList';
+import { cashOutline, peopleOutline } from 'ionicons/icons';
+import ContactsList from '../components/contacts/ContactsList';
 
 
 const PaymentPage = (props) => {
@@ -25,6 +27,8 @@ const PaymentPage = (props) => {
   const [account, setAccount] = useState([])
   const [balance, setBalance] = useState("0");
   const [tokenToSend, setTokenToSend] = useState("ETH")
+
+  const [selectedTab, setSelectedTab] = useState("holdings")
 
   const ethHoldings = useSelector((state) => state.holdings.ethHoldings)
   const holdings = useSelector((state) => state.holdings.holdings)
@@ -287,29 +291,43 @@ const PaymentPage = (props) => {
       <div className="wallet" >
       { user !== null ?
         <IonContent className={"ion-padding home-page light-card"} >
-          <MobileWalletCard accounts={accounts} openTransak={openTransak} openModal={openModal} />
           {accounts.length > 0 ? 
             <>
-              <IonList style={{background: "transparent"}} className={"account-list"} >
+              {/* <IonList style={{background: "transparent"}} className={"account-list"} > */}
                 {accounts.map((account) => 
                   <PersonalAccountItem tokens={ERC20TOKENS} openModal={openTransak} ownersAccount={true} openTransak={openTransak} account={{name: "", address: account}} />
                 )}
-              </IonList>
+              {/* </IonList> */}
+            </>
+            :
+            <IonButton onClick={() => login()}>
+              Connect Wallet
+            </IonButton>
+          }
+          <MobileWalletCard accounts={accounts} openTransak={openTransak} openModal={openModal} />
+          <IonToolbar>
+            <IonSegment className={"wallet-toolbar"} value={selectedTab} onIonChange={(e) => setSelectedTab(e.detail.value)}>
+                <IonSegmentButton value="holdings">
+                    <IonIcon icon={cashOutline} />
+                </IonSegmentButton>
+                <IonSegmentButton value="contacts">
+                    <IonIcon icon={peopleOutline} />
+                </IonSegmentButton>
+            </IonSegment>
+          </IonToolbar>
+          {selectedTab === "holdings" ?
+            <>
               <IonButton onClick={() => openTransak(accounts[0])}>
                 Buy Crypto
               </IonButton>
               <IonButton size={"normal"}  onClick={() => openModal(true, "")} >
                 Transfer Funds
               </IonButton>
+              <HoldingsList balances={holdings} balance={ethHoldings} personalAccount={true} />
             </>
-            : 
-              <IonButton onClick={() => login()}>
-                Connect Wallet
-              </IonButton>
-            }
-
-            <HoldingsList balances={holdings} balance={ethHoldings} personalAccount={true} />
-
+              :
+              <ContactsList openModal={openModal} openTransak={openTransak} />
+          }
         </IonContent>
       : 
         <IonContent className="ion-padding">
