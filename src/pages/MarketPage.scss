@@ -1,14 +1,33 @@
 #market-page {
 
+    .header {
+        padding-bottom: 0;
+        padding-top: 20px;
+
+        .title {
+            font-size: 36px;
+            text-align: center;
+        }
+    }
     .price-card {
+        padding-top: 0;
         height: 97%;
         border-radius: 12px;
         text-align: center;
+
+        .pricelist-tabs {
+            margin-bottom: 12px;
+        }
 
         .price-list {
             overflow: scroll;
             height: 80%;
             padding: 0;
+            border-radius: 12px;
         }
     }
+}
+
+.outer-content {
+    --background: transparent;
 }

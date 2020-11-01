@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { IonHeader, IonToolbar, IonTitle, IonContent, IonPage, IonButtons, IonMenuButton, IonRefresher, IonRefresherContent } from '@ionic/react';
+import { IonHeader, IonToolbar, IonTitle, IonContent, IonPage, IonButtons, IonMenuButton, IonRefresher, IonRefresherContent, IonCardHeader, IonCardTitle } from '@ionic/react';
 import ArticleList from '../components/articles/ArticleList';
 
 import { RefresherEventDetail } from '@ionic/core';
+import { useSelector } from 'react-redux';
 
 interface OwnProps { };
 
@@ -12,12 +13,16 @@ interface SpeakerListProps extends OwnProps, DispatchProps { };
 
 const NewsPage: React.FC<SpeakerListProps> = ({}) => {
 
+    const useDarkMode = useSelector((state: any) => state.user.useDarkMode)
+
     const [news, setNews] = useState<any[]>([])
 
     function refresh(event: CustomEvent<RefresherEventDetail>) {
         fetch('https://mighty-dawn-74394.herokuapp.com/live')
-            .then(response => response.json())
-            .then(articles => {
+            .then(response => {
+                event.detail.complete();
+                return response.json()
+            }).then(articles => {
                 // dispatch(updateN(articles.articles))
                 setNews(articles);
                 event.detail.complete();
@@ -29,20 +34,11 @@ const NewsPage: React.FC<SpeakerListProps> = ({}) => {
 
     return (
         <IonPage id="news-page">
-            <IonHeader>
-                <IonToolbar>
-                    <IonButtons slot="start">
-                        <IonMenuButton />
-                    </IonButtons>
-                    <IonTitle>Recent News</IonTitle>
-                </IonToolbar>
-            </IonHeader>
-
-            <IonContent className={`outer-content`}>
-                <IonRefresher slot="fixed" onIonRefresh={refresh}>
-                    <IonRefresherContent>
-                    </IonRefresherContent>
-                </IonRefresher>
+            <IonContent className={`${useDarkMode ? null : "light-card"} outer-content`}>
+                <IonCardTitle className={"accounts-title"} >
+                    News
+                </IonCardTitle>
+                {/* <IonRefresher slot="fixed" onIonRefresh={refresh}/> */}
                 <ArticleList news={news} />
             </IonContent>
         </IonPage>

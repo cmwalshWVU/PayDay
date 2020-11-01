@@ -53,9 +53,14 @@ ion-content ion-toolbar {
   }
 }
 
-.wallet-toolbar {
+.wallet-chart-toolbar {
   width: 60%;
   margin: auto;
+}
+
+.wallet-toolbar {
+  margin: 4px auto 8px auto;
+  width: 60%;
 }
 
 .wallet {
@@ -75,7 +80,9 @@ ion-content ion-toolbar {
 }
 
 .accounts-title {
-  padding: 0px
+  padding: 20px;
+  font-size: 36px;
+  text-align: center;
 }
 
 .accounts-card {

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { IonList, IonContent, IonPage, IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonToolbar, IonSegment, IonSegmentButton, IonIcon } from '@ionic/react';
+import { IonContent, IonPage, IonButton, IonToolbar, IonSegment, IonSegmentButton, IonIcon } from '@ionic/react';
 import './PaymentPage.scss';
 import transakSDK from '@transak/transak-sdk'
 import { useSelector, useDispatch } from 'react-redux';
@@ -305,8 +305,8 @@ const PaymentPage = (props) => {
             </IonButton>
           }
           <MobileWalletCard accounts={accounts} openTransak={openTransak} openModal={openModal} />
-          <IonToolbar>
-            <IonSegment className={"wallet-toolbar"} value={selectedTab} onIonChange={(e) => setSelectedTab(e.detail.value)}>
+          <IonToolbar className={"wallet-toolbar"}>
+            <IonSegment  value={selectedTab} onIonChange={(e) => setSelectedTab(e.detail.value)}>
                 <IonSegmentButton value="holdings">
                     <IonIcon icon={cashOutline} />
                 </IonSegmentButton>
