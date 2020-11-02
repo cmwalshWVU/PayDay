@@ -121,7 +121,7 @@ const App: React.FC = () => {
   }, [dispatch, user, getAccounts]);
 
   useEffect(() => {
-      const articles = Firebase.firestore().collection('articles').limit(100)
+      const articles = Firebase.firestore().collection('articles').limit(250)
       articles.onSnapshot(querySnapshot => {
           const newsArticles: any = []
           querySnapshot.docs.forEach(doc => {

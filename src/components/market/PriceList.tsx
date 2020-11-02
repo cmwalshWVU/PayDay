@@ -10,10 +10,11 @@ const PriceList: React.FC = () => {
     const [searchString, setSearchString] = useState("")
     const [sortingDirection, setSortingDirection] = useState("")
     const currentPrices = useSelector((state: any) => state.prices.currentPrices)
+    const useDarkMode = useSelector((state: any) => state.user.useDarkMode)
 
     return (
         <div className={`ion-padding price-card`}>
-            <IonSearchbar value={searchString} onIonChange={(e: any) => setSearchString(e.detail.value)}></IonSearchbar>
+            <IonSearchbar id={`${useDarkMode ? 'dark-input' : null}`} value={searchString} onIonChange={(e: any) => setSearchString(e.detail.value)}></IonSearchbar>
             <IonSegment className="pricelist-tabs" value={selectedTab} >
                 <IonSegmentButton value="all" onClick={() => {
                 setSelectedTab("all")

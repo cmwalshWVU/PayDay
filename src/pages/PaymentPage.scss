@@ -80,7 +80,7 @@ ion-content ion-toolbar {
 }
 
 .accounts-title {
-  padding: 20px 20px 0;
+  padding: 20px 20px 4px;
   font-size: 36px;
   text-align: center;
 }
@@ -176,10 +176,14 @@ ion-content ion-toolbar {
     width: 80%;
     margin: auto;
     height: 100%;
-    
+
     .searchbar-input-container {
       max-width: 600px;
       margin: auto;
+
+      input {
+        border-radius: 8px;
+      }
     }
     .price-list {
       overflow: scroll;
@@ -193,6 +197,17 @@ ion-content ion-toolbar {
         padding-left: 4px;
       }
     }
+  }
+}
+
+.searchbar-input-container {
+  input {
+    border-radius: 8px !important;
+  }
+}
+#dark-input {
+  input {
+    --background: #1e1e1e !important;
   }
 }
 
