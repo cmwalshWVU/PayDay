@@ -22,10 +22,7 @@ interface Props {
 const MobileWalletCard: React.FC<Props> = ({accounts, openTransak, openModal}) => {
     
     const [selectedTab, setSelectedTab] = useState("pieChart")
-    const useDarkMode = useSelector((state: any) => state.user.useDarkMode)
 
-    const ethHoldings = useSelector((state: any) => state.holdings.ethHoldings)
-    const holdings = useSelector((state: any) => state.holdings.holdings)
 
     const web3 = useSelector((state: any) => state.user.web3)
     const currentPrices = useSelector((state: any) => state.prices.currentPrices)
@@ -122,7 +119,7 @@ const MobileWalletCard: React.FC<Props> = ({accounts, openTransak, openModal}) =
         return (
             <div>
                 <IonToolbar>
-                    <IonSegment className={"wallet-toolbar"} value={selectedTab} onIonChange={(e: any) => setSelectedTab(e.detail.value)}>
+                    <IonSegment className={"wallet-chart-toolbar"} value={selectedTab} onIonChange={(e: any) => setSelectedTab(e.detail.value)}>
                         <IonSegmentButton value="pieChart">
                             <IonIcon icon={pieChartOutline} />
                         </IonSegmentButton>

@@ -1,6 +1,6 @@
 import { RouteComponentProps } from "react-router-dom";
 import React from 'react';
-import { IonRow, IonCol, IonButton, IonCardTitle, IonCardContent } from '@ionic/react';
+import { IonRow, IonCol, IonButton, IonCardTitle, IonCardContent, isPlatform } from '@ionic/react';
 import '../pages/LandingPage.scss'
 import { useSelector, useDispatch } from "react-redux";
 import { setWeb3 } from "../store/actions/userActions";
@@ -17,12 +17,18 @@ const LandingPageComponent: React.FC<OwnProps> = ({  history }) => {
   const walletConnector = useSelector((state: any) => state.user.walletConnector)
 
   const login = async () => {
+    if (isPlatform("mobile")) {
+      await walletConnector.clearCachedProvider()
+    }
     walletConnector.connect().then((provider: any) => {
       dispatch(setWeb3(new Web3(provider)))
     });
   }
 
   const createWallet = async () => {
+    if (isPlatform("mobile")) {
+      await walletConnector.clearCachedProvider()
+    }
     const providerOptions = {
       fortmatic: {
         display: {
