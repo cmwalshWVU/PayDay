@@ -126,7 +126,7 @@ const DashboardPage = () => {
                     <HoldingsListCard accounts={accounts} openTransak={openTransak} openModal={openModal}/>
                     <IonCard className={`main-card ${useDarkMode ? "light-card" : null}`}>
                       <IonCardHeader>
-                        <IonCardTitle className={"accounts-title"} >
+                        <IonCardTitle className={"desktop-accounts-title"} >
                           Contacts
                         </IonCardTitle>
                       </IonCardHeader>

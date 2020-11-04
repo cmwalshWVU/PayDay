@@ -20,7 +20,7 @@ const HoldingsListCard: React.FC<Props> = ({accounts, openTransak, openModal}) =
     return (
         <IonCard className={`holdings-card ${!useDarkMode ? "light-card" : null}`} >
             <IonCardHeader id={"holdings-card-header"}>
-                <IonCardTitle className={"accounts-title"} >
+                <IonCardTitle className={"dekstop-accounts-title"} >
                     Holdings
                 </IonCardTitle>
                 <IonCardSubtitle  color={"light"}>
