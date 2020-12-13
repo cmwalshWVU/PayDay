@@ -83,6 +83,8 @@ const HoldingsPieChart = ({series, labels}) => {
         colors: colorPalette,
         labels: [],
         legend: {
+            horizontalAlign: 'right',
+            fontSize: '14px',
             labels: {
                 colors: [useDarkMode ? "#FFFFFF" : "#000000"]
             },

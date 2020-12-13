@@ -1,15 +1,15 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonButton, IonToolbar, IonSegment, IonSegmentButton, IonIcon } from '@ionic/react';
-import HoldingsPieChart from './holdings/HoldingsPieChart';
+import HoldingsPieChart from '../../holdings/charts/HoldingsPieChart';
 import { useSelector, useDispatch } from 'react-redux';
-import './personalAccountHeader.scss'
-import { setEthHoldings, setHoldings } from '../store/actions/holdingsActions';
-import { setWeb3, setLoadingBalances } from '../store/actions/userActions';
+import '../styles/personalAccountHeader.scss'
+import { setEthHoldings, setHoldings } from '../../../store/actions/holdingsActions';
+import { setWeb3, setLoadingBalances } from '../../../store/actions/userActions';
 import Web3 from 'web3';
 import ClipLoader from "react-spinners/ClipLoader";
-import MinAbi from '../MinAbi';
-import { ERC20TOKENS } from './Erc20Tokens';
-import HoldingsHistoryChart from './holdings/HoldingsHistoryChart';
+import MinAbi from '../../../MinAbi';
+import { ERC20TOKENS } from '../../../ERC20Tokens/Erc20Tokens';
+import HoldingsHistoryChart from '../../holdings/charts/HoldingsHistoryChart';
 import { pieChartOutline, trendingUpOutline } from 'ionicons/icons';
 
 interface Props {

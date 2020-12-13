@@ -1,25 +1,25 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { IonContent, IonPage, IonButton, IonToolbar, IonSegment, IonSegmentButton, IonIcon } from '@ionic/react';
-import './PaymentPage.scss';
+import '../styles/PaymentPage.scss';
 import transakSDK from '@transak/transak-sdk'
 import { useSelector, useDispatch } from 'react-redux';
-import Firebase, { signInWithCustomToken, createAccountCollectionIfNotExists } from '../firebase';
-import { setContacts, setWeb3, setLoadingBalances, setUser } from '../store/actions/userActions';
+import Firebase, { signInWithCustomToken, createAccountCollectionIfNotExists } from '../../firebase';
+import { setContacts, setWeb3, setLoadingBalances, setUser } from '../../store/actions/userActions';
 import { withRouter } from 'react-router';
-import PersonalAccountItem from '../components/contacts/personalAccountItem'
-import { erc20ContractAbi } from '../components/Erc20TokenAbi';
+import PersonalAccountItem from '../../components/contacts/personalAccountItem'
+import { erc20ContractAbi } from '../../ERC20Tokens/Erc20TokenAbi';
 import { isString } from 'util';
-import TransferModal from '../components/modals/TransferModal';
-import LandingPageComponent from '../components/LandingPageComponent';
+import TransferModal from '../../components/modals/TransferModal';
+import LandingPageComponent from '../../components/landing/LandingPageComponent';
 import Web3 from 'web3';
-import { ERC20TOKENS } from '../components/Erc20Tokens';
-import MobileWalletCard from '../components/MobileWalletCard';
-import { setEthHoldings, setHoldings, setPieChartData } from '../store/actions/holdingsActions';
-import MinAbi from '../MinAbi';
-import { toast } from '../components/toast';
-import HoldingsList from '../components/holdings/HoldingsList';
+import { ERC20TOKENS } from '../../ERC20Tokens/Erc20Tokens';
+import MobileWalletCard from '../../components/wallet/mobile/MobileWalletCard';
+import { setEthHoldings, setHoldings, setPieChartData } from '../../store/actions/holdingsActions';
+import MinAbi from '../../MinAbi';
+import { toast } from '../../components/toast';
+import HoldingsList from '../../components/holdings/HoldingsList';
 import { cashOutline, peopleOutline } from 'ionicons/icons';
-import ContactsList from '../components/contacts/ContactsList';
+import ContactsList from '../../components/contacts/ContactsList';
 
 
 const PaymentPage = (props) => {
@@ -287,7 +287,7 @@ const PaymentPage = (props) => {
   }, [web3, getAccounts])
 
   return (
-    <IonPage id="mobile-view">
+    <>
       <div className="wallet" >
       { user !== null ?
         <IonContent className={`ion-padding home-page ${useDarkMode ? "" : "light-card"}`} >
@@ -344,8 +344,8 @@ const PaymentPage = (props) => {
                       balance={balance}
                       openFortmaticTransfer={openFortmaticTransfer} />
     </div>
-    </IonPage>
+    </>
   );
 };
 
-export default withRouter(React.memo(PaymentPage))
+export default React.memo(PaymentPage)

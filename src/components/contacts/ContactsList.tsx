@@ -3,8 +3,8 @@ import React, { useState } from "react";
 import NewAccountItem from "./NewAccountItem";
 import AccountItem from "./accountItem";
 import { useSelector } from "react-redux";
-import './ContactsList.scss'
-import { ERC20TOKENS } from "../Erc20Tokens";
+import './styles/ContactsList.scss'
+import { ERC20TOKENS } from "../../ERC20Tokens/Erc20Tokens";
 
 interface Props {
     openModal: (open: boolean, address: string) => void

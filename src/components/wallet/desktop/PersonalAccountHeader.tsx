@@ -1,15 +1,15 @@
 import React from 'react'
 import { IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonButton } from '@ionic/react';
-import HoldingsPieChart from './holdings/HoldingsPieChart';
+import HoldingsPieChart from '../../holdings/charts/HoldingsPieChart';
 import { useSelector, useDispatch } from 'react-redux';
-import './personalAccountHeader.scss'
+import '../styles/personalAccountHeader.scss'
 import WalletConnectProvider from '@walletconnect/web3-provider';
 import Fortmatic from 'fortmatic';
-import { setWeb3 } from '../store/actions/userActions';
+import { setWeb3 } from '../../../store/actions/userActions';
 import Web3 from 'web3';
 import Web3Modal from "web3modal";
 import ClipLoader from "react-spinners/ClipLoader";
-import HoldingsHistoryChart from './holdings/HoldingsHistoryChart';
+import HoldingsHistoryChart from '../../holdings/charts/HoldingsHistoryChart';
 
 interface Props {
     accounts: any

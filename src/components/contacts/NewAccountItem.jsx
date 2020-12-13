@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { IonItem, IonLabel, IonInput, IonAvatar, IonIcon, IonButtons, IonButton } from "@ionic/react";
 import Identicon from 'react-identicons';
 import { save, close } from "ionicons/icons";
-import './NewAccountItem.scss'
+import './styles/NewAccountItem.scss'
 import { saveNewAccount } from '../../firebase';
 import { useSelector } from 'react-redux';
 import { toast } from '../toast';

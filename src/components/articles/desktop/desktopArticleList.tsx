@@ -2,7 +2,7 @@ import React from 'react';
 import { IonList, IonItem, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/react';
 import pushid from 'unique-push-id';
 import { useSelector } from 'react-redux';
-import './Article.scss'
+import '../styles/Article.scss'
 import DesktopArticle from './DesktopArticle';
 
 interface Props {

@@ -3,7 +3,7 @@ import { IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonButton, IonCar
 import PersonalAccountItem from '../contacts/personalAccountItem';
 import { useSelector } from 'react-redux';
 import HoldingsList from './HoldingsList';
-import '../personalAccountHeader.scss'
+import '../wallet/styles/personalAccountHeader.scss'
 
 interface Props {
     openTransak: (address: string) => void

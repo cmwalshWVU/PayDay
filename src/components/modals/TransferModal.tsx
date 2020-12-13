@@ -1,7 +1,7 @@
 import { IonModal, IonContent, IonHeader, IonTitle, IonList, IonItem, IonLabel, IonSelect, IonSelectOption, IonInput, IonButton } from "@ionic/react";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import { ERC20TOKENS } from "../Erc20Tokens";
+import { ERC20TOKENS } from "../../ERC20Tokens/Erc20Tokens";
 
 interface Props {
     open: boolean

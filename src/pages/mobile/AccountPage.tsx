@@ -1,30 +1,30 @@
 import { RouteComponentProps, withRouter } from "react-router";
 import React from "react";
 import { IonPage, IonHeader, IonTitle, IonToolbar, isPlatform, IonIcon } from "@ionic/react";
-import "./AccountPage.scss"
+import "../styles/AccountPage.scss"
 import { arrowBack } from "ionicons/icons";
-import AccountView from "../components/account/AccountView";
+import AccountView from "../../components/account/AccountView";
 
-interface OwnProps extends RouteComponentProps {}
+interface OwnProps {}
 
-const AccountPage: React.FC<OwnProps> = ({history}) => {
+const AccountPage: React.FC<OwnProps> = ({}) => {
 
   return (
-    <IonPage id="account-page">
+    <div id="account-page">
       <IonHeader>
       <IonToolbar>
         {isPlatform("mobile") ?
           <IonTitle>Account</IonTitle>
         :
           <IonTitle>
-            <IonIcon className={"back-arrow"} onClick={() => history.push("/")} icon={arrowBack}/>
+            <IonIcon className={"back-arrow"} onClick={() => null} icon={arrowBack}/>
           </IonTitle>
         }
       </IonToolbar>
       </IonHeader>
       <AccountView />
-    </IonPage>
+    </div>
     );
 };
 
-export default withRouter(AccountPage);
+export default AccountPage

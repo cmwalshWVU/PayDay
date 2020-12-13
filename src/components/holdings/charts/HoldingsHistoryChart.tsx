@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react'
 import { useSelector } from 'react-redux';
-import Firebase from '../../firebase';
+import Firebase from '../../../firebase';
 import Chart from 'react-apexcharts'
 import numbro from 'numbro';
 import moment from 'moment';

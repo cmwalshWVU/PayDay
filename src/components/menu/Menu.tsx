@@ -3,9 +3,9 @@ import { IonList, IonListHeader, IonItem, IonIcon } from '@ionic/react';
 import { logoTwitter, logoGooglePlaystore, gridOutline, newspaperOutline, statsChartOutline, contrastOutline, logOutOutline } from 'ionicons/icons';
 import { useSelector, useDispatch } from 'react-redux';
 import './Menu.scss'
-import { setUseDarkMode, setUser, setWeb3 } from '../store/actions/userActions';
-import { signout } from '../firebase';
-import { toast } from './toast';
+import { setUseDarkMode, setUser, setWeb3 } from '../../store/actions/userActions';
+import { signout } from '../../firebase';
+import { toast } from '../toast';
 
 interface Props {
   setSelectedView: (view: string) => void

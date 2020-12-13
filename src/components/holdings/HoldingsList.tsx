@@ -3,7 +3,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { IonList, IonItem, IonAvatar, IonLabel } from "@ionic/react";
 import numbro from "numbro";
-import "./HoldingsList.scss"
+import "./styles/HoldingsList.scss"
 
 interface Props {
     balances: any,
@@ -26,7 +26,11 @@ const HoldingsList: React.FC<Props> = ({balance, balances, personalAccount}) => 
                         <IonItem color={"light"} key={index} className="holding-item">
                             <IonLabel className={"holding-list-label"}>
                                 <IonAvatar className={"holding-avatar"} slot="start">
+                                    {currentPrices.filter((it:any) => it.symbol === holding[2].toLowerCase())[0] ?
                                     <img className={"holding-icon"} src={currentPrices.filter((it:any) => it.symbol === holding[2].toLowerCase())[0].image} alt="N/A"/>
+                                        : 
+                                        <img className={"holding-icon"} src={require(`cryptocurrency-icons/32/icon/generic.png`)} alt="N/A"/>
+                                    }
                                 </IonAvatar>
                                 <div className="token-name">
                                     <div>
@@ -38,13 +42,12 @@ const HoldingsList: React.FC<Props> = ({balance, balances, personalAccount}) => 
                                 </div>
                             </IonLabel>
                             <div className={"holdings-list-amount"}>
-                                {currentPrices.filter((it:any) => it.symbol === holding[2].toLowerCase())[0] && <div className="current-value">
-                                    ${numbro(Number(currentPrices.filter((it:any) => it.symbol === holding[2].toLowerCase())[0].current_price) * Number(holding[0])).format({
+                                <div className="current-value">
+                                    ${numbro(holding[1]).format({
                                         thousandSeparated: true,
                                         mantissa: 2,
                                     })}
                                 </div>
-                                }
                                 <div className="token-amount">
                                     {numbro(holding[0]).format({
                                             thousandSeparated: true,

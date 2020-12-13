@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { IonHeader, IonToolbar, IonTitle, IonContent, IonPage, IonButtons, IonMenuButton, IonRefresher, IonRefresherContent, IonCardHeader, IonCardTitle } from '@ionic/react';
-import ArticleList from '../components/articles/ArticleList';
+import ArticleList from '../../components/articles/mobile/ArticleList';
 
 import { RefresherEventDetail } from '@ionic/core';
 import { useSelector } from 'react-redux';
@@ -33,7 +33,7 @@ const NewsPage: React.FC<SpeakerListProps> = ({}) => {
     }
 
     return (
-        <IonPage id="news-page">
+        // <IonPage id="news-page">
             <IonContent className={`${useDarkMode ? null : "light-card"} outer-content`}>
                 <IonCardTitle className={"accounts-title"} >
                     News
@@ -41,7 +41,7 @@ const NewsPage: React.FC<SpeakerListProps> = ({}) => {
                 {/* <IonRefresher slot="fixed" onIonRefresh={refresh}/> */}
                 <ArticleList news={news} />
             </IonContent>
-        </IonPage>
+        // </IonPage>
     );
 };
 

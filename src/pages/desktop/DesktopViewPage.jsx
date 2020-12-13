@@ -1,22 +1,22 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { IonContent, IonPage, IonCard, IonCardContent, IonCardHeader, IonCardTitle } from '@ionic/react';
-import './PaymentPage.scss';
+import '../styles/PaymentPage.scss';
 import transakSDK from '@transak/transak-sdk'
 import { useSelector, useDispatch } from 'react-redux';
-import Firebase, { signInWithCustomToken, createAccountCollectionIfNotExists } from '../firebase';
-import { setContacts, setUser, setLoadingBalances } from '../store/actions/userActions';
-import { erc20ContractAbi } from '../components/Erc20TokenAbi';
+import Firebase, { signInWithCustomToken, createAccountCollectionIfNotExists } from '../../firebase';
+import { setContacts, setUser, setLoadingBalances } from '../../store/actions/userActions';
+import { erc20ContractAbi } from '../../ERC20Tokens/Erc20TokenAbi';
 import { isString } from 'util';
-import ContactsList from '../components/contacts/ContactsList';
-import TransferModal from '../components/modals/TransferModal';
-import DesktopArticleList from '../components/articles/desktopArticleList';
-import LandingPageComponent from '../components/LandingPageComponent'
-import PersonalAccountHeader from '../components/PersonalAccountHeader';
-import HoldingsListCard from '../components/holdings/HoldingsListCard';
-import AccountView from '../components/account/AccountView';
-import DesktopPriceList from '../components/market/DesktopPriceList';
-import Menu from '../components/Menu';
-import { toast } from '../components/toast';
+import ContactsList from '../../components/contacts/ContactsList';
+import TransferModal from '../../components/modals/TransferModal';
+import DesktopArticleList from '../../components/articles/desktop/desktopArticleList';
+import LandingPageComponent from '../../components/landing/LandingPageComponent'
+import PersonalAccountHeader from '../../components/wallet/desktop/PersonalAccountHeader';
+import HoldingsListCard from '../../components/holdings/HoldingsListCard';
+import AccountView from '../../components/account/AccountView';
+import DesktopPriceList from '../../components/market/DesktopPriceList';
+import Menu from '../../components/menu/Menu';
+import { toast } from '../../components/toast';
 
 const PaymentPage = () => {
 
@@ -205,7 +205,7 @@ const PaymentPage = () => {
           <IonContent className={"ion-padding home-page"} >
             <div className="main-content">
               { selectedView === "market" ?
-                  <DesktopPriceList />
+                <DesktopPriceList />
               : selectedView === "account" ?
                 <AccountView />
               : selectedView === "news" ?

@@ -5,7 +5,7 @@ import { chevronUp, chevronDown, cashOutline, copy, trash, pencil, sendOutline, 
 import { deleteAccount, saveNewAccount } from '../../firebase';
 import { useSelector } from 'react-redux';
 import {CopyToClipboard} from 'react-copy-to-clipboard'
-import './accountItem.scss'
+import './styles/accountItem.scss'
 import { toast } from '../toast';
 import HoldingsList from '../holdings/HoldingsList';
 import MinAbi from '../../MinAbi';
@@ -124,14 +124,14 @@ const AccountItem = ({tokens, openModal, ownersAccount, account, openTransak}) =
                   </p>
                 </div>
               </CopyToClipboard>
-              <h2 onClick={() => setShowBalances(!showBalances)}>Balances: <IonIcon className={"collapse-balances-icon"} icon={showBalances ? chevronUp : chevronDown}/></h2>
+              {/* <h2 onClick={() => setShowBalances(!showBalances)}>Balances: <IonIcon className={"collapse-balances-icon"} icon={showBalances ? chevronUp : chevronDown}/></h2> */}
             </IonLabel>
           </div>
-          {balances && showBalances &&
+          {/* {balances && showBalances &&
             <IonLabel className="account-holdings-list" >
               <HoldingsList balances={balances} balance={balance} />
             </IonLabel>
-          }
+          } */}
         </div>
       </IonItem>
      

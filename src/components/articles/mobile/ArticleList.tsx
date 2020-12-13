@@ -1,9 +1,9 @@
 import React from 'react';
 import { IonCard, IonCardContent, IonContent, IonList, IonGrid, IonRow, IonCol } from '@ionic/react';
-import Article from './NewArticle';
+import Article from './Article';
 import pushid from 'unique-push-id';
 import { useSelector } from 'react-redux';
-import './Article.scss'
+import '../styles/Article.scss'
 
 interface Props {
     news: any[]

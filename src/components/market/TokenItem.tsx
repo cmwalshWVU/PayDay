@@ -1,7 +1,7 @@
 import React from "react";
 import { IonItem, IonLabel } from "@ionic/react";
 import numbro from "numbro";
-import "../holdings/HoldingsList.scss"
+import "../holdings/styles/HoldingsList.scss"
 
 interface Props {
     token: any

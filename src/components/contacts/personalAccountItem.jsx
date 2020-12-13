@@ -3,7 +3,7 @@ import { IonItem, IonAvatar, IonLabel, IonIcon } from "@ionic/react";
 import Identicon from 'react-identicons';
 import { copy} from 'ionicons/icons';
 import {CopyToClipboard} from 'react-copy-to-clipboard'
-import './accountItem.scss'
+import './styles/accountItem.scss'
 import { toast } from '../toast';
 
 const PersonalAccountItem = ({ account}) => {

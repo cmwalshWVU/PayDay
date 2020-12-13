@@ -1,7 +1,7 @@
 import moment from "moment";
 import { IonCard, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCardContent } from "@ionic/react";
 import React from "react"
-import "./Article.scss"
+import "../styles/Article.scss"
 
 interface Props {
     article: any

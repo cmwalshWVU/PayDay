@@ -52,6 +52,10 @@
         margin: auto;
         max-width: 534px;
         width: 90%;
+
+        .apexcharts-legend-series {
+            align-self: end;
+        }
     }
     
 

@@ -1,9 +1,9 @@
 import { RouteComponentProps } from "react-router-dom";
 import React from 'react';
 import { IonRow, IonCol, IonButton, IonCardTitle, IonCardContent, isPlatform } from '@ionic/react';
-import '../pages/LandingPage.scss'
+import '../../pages/styles/LandingPage.scss'
 import { useSelector, useDispatch } from "react-redux";
-import { setWeb3 } from "../store/actions/userActions";
+import { setWeb3 } from "../../store/actions/userActions";
 import Web3 from "web3";
 import Fortmatic from "fortmatic";
 import Portis from "@portis/web3";

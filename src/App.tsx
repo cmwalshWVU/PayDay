@@ -11,7 +11,7 @@ import {
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import { newspaperOutline, walletOutline, personOutline, statsChartOutline } from 'ionicons/icons';
-import PaymentPage from './pages/PaymentPage';
+import PaymentPage from './pages/mobile/PaymentPage';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -31,19 +31,20 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
-import AccountPage from './pages/AccountPage';
+import AccountPage from './pages/mobile/AccountPage';
 import { useSelector, useDispatch } from 'react-redux';
 
-import NewsPage from './pages/NewsPage';
+import NewsPage from './pages/mobile/NewsPage';
 import { setFeed, updateFeed } from './store/actions/newsActions';
 import Pusher, { Options } from 'pusher-js';
 import { getCurrentPrices } from './store/actions/currentPricesAction';
-import MarketPage from './pages/MarketPage';
+import MarketPage from './pages/mobile/MarketPage';
 import { setWeb3, setLoadingBalances, setAccounts, setUser, setContacts } from './store/actions/userActions';
 import Web3 from 'web3';
-import DesktopApp from './pages/DesktopApp';
+import DesktopApp from './pages/desktop/DesktopApp';
 import Firebase, { signInWithCustomToken, createAccountCollectionIfNotExists } from './firebase';
 import { toast } from './components/toast';
+import MobileViewPage from './pages/mobile/MobileViewPage';
 
 
 const App: React.FC = () => {
@@ -141,7 +142,8 @@ const App: React.FC = () => {
   return (
   <IonApp className={useDarkMode ? 'dark-theme' : 'light-mode'} >
       {isPlatform("mobile") ? 
-          mobileApp()
+        <MobileViewPage />
+          // mobileApp()
         :
          <DesktopApp />
         }

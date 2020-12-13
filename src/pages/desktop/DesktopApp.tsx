@@ -1,10 +1,11 @@
 import React, { useCallback, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
-import { setLoadingBalances } from '../store/actions/userActions';
-import { setEthHoldings, setHoldings, setPieChartData } from '../store/actions/holdingsActions';
-import { ERC20TOKENS } from '../components/Erc20Tokens';
-import MinAbi from '../MinAbi';
+import { setLoadingBalances } from '../../store/actions/userActions';
+import { setEthHoldings, setHoldings, setPieChartData } from '../../store/actions/holdingsActions';
+import { ERC20TOKENS } from '../../ERC20Tokens/Erc20Tokens';
+import MinAbi from '../../MinAbi';
 import DesktopViewPage from './DesktopViewPage';
+import axios from 'axios';
 
 const DesktopApp: React.FC = () => {
     const web3 = useSelector((state: any) => state.user.web3)
@@ -50,34 +51,52 @@ const DesktopApp: React.FC = () => {
             dispatch(setLoadingBalances(true))
             const bals = [...ERC20TOKENS, ].map(async (token) => {
                 // GET TOKEN contract and decimals
-                const contract = new web3.eth.Contract(MinAbi, token.address);
-                const dec = await contract.methods.decimals().call()
+                try {
+                    const contract = new web3.eth.Contract(MinAbi, token.address);
+                    const dec = await contract.methods.decimals().call()
 
-                // GET ERC20 Token Balance and divide by decimals
-                let bal = await contract.methods.balanceOf(accounts[0]).call()
+                    // GET ERC20 Token Balance and divide by decimals
+                    let bal = await contract.methods.balanceOf(accounts[0]).call()
 
-                bal = bal / (10 ** dec)
+                    bal = bal / (10 ** dec)
 
-                if (currentPrices.filter((it: any) => it.symbol === token.symbol.toLowerCase())[0]) {
-                    const currentHoldings = currentPrices.filter((it: any) => it.symbol === token.symbol.toLowerCase())[0].current_price * bal
-                    return [bal, currentHoldings, token.symbol, token.name]
+                    if (token.symbol === "LYXe") {
+                        console.log("found it")
+                    }
+                    if (bal <= 0) {
+                        return [0, 0, token.symbol, token.name]
+                    }
+                    else if (currentPrices.filter((it: any) => it.symbol === token.symbol.toLowerCase())[0]) {
+                        const currentHoldings = currentPrices.filter((it: any) => it.symbol === token.symbol.toLowerCase())[0].current_price * bal
+                        return [bal, currentHoldings, token.symbol, token.name]
+                    } else {
+                        // return [0, 0, token.symbol, token.name]
+
+                        return axios.get("https://min-api.cryptocompare.com/data/price?fsym=" + token.symbol +"&tsyms=USD").then((price: any) => {
+                            const currentHoldings = price.data.USD * bal
+                            return [bal, currentHoldings, token.symbol, token.name]
+                        }).catch(() => {
+                            return [0, 0, token.symbol, token.name]
+                        })
+                    }
+                } catch (error) {
+                    console.log("error with: " + token.symbol)
+                    return [0, 0, token.symbol, token.name]
                 }
-                return [0]
+                
             })
             Promise.all(bals).then((finalBalances) => {
                 // const fake = fakeHoldings()
                 // finalBalances.push(...fake)
                 dispatch(setLoadingBalances(false))
 
-                const filteredSet = finalBalances.filter((it) => Number(it[0]) > 0 )
+                const filteredSet = finalBalances.filter((it) => Number(it[1]) > 0 )
                 
-                dispatch(setHoldings(finalBalances.filter((it) => Number(it[0]) > 0 )))
+                dispatch(setHoldings(finalBalances.filter((it) => Number(it[1]) > 0 )))
                 if (Number(ethBal) > 0) {
                     filteredSet.push([ethBal, ethBal, "ETH", "Ethereum"])
                 }
                 dispatch(setPieChartData(filteredSet.map((it: any) => it[1]), filteredSet.map((it: any) => it[2])))
-                // setSeries(filteredSet.map((it: any) => it[1]))
-                // setLabels(filteredSet.map((it: any) => it[2]))
             })
         }
     }, [accounts, currentPrices, dispatch, ethBal, web3])
@@ -92,18 +111,6 @@ const DesktopApp: React.FC = () => {
 
     return (
         <DesktopViewPage />
-        // <BrowserRouter>
-        //   <div className="desktopview">
-        //         <Menu />
-        //         <Switch>
-        //             <Route path="/" component={DashboardPage} exact={true} />
-        //             <Route path="/account" component={AccountView} exact={true} />
-        //             <Route path="/market" component={DesktopPriceList} exact={true} />
-        //             <Route path="/news" render={() => <DesktopArticleList news={[]} />} exact={true} />
-        //             <Route render={() => <Redirect to="/" />} />
-        //         </Switch>
-        //     </div>
-        // </BrowserRouter>
       )
 }
 

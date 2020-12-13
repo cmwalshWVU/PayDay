@@ -1,11 +1,11 @@
 import { useSelector, useDispatch } from "react-redux";
 import React, { useEffect, useState, useCallback } from "react";
 import { IonContent, IonItem, IonList, IonLabel, IonToggle, IonPage } from "@ionic/react";
-import "../../pages/AccountPage.scss"
+import "../../pages/styles/AccountPage.scss"
 import ProfileIdenticon from "../indenticton";
 import { setWeb3, setUser, setUseDarkMode } from "../../store/actions/userActions";
 import { signout } from "../../firebase";
-import Menu from "../Menu";
+import Menu from "../menu/Menu";
 import { toast } from "../toast";
 
 const AccountView: React.FC = () => {
