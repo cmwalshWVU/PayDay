@@ -11,12 +11,11 @@ interface Props {
     account: string
     setTransferToAddress: (address: string) => void
     transferToAddress: string
-    balance: string
     openFortmaticTransfer: (amount: string, account: string, transferToAddress: string) => void
 }
 
 const TransferModal: React.FC<Props> = ({account, open, setOpen, setTokenToSend, tokenToSend,
-                                setTransferToAddress, transferToAddress, balance, openFortmaticTransfer}) => {
+                                setTransferToAddress, transferToAddress, openFortmaticTransfer}) => {
     
     const [amount, setAmount] = useState("")
     const web3 = useSelector((state: any) => state.user.web3)
@@ -49,7 +48,7 @@ const TransferModal: React.FC<Props> = ({account, open, setOpen, setTokenToSend,
             <IonList className="amount-inputs">
                 <IonItem>
                 <IonLabel position="stacked" color="primary">Amount:</IonLabel>
-                <IonInput max={balance} clearInput name="transferToAddress" value={amount} onIonChange={(e: any) => setAmount(e.detail.value)}/>
+                <IonInput clearInput name="transferToAddress" value={amount} onIonChange={(e: any) => setAmount(e.detail.value)}/>
                 </IonItem> 
             </IonList>
             <div className="modal-buttons">

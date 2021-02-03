@@ -31,6 +31,11 @@
   /* left: 77px; */
 }
 
+.light-card {
+  background: #f4f5f8;
+  --background: #f4f5f8;
+}
+
 :root {
   --ion-color-angular: #ac282b;
   --ion-color-communication: #8e8d93;
@@ -188,6 +193,7 @@
  */
 
 .dark-theme {
+  background: #121212;
   --ion-color-primary: #6851ff;
   --ion-color-primary-rgb: 66,140,255;
   --ion-color-primary-contrast: #ffffff;

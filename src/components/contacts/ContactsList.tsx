@@ -18,12 +18,13 @@ const ContactsList: React.FC<Props> = ({openModal, openTransak}) => {
     const [addNewUser, setAddNewUser] = useState(false)
 
     return (
-        <IonList className="contacts-list">
+      <>
+        <IonButton  onClick={() => setAddNewUser(true)} >
+          Add Contact
+        </IonButton>
+        <IonList color={"light"} className="contacts-list">
                 {user !== null ? 
                   <>
-                    <IonButton  onClick={() => setAddNewUser(true)} >
-                      Add Contact
-                    </IonButton>
                     {addNewUser && <NewAccountItem setAddNewUser={setAddNewUser} />}
                     {contacts.length > 0 ?
                       contacts.map((account: any, index: number) => (
@@ -44,7 +45,8 @@ const ContactsList: React.FC<Props> = ({openModal, openTransak}) => {
                   </IonItem>
                 }
               </IonList>
+            </>
     )
 }
 
-export default ContactsList
+export default React.memo(ContactsList)

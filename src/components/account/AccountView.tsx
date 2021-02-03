@@ -1,11 +1,12 @@
 import { useSelector, useDispatch } from "react-redux";
 import React, { useEffect, useState, useCallback } from "react";
-import { IonContent, IonItem, IonList, IonLabel, IonToggle } from "@ionic/react";
+import { IonContent, IonItem, IonList, IonLabel, IonToggle, IonPage } from "@ionic/react";
 import "../../pages/AccountPage.scss"
 import ProfileIdenticon from "../indenticton";
 import { setWeb3, setUser, setUseDarkMode } from "../../store/actions/userActions";
 import { signout } from "../../firebase";
-
+import Menu from "../Menu";
+import { toast } from "../toast";
 
 const AccountView: React.FC = () => {
   
@@ -37,33 +38,35 @@ const AccountView: React.FC = () => {
     dispatch(setUser(null))
     dispatch(setWeb3(null))
     signout()
+    toast("Loggeded Out")
     await walletConnector.clearCachedProvider();
 
   }
 
   return (
-      <IonContent>
-        <div className="ion-padding-top ion-text-center">
-          <ProfileIdenticon size={140} address={account} />
-          <IonList inset>
-            {user !== null ?
-              <>
-                <IonItem className={"account-button"} onClick={() => logout()}>Logout</IonItem>
-                <IonItem>
-                  <IonLabel>Use Dark Theme</IonLabel>
-                  <IonToggle checked={useDarkMode} onClick={() => dispatch(setUseDarkMode(!useDarkMode))} />
-                </IonItem>
-              </>
-              :
+    <>
+      <div className="desktopview">
+        <IonContent>
+          <div className="ion-padding-top ion-text-center">
+            <ProfileIdenticon size={140} address={account} />
+            <IonList inset>
+              {user !== null ?
+                <>
+                  <IonItem className={"account-button"} onClick={() => logout()}>Logout</IonItem>
+                </>
+                :
+                null
+              }
               <IonItem>
                 <IonLabel>Use Dark Theme</IonLabel>
                 <IonToggle checked={useDarkMode} onClick={() => dispatch(setUseDarkMode(!useDarkMode))} />
               </IonItem>
-            }
-          </IonList>
-        </div>
-      </IonContent>
-    );
+            </IonList>
+          </div>
+        </IonContent>
+      </div>
+    </>
+  );
 };
 
 export default AccountView;

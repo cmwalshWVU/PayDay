@@ -1,11 +1,10 @@
-import { RouteComponentProps, withRouter } from "react-router-dom";
+import { RouteComponentProps } from "react-router-dom";
 import React from 'react';
-import { IonRow, IonCol, IonButton, IonCardTitle, IonCardContent } from '@ionic/react';
+import { IonRow, IonCol, IonButton, IonCardTitle, IonCardContent, isPlatform } from '@ionic/react';
 import '../pages/LandingPage.scss'
 import { useSelector, useDispatch } from "react-redux";
 import { setWeb3 } from "../store/actions/userActions";
 import Web3 from "web3";
-import WalletConnectProvider from "@walletconnect/web3-provider";
 import Fortmatic from "fortmatic";
 import Portis from "@portis/web3";
 import Web3Modal from 'web3modal'
@@ -18,12 +17,18 @@ const LandingPageComponent: React.FC<OwnProps> = ({  history }) => {
   const walletConnector = useSelector((state: any) => state.user.walletConnector)
 
   const login = async () => {
+    if (isPlatform("mobile")) {
+      await walletConnector.clearCachedProvider()
+    }
     walletConnector.connect().then((provider: any) => {
       dispatch(setWeb3(new Web3(provider)))
     });
   }
 
   const createWallet = async () => {
+    if (isPlatform("mobile")) {
+      await walletConnector.clearCachedProvider()
+    }
     const providerOptions = {
       fortmatic: {
         display: {
@@ -76,7 +81,7 @@ const LandingPageComponent: React.FC<OwnProps> = ({  history }) => {
           </h5>
           <IonRow className="login-button-container">
             <IonButton className={"login-button"} onClick={() => login()} expand="block">Connect Wallet</IonButton>
-            <IonButton className={"login-button"} onClick={() => createWallet()} expand="block">Create Wallet</IonButton>
+            <IonButton color="light" className={"login-button"} onClick={() => createWallet()} expand="block">Create Wallet</IonButton>
           </IonRow>
           <IonRow>
           <IonCol>
@@ -89,7 +94,7 @@ const LandingPageComponent: React.FC<OwnProps> = ({  history }) => {
                 </IonCardTitle>
                 <>
                   <div>
-                    Debit Card Access to 320+ Cryptocurrencies
+                    Debit Card Access to 230+ Cryptocurrencies
                   </div>
                   <div >
                     Performance Tracking for your holdings
@@ -113,4 +118,4 @@ const LandingPageComponent: React.FC<OwnProps> = ({  history }) => {
     );
 };
 
-export default withRouter(LandingPageComponent);
+export default LandingPageComponent

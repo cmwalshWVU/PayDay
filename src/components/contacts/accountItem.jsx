@@ -88,9 +88,9 @@ const AccountItem = ({tokens, openModal, ownersAccount, account, openTransak}) =
 
   if (isEditing) {
     return (
-      <IonItem className={"ion-padding"}>
+      <IonItem className={"ion-padding account-item-sliding"}>
         <IonAvatar className={"avatar"} slot="start">
-          <Identicon size={40} string={account.address} />
+          <Identicon className="identicon" size={40} string={account.address} />
         </IonAvatar>
         <IonLabel position="stacked" color="primary">Name</IonLabel>
         <IonInput name="name" type="text" value={updatedName} onIonChange={e => setUpdatedName(e.detail.value)} />
@@ -107,17 +107,17 @@ const AccountItem = ({tokens, openModal, ownersAccount, account, openTransak}) =
       </IonItem>
     )
   } return (
-    <IonItemSliding>
-      <IonItem >
+    <IonItemSliding color={"light"} className="account-item-sliding">
+      <IonItem className={"contact"} color={"light"} >
         <div className={"account-item"}>
           <div className={"main-content"} >
             <IonAvatar className={"avatar"} slot="start">
-              <Identicon size={40} string={account.address} />
+              <Identicon className="identicon" size={40} string={account.address} />
             </IonAvatar>
             <IonLabel>
               <div className="account-name">{account.name}</div>
-              <CopyToClipboard text={account.address}>
-                <div className={"account-flex"} >
+              <CopyToClipboard text={account.address} >
+                <div className={"account-flex"} onClick={() => toast("Address Copied")} >
                   <IonIcon className={"copy-icon"} icon={copy}/>
                   <p className={"account"}>
                     {account.address}

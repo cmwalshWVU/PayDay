@@ -5,10 +5,13 @@
 
 .personal-account {
     margin: auto;
+    max-width: 100%;
+    width: fit-content;
+    border-radius: 8px;
 }
 
 .account-name {
-    font-weight: 700;
+    font-weight: 500;
     font-size: 16px;
 }
 
@@ -25,6 +28,7 @@
     // padding-left: 5px;
     margin-top: auto;
     margin-bottom: auto;
+    color: gray;
 }
 
 .collapse-balances-icon {
@@ -65,13 +69,20 @@
     padding: 0 0 0 20px;
 }
 
-.account-item {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    
-    .main-content {
-        display: flex;
-        flex-direction: row;
+.account-item-sliding {
+    .contact {
+        .account-item {
+            display: flex;
+            flex-direction: column;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+            padding: 8px;
+
+            .main-content {
+                display: flex;
+                flex-direction: row;
+            }
+        }
     }
 }

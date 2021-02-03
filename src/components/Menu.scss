@@ -1,0 +1,59 @@
+.menu-icon {
+    margin-right: 8px;
+}
+
+.logout-item {
+    margin: auto 0 0 0;
+    align-self: center;
+}
+
+.menu-light {
+    background: #f4f5f8;
+}
+
+.menu-list {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    width: 20vw;
+    max-width: 200px;
+    min-width: 100px;    
+
+    .icons {
+      display: flex;
+      flex-direction: column;
+      margin: auto 0 0 0;
+      --background: transparent;
+
+        ion-item {
+            --background: transparent;
+        }
+
+        .logos {
+            width: 100%;
+
+            .twitter, .google {
+                margin: auto;
+                cursor: pointer;
+            }
+        }
+    }
+
+    .selected {
+      color: #6851ff;
+      font-weight: 600 !important;
+
+    }
+
+    .list-items {
+        margin-top: 30px;
+        --background: transparent;
+
+        ion-item {
+            cursor: pointer;
+            font-size: 17px;
+            font-weight: 300;
+            --background: transparent;
+        }
+    }
+  }

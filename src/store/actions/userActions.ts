@@ -9,20 +9,6 @@ export function setUseDarkMode(useDarkMode: boolean) {
     }
 }
 
-export function setPortis(portis: any) {
-    return {
-        type: 'SET_PORTIS',
-        portis
-    }
-}
-
-export function setFortmatic(fortmatic: any) {
-    return {
-        type: 'SET_FORTMATIC',
-        fortmatic
-    }
-}
-
 export function setLoadingBalances(loadingBalances: any) {
     return {
         type: 'SET_LOADING_BALANCES',
@@ -41,5 +27,12 @@ export function setContacts(contacts: any) {
     return {
         type: 'SET_CONTACTS',
         contacts
+    }
+}
+
+export function setAccounts(accounts: any) {
+    return {
+        type: 'SET_ACCOUNTS',
+        accounts
     }
 }

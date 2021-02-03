@@ -7,10 +7,11 @@ import { isPlatform } from '@ionic/react';
 
 
 const HoldingsPieChart = ({series, labels}) => {
-    // var colorPalette = ['#00D8B6','#008FFB',  '#FEB019', '#FF4560', '#775DD0']
     var colorPalette = ['#00D8B6', "#6851FF", '#008FFB', '#FEB019', '#FF4560', '#775DD0', "#A300D6", "#7D02EB", "#5653FE", "#2983FF", "#00B1F2", "#F0C808", "#93E1D8", "#FFA69E", "#DDFFF7"]
     const ethBal = useSelector((state) => state.holdings.ethBalance)
-    
+    const holdingSeries = useSelector((state) => state.holdings.series)
+    const holdingLabels = useSelector((state) => state.holdings.labels)
+
     const useDarkMode = useSelector((state) => state.user.useDarkMode)
 
     const loadingBalances = useSelector((state) => state.user.loadingBalances)
@@ -88,6 +89,7 @@ const HoldingsPieChart = ({series, labels}) => {
             position: isPlatform("mobile") ? 'bottom' : 'left'
         }
     }
+
     const buildChart = useCallback((chartSeries, chartLabels, loading) => {
         options.labels = chartLabels
 
@@ -99,11 +101,10 @@ const HoldingsPieChart = ({series, labels}) => {
     }, [options, spinner])
 
     useEffect(() => {
-        setChart(buildChart(series, labels, loadingBalances))
-    }, [series, labels, ethBal, loadingBalances])
+        setChart(buildChart(holdingSeries, holdingLabels, loadingBalances))
+    }, [holdingSeries, holdingLabels, ethBal, loadingBalances, useDarkMode])
 
     return chart
-
 }
 
 export default HoldingsPieChart

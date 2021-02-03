@@ -6,7 +6,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import { useSelector } from 'react-redux';
 import { ThemeProvider, createMuiTheme } from '@material-ui/core';
-import { IonHeader, IonToolbar, IonTitle, IonSearchbar, IonIcon } from '@ionic/react';
+import { IonHeader, IonToolbar, IonTitle, IonSearchbar, IonIcon, IonContent } from '@ionic/react';
 import numbro from 'numbro';
 import "./DesktopPriceList.scss"
 import { arrowUpOutline, arrowDownOutline } from 'ionicons/icons';
@@ -109,10 +109,6 @@ const DesktopPriceList: React.FC = () => {
             setSortingField(newSortString)
         }
     }
-
-    const sortList = (list: any) => {
-
-    }
     
     const showFilter = (column: String) => {
         const newColumn = column !== "image" ? column : "name"
@@ -128,8 +124,71 @@ const DesktopPriceList: React.FC = () => {
 
     }
 
+    const buildTable = () => {
+        return (
+            <Table stickyHeader className={useDarkMode ? `dark-table mat-elevation-z0` : 'light-table mat-elevation-z0'}  aria-label="sticky table">
+                <TableHead>
+                    <TableRow>
+                        {columns.map((column: any) => {
+                            return ( 
+                                <TableCell key={column.id} onClick={() => setSorting(column.id)}
+                                            style={{cursor: 'pointer', whiteSpace: 'nowrap'}}
+                                            align={column.id === "name" ? "left" : column.align} >
+                                    {column.label} {showFilter(column.id)}
+                                </TableCell>
+                            )}
+                        )
+                    }
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {currentPrices.filter((it: any) => it.symbol.toLowerCase().includes(searchString.toLowerCase()) || it.name.toLowerCase().includes(searchString.toLowerCase()))
+                    .sort((a: any, b: any) => {
+                        if (sortingField === "price_change_percentage_24h") {
+                            if (sortingDirection === "desc") {
+                                return a.price_change_percentage_24h > b.price_change_percentage_24h ? -1 : 1
+                            } else {
+                                return a.price_change_percentage_24h > b.price_change_percentage_24h ? 1 : -1
+                            }
+                        } if (sortingField === "market_cap") {
+                            if (sortingDirection === "desc") {
+                                return a.market_cap > b.market_cap ? -1 : 1
+                            } else {
+                                return a.market_cap > b.market_cap ? 1 : -1
+                            }
+                        } else if (sortingField === "current_price") {
+                            if (sortingDirection === "desc") {
+                                return a.current_price > b.current_price ? -1 : 1
+                            } else {
+                                return a.current_price > b.current_price ? 1 : -1
+                            }
+                        } else if (sortingField === "name") {
+                            if (sortingDirection === "desc") {
+                                return a.name > b.name ? -1 : 1
+                            } else {
+                                return a.name > b.name ? 1 : -1
+                            }
+                        } else {
+                            return a.market_cap > b.market_cap ? -1 : 1
+                        }
+                    }).map((row: any, index: any) => {
+                        const symbol = row.symbol
+                        return (
+                            <TableRow hover role="checkbox" tabIndex={-1} key={index}>
+                            {columns.map((column: any) => {
+                                const value = row[column.id];
+                                return buildCell(value, column, symbol)
+                            })}
+                            </TableRow>
+                        )
+                    })}
+                </TableBody>
+            </Table>
+        )
+    }
+
     return (
-        <>
+        <IonContent>
             <div className="market-list-desktopview">
                 <IonHeader className="market-header">
                     <IonToolbar>
@@ -143,69 +202,12 @@ const DesktopPriceList: React.FC = () => {
                 </IonHeader>
                 <div className="table-container">
                     <ThemeProvider theme={theme}>
-                        <Table stickyHeader className={useDarkMode ? `dark-table mat-elevation-z0` : 'light-table mat-elevation-z0'}  aria-label="sticky table">
-                            <TableHead>
-                                <TableRow>
-                                    {columns.map((column: any) => {
-                                        return ( 
-                                            <TableCell key={column.id} onClick={() => setSorting(column.id)}
-                                                        style={{cursor: 'pointer', whiteSpace: 'nowrap'}}
-                                                        align={column.id === "name" ? "left" : column.align} >
-                                                {column.label} {showFilter(column.id)}
-                                            </TableCell>
-                                        )}
-                                    )
-                                }
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {currentPrices.filter((it: any) => it.symbol.toLowerCase().includes(searchString.toLowerCase()) || it.name.toLowerCase().includes(searchString.toLowerCase()))
-                                .sort((a: any, b: any) => {
-                                    if (sortingField === "price_change_percentage_24h") {
-                                        if (sortingDirection === "desc") {
-                                            return a.price_change_percentage_24h > b.price_change_percentage_24h ? -1 : 1
-                                        } else {
-                                            return a.price_change_percentage_24h > b.price_change_percentage_24h ? 1 : -1
-                                        }
-                                    } if (sortingField === "market_cap") {
-                                        if (sortingDirection === "desc") {
-                                            return a.market_cap > b.market_cap ? -1 : 1
-                                        } else {
-                                            return a.market_cap > b.market_cap ? 1 : -1
-                                        }
-                                    } else if (sortingField === "current_price") {
-                                        if (sortingDirection === "desc") {
-                                            return a.current_price > b.current_price ? -1 : 1
-                                        } else {
-                                            return a.current_price > b.current_price ? 1 : -1
-                                        }
-                                    } else if (sortingField === "name") {
-                                        if (sortingDirection === "desc") {
-                                            return a.name > b.name ? -1 : 1
-                                        } else {
-                                            return a.name > b.name ? 1 : -1
-                                        }
-                                    } else {
-                                        return a.market_cap > b.market_cap ? -1 : 1
-                                    }
-                                }).map((row: any) => {
-                                    const symbol = row.symbol
-                                    return (
-                                        <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-                                        {columns.map((column: any) => {
-                                            const value = row[column.id];
-                                            return buildCell(value, column, symbol)
-                                        })}
-                                        </TableRow>
-                                    )
-                                })}
-                            </TableBody>
-                        </Table>
+                        {buildTable()}
                     </ThemeProvider>
                 </div>
             </div>
-        </>
+        </IonContent>
     )
 }
 
-export default DesktopPriceList
+export default React.memo(DesktopPriceList)

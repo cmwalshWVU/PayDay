@@ -1,5 +1,5 @@
 import React from 'react';
-import { IonList, IonItem, IonHeader, IonToolbar, IonTitle, IonSearchbar } from '@ionic/react';
+import { IonList, IonItem, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/react';
 import pushid from 'unique-push-id';
 import { useSelector } from 'react-redux';
 import './Article.scss'
@@ -11,7 +11,6 @@ interface Props {
   
 const DesktopArticleList: React.FC<Props> = ({ news }) => {
     const newsFeed = useSelector((state: any) => state.news.newsArticles)
-    const useDarkMode = useSelector((state: any) => state.user.useDarkMode)
 
     function newArray(x: any, y: any) {
         let d: any[] = []
@@ -55,7 +54,7 @@ const DesktopArticleList: React.FC<Props> = ({ news }) => {
     }
 
     return (
-        <>
+        <IonContent className={"ion-padding home-page"} >
             <div className="market-list-desktopview">
                 <IonHeader className="market-header">
                     <IonToolbar>
@@ -70,8 +69,8 @@ const DesktopArticleList: React.FC<Props> = ({ news }) => {
                     {buildList()}
                 </IonList>
             </div>
-        </>
-    );
+        </IonContent>
+    )
 }
 
 const noData = (

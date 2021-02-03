@@ -33,13 +33,12 @@ const WalletConnector = new Web3Modal({
 
 const initData = {
     user: null,
-    useDarkMode: true,
-    portis: undefined,
-    fortmatic: undefined,
+    useDarkMode: false,
     contacts: [],
     walletConnector: WalletConnector,
     loadingBalances: false,
-    web3: null
+    web3: null,
+    accounts: []
 }
 
 const userReducer = ( state = initData, action: any ) => {
@@ -54,20 +53,10 @@ switch (action.type) {
             ...state,
             useDarkMode: action.useDarkMode
         }
-    case 'SET_PORTIS':
-        return {
-            ...state,
-            portis: action.portis
-        }
     case 'SET_WEB3':
         return {
             ...state,
             web3: action.web3
-        }
-    case 'SET_FORTMATIC':
-        return {
-            ...state,
-            fortmatic: action.fortmatic
         }
     case 'SET_CONTACTS':
         return {
@@ -83,6 +72,11 @@ switch (action.type) {
         return {
             ...state,
             walletConnector: action.walletConnector
+        }
+    case 'SET_ACCOUNTS':
+        return {
+            ...state,
+            accounts: action.accounts
         }
     default:
         return {

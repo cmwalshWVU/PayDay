@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { IonList, IonContent, IonPage, IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle } from '@ionic/react';
+import { IonContent, IonPage, IonButton, IonToolbar, IonSegment, IonSegmentButton, IonIcon } from '@ionic/react';
 import './PaymentPage.scss';
 import transakSDK from '@transak/transak-sdk'
 import { useSelector, useDispatch } from 'react-redux';
@@ -9,12 +9,18 @@ import { withRouter } from 'react-router';
 import PersonalAccountItem from '../components/contacts/personalAccountItem'
 import { erc20ContractAbi } from '../components/Erc20TokenAbi';
 import { isString } from 'util';
-import PurchaseModal from '../components/modals/PurchaseModal';
 import TransferModal from '../components/modals/TransferModal';
 import LandingPageComponent from '../components/LandingPageComponent';
 import Web3 from 'web3';
 import { ERC20TOKENS } from '../components/Erc20Tokens';
 import MobileWalletCard from '../components/MobileWalletCard';
+import { setEthHoldings, setHoldings, setPieChartData } from '../store/actions/holdingsActions';
+import MinAbi from '../MinAbi';
+import { toast } from '../components/toast';
+import HoldingsList from '../components/holdings/HoldingsList';
+import { cashOutline, peopleOutline } from 'ionicons/icons';
+import ContactsList from '../components/contacts/ContactsList';
+
 
 const PaymentPage = (props) => {
   const [accounts, setaccounts] = useState([])
@@ -22,10 +28,13 @@ const PaymentPage = (props) => {
   const [balance, setBalance] = useState("0");
   const [tokenToSend, setTokenToSend] = useState("ETH")
 
-  const [purchaseModalOpen, setPurchaseModalOpen] = useState(false)
-  const [purchaseAmount, setPurchaseAmount] = useState(0);
+  const [selectedTab, setSelectedTab] = useState("holdings")
 
+  const ethHoldings = useSelector((state) => state.holdings.ethHoldings)
+  const holdings = useSelector((state) => state.holdings.holdings)
   const web3 = useSelector((state) => state.user.web3)
+  const currentPrices = useSelector((state) => state.prices.currentPrices)
+  const useDarkMode = useSelector((state) => state.user.useDarkMode)
 
   const [open, setOpen] = useState(false)
   const [transferToAddress, setTransferToAddress] = useState("")
@@ -47,6 +56,80 @@ const PaymentPage = (props) => {
     setTransferToAddress("")
     setOpen(false)
   }
+
+  const ethBal = useSelector((state) => state.holdings.ethBalance)
+
+    const getEthBalance = useCallback(async () => {
+        try {
+            const amount = await web3.eth.getBalance(accounts[0])
+            if (amount) {
+                const holdings =  Number(currentPrices.filter((it) => it.symbol === "eth")[0].current_price) * Number(web3.utils.fromWei(amount, 'ether'))
+
+                dispatch(setEthHoldings(amount, holdings))
+            } else {
+                return 0
+            }
+            } catch (ex) {
+            return 0
+        }
+    }, [accounts, currentPrices, dispatch, web3])
+
+    const fakeList = ["LRC","LINK", "BAT", "BAND", "LEND", "USDC"]
+    const fakeHoldings = () => {
+        return fakeList.map((ticker) => {
+            const bal = Math.floor(Math.random() * 100) + 1000
+            if (currentPrices.filter((it) => it.symbol === ticker.toLowerCase())[0]) {
+                const name = currentPrices.filter((it) => it.symbol === ticker.toLowerCase())[0].name
+                const currentHoldings = currentPrices.filter((it) => it.symbol === ticker.toLowerCase())[0].current_price * bal
+                return [bal.toFixed(4), currentHoldings, ticker, name]
+            }
+            return [0]
+        })
+    }
+
+    const buildHoldingsList = useCallback(() => {
+        if (accounts[0] && web3) {
+            dispatch(setLoadingBalances(true))
+            const bals = [...ERC20TOKENS, ].map(async (token) => {
+                // GET TOKEN contract and decimals
+                const contract = new web3.eth.Contract(MinAbi, token.address);
+                const dec = await contract.methods.decimals().call()
+
+                // GET ERC20 Token Balance and divide by decimals
+                let bal = await contract.methods.balanceOf(accounts[0]).call()
+
+                bal = bal / (10 ** dec)
+
+                if (currentPrices.filter((it) => it.symbol === token.symbol.toLowerCase())[0]) {
+                    const currentHoldings = currentPrices.filter((it) => it.symbol === token.symbol.toLowerCase())[0].current_price * bal
+                    return [bal, currentHoldings, token.symbol, token.name]
+                }
+                return [0]
+            })
+            Promise.all(bals).then((finalBalances) => {
+                // const fake = fakeHoldings()
+                // finalBalances.push(...fake)
+                dispatch(setLoadingBalances(false))
+
+                const filteredSet = finalBalances.filter((it) => Number(it[0]) > 0 )
+                dispatch(setHoldings(finalBalances.filter((it) => Number(it[0]) > 0 )))
+                if (Number(ethBal) > 0) {
+                    filteredSet.push([ethBal, ethBal, "ETH", "Ethereum"])
+                }
+                dispatch(setPieChartData(filteredSet.map((it) => it[1]), filteredSet.map((it) => it[2])))
+                // setSeries(filteredSet.map((it: any) => it[1]))
+                // setLabels(filteredSet.map((it: any) => it[2]))
+            })
+        }
+    }, [accounts, currentPrices, dispatch, ethBal, web3])
+
+    useEffect(() => {
+        buildHoldingsList()
+    }, [accounts, currentPrices, ethBal, buildHoldingsList])
+
+    useEffect(() => {
+        getEthBalance()
+    }, [accounts, currentPrices, getEthBalance])
 
 
   let calculateHexValue = (value, decimals, BN) => {
@@ -133,6 +216,7 @@ const PaymentPage = (props) => {
 
         if (!user) {
           signInWithCustomToken(accounts[0]).then((user) => {
+            toast("Sucessfully Logged In")
             createAccountCollectionIfNotExists(accounts[0])
             dispatch(setUser(user))
             // return <Redirect to="/wallet" />
@@ -182,23 +266,8 @@ const PaymentPage = (props) => {
       widgetWidth: '400px'
     });
     
-    // let transak = new transakSDK({
-    //   apiKey: '08492b5f-b07c-46d1-86b4-0435a2cf7146',  // Your API Key
-    //   environment: 'STAGING', // STAGING/PRODUCTION
-    //   defaultCryptoCurrency: 'ETH',
-
-    //   walletAddress: address, // Your customer's wallet address
-    //   themeColor: '6851ff', // App theme color
-    //   fiatCurrency: 'USD', // INR/GBP
-    //   email: '', // Your customer's email address
-    //   redirectURL: '',
-    //   hostURL: window.location.origin,
-    //   widgetHeight: '600px',
-    //   widgetWidth: '400px'
-    // });
     transak.init();
     
-    // To get all the events
     transak.on(transak.ALL_EVENTS, (data) => {
         console.log(data)
     });
@@ -207,58 +276,9 @@ const PaymentPage = (props) => {
       transak.close();
     })
     
-    // This will trigger when the user marks payment is made.
     transak.on(transak.EVENTS.TRANSAK_ORDER_SUCCESSFUL, (orderData) => {
         console.log(orderData);
         transak.close();
-    });
-  
-  }
-
-  const openTransakModal = (address, amount, token) => {
-    let transak = new transakSDK({
-        apiKey: process.env.REACT_APP_TRANSAK_API_KEY,  // Your API Key
-        environment: 'PRODUCTION', // STAGING/PRODUCTION
-        hostURL: window.location.origin,
-        cryptoCurrencyCode: token,
-        fiatAmount: amount,
-        walletAddress: address, // Your customer's wallet address
-        themeColor: '6851ff', // App theme color
-        fiatCurrency: 'USD', // INR/GBP
-        widgetHeight: '600px',
-        widgetWidth: '400px'
-    });
-    
-    // let transak = new transakSDK({
-    //   apiKey: '08492b5f-b07c-46d1-86b4-0435a2cf7146',  // Your API Key
-    //   environment: 'STAGING', // STAGING/PRODUCTION
-    //   defaultCryptoCurrency: 'ETH',
-
-    //   walletAddress: address, // Your customer's wallet address
-    //   themeColor: '6851ff', // App theme color
-    //   fiatCurrency: 'USD', // INR/GBP
-    //   email: '', // Your customer's email address
-    //   redirectURL: '',
-    //   hostURL: window.location.origin,
-    //   widgetHeight: '600px',
-    //   widgetWidth: '400px'
-    // });
-    transak.init();
-    
-    // To get all the events
-    transak.on(transak.ALL_EVENTS, (data) => {
-        console.log(data)
-    });
-
-    transak.on(transak.EVENTS.TRANSAK_WIDGET_CLOSE, (data) => {
-      transak.close();
-    })
-    
-    // This will trigger when the user marks payment is made.
-    transak.on(transak.EVENTS.TRANSAK_ORDER_SUCCESSFUL, (orderData) => {
-        console.log(orderData);
-        transak.close();
-        setPurchaseModalOpen(false)
     });
   }
 
@@ -268,53 +288,51 @@ const PaymentPage = (props) => {
 
   return (
     <IonPage id="mobile-view">
+      <div className="wallet" >
       { user !== null ?
-        <IonContent className={"ion-padding home-page"} >
-          <IonCard className={"owners-acount"} >
-            <IonCardHeader>
-              <IonCardTitle className={"accounts-title"} >
-                Personal Account
-              </IonCardTitle>
-            </IonCardHeader>
-            <IonCardContent>
-              {accounts.length > 0 ? 
-              <>
-                <IonList>
-                  {accounts.map((account) => 
-                    <PersonalAccountItem tokens={ERC20TOKENS} openModal={openTransak} ownersAccount={true} openTransak={openTransak} account={{name: "", address: account}} />
-                  )}
-                </IonList>
-                <IonButton onClick={() => openTransak(accounts[0])}>
-                  Buy Crypto
-                </IonButton>
-                <IonButton size={"normal"}  onClick={() => openModal(true, "")} >
-                  Transfer Funds
-                </IonButton>
-              </>
-              : 
-                <IonButton onClick={() => login()}>
-                  Connect Wallet
-                </IonButton>
-              }
-            </IonCardContent>
-          </IonCard>
-          
-
+        <IonContent className={`ion-padding home-page ${useDarkMode ? "" : "light-card"}`} >
+          {accounts.length > 0 ? 
+            <>
+              {/* <IonList style={{background: "transparent"}} className={"account-list"} > */}
+                {accounts.map((account) => 
+                  <PersonalAccountItem tokens={ERC20TOKENS} openModal={openTransak} ownersAccount={true} openTransak={openTransak} account={{name: "", address: account}} />
+                )}
+              {/* </IonList> */}
+            </>
+            :
+            <IonButton onClick={() => login()}>
+              Connect Wallet
+            </IonButton>
+          }
           <MobileWalletCard accounts={accounts} openTransak={openTransak} openModal={openModal} />
+          <IonToolbar className={"wallet-toolbar"}>
+            <IonSegment  value={selectedTab} onIonChange={(e) => setSelectedTab(e.detail.value)}>
+                <IonSegmentButton value="holdings">
+                    <IonIcon icon={cashOutline} />
+                </IonSegmentButton>
+                <IonSegmentButton value="contacts">
+                    <IonIcon icon={peopleOutline} />
+                </IonSegmentButton>
+            </IonSegment>
+          </IonToolbar>
+          {selectedTab === "holdings" ?
+            <>
+              <IonButton onClick={() => openTransak(accounts[0])}>
+                Buy Crypto
+              </IonButton>
+              <IonButton size={"normal"}  onClick={() => openModal(true, "")} >
+                Transfer Funds
+              </IonButton>
+              <HoldingsList balances={holdings} balance={ethHoldings} personalAccount={true} />
+            </>
+              :
+              <ContactsList openModal={openModal} openTransak={openTransak} />
+          }
         </IonContent>
       : 
         <IonContent className="ion-padding">
           <LandingPageComponent />
         </IonContent>}
-
-      <PurchaseModal  open={purchaseModalOpen}
-                      tokenToSend={tokenToSend}
-                      amount={purchaseAmount}
-                      setAmount={setPurchaseAmount}
-                      openTransakModal={openTransakModal}
-                      account={account}
-                      setPurchaseModalOpen={setPurchaseModalOpen}
-                      setTokenToSend={setTokenToSend} />
 
       <TransferModal  open={open}
                       setOpen={setOpen}
@@ -325,8 +343,9 @@ const PaymentPage = (props) => {
                       transferToAddress={transferToAddress}
                       balance={balance}
                       openFortmaticTransfer={openFortmaticTransfer} />
+    </div>
     </IonPage>
   );
 };
 
-export default withRouter(PaymentPage);
+export default withRouter(React.memo(PaymentPage))

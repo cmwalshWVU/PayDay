@@ -4,18 +4,19 @@ import Identicon from 'react-identicons';
 import { copy} from 'ionicons/icons';
 import {CopyToClipboard} from 'react-copy-to-clipboard'
 import './accountItem.scss'
+import { toast } from '../toast';
 
 const PersonalAccountItem = ({ account}) => {
 
     return (
-        <IonItem className="personal-account" >
+        <IonItem color={"light"} className="personal-account" >
             <IonAvatar className={"avatar"} slot="start">
-            <Identicon size={40} string={account.address} />
+            <Identicon size={30} string={account.address} />
             </IonAvatar>
-            <IonLabel>
+            <IonLabel className={"personel-account-address"}>
             <div className="account-name">{account.name}</div>
-            <CopyToClipboard text={account.address}>
-                <div className={"account-flex"} >
+            <CopyToClipboard text={account.address} >
+                <div className={"account-flex"} onClick={() => toast("Address Copied")}>
                 <IonIcon className={"copy-icon"} icon={copy}/>
                 <p className={"account"}>
                     {account.address}

@@ -10,6 +10,11 @@
     margin-bottom: 4px;
 }
 
+.token-amount {
+    font-size: 13px;
+    text-align: right;
+}
+
 .holding-list-label {
     width: fit-content;
     display: flex !important;
@@ -113,5 +118,13 @@ ion-item {
 }
 
 .current-value {
-    font-size: 14px;
+    font-weight: 500;
+}
+
+.mobile-holdings {
+    padding-top: 20px;
+
+    .personal-holdings-list, .holdings-list {
+        border-radius: 12px;
+    }
 }

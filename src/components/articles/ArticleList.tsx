@@ -11,7 +11,8 @@ interface Props {
   
 const ArticleList: React.FC<Props> = ({ news }) => {
     const newsFeed = useSelector((state: any) => state.news.newsArticles)
-   
+    const useDarkMode = useSelector((state: any) => state.user.useDarkMode)
+
     function newArray(x: any, y: any) {
         let d: any[] = []
         x.concat(y).forEach((item: any) =>{
@@ -56,7 +57,7 @@ const ArticleList: React.FC<Props> = ({ news }) => {
     }
 
     return (
-        <IonContent>
+        <IonContent className={`${useDarkMode ? null : "light-card"}`}>
             <IonList className={"default-background"}>
                 <IonGrid fixed className="article-grid">
                     <IonRow align-items-stretch>

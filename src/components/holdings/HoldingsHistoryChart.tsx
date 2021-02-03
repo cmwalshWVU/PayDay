@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useMemo } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { useSelector } from 'react-redux';
 import Firebase from '../../firebase';
 import Chart from 'react-apexcharts'
@@ -16,7 +16,7 @@ const HoldingsHistoryChart: React.FC = () => {
                         loading={true} />
     const [chart, setChart] = useState<any>(spinner)
 
-    const options = useMemo(() => {
+    const options = useCallback(() => {
         return {
             chart: {
                 type: 'area',
@@ -42,31 +42,31 @@ const HoldingsHistoryChart: React.FC = () => {
                     color: useDarkMode ? "#FFFFFF" : "#000000",
                 }
             },
-            // tooltip: {
-            //     x: {
-            //         formatter: function (value: any) {
-            //             return new Date(value).toLocaleString()
-            //         }
-            //     },
-            //     y: {
-            //         formatter: function (value: any) {
-            //             if (value < .5) {
-            //                 return "$" + numbro(value).format({
-            //                     mantissa: 4,
-            //                 })                        }
-            //             return "$" + numbro(value).format({
-            //                 thousandSeparated: true,
-            //                 mantissa: 2,
-            //             })
-            //         }
-            //     },
-            // },
+            tooltip: {
+                x: {
+                    formatter: function (value: any) {
+                        return moment(value).format("MMM Do YYYY, h:mm a")
+                    }
+                },
+                y: {
+                    formatter: function (value: any) {
+                        if (value < .5) {
+                            return "$" + numbro(value).format({
+                                mantissa: 4,
+                            })                        }
+                        return "$" + numbro(value).format({
+                            thousandSeparated: true,
+                            mantissa: 2,
+                        })
+                    }
+                },
+            },
             dataLabels: {
               enabled: false
             },
             stroke: {
               curve: 'smooth',
-              width: 3
+              width: 1
             },
             yaxis: {
                 // opposite: true,
@@ -99,7 +99,7 @@ const HoldingsHistoryChart: React.FC = () => {
                         colors: useDarkMode ? "#FFFFFF" : "#000000" 
                     },
                     formatter: function (value: any) {
-                        return moment(value).format('LT')
+                        return moment(value).format("MMM Do")
                     }
                 },
                 type: 'datetime',
@@ -108,7 +108,7 @@ const HoldingsHistoryChart: React.FC = () => {
                 }
             },
           }
-    }, [])
+    }, [useDarkMode])
 
     const buildChart = useCallback((history) => {
         // options.labels = history.map((hist: any) => new Date(hist.lastUpdated.seconds * 1000).toLocaleString())
@@ -116,7 +116,7 @@ const HoldingsHistoryChart: React.FC = () => {
         const s: any = series(history)
         if (history.length > 0) {
             return (
-                <Chart options={options} series={[{
+                <Chart options={options()} series={[{
                     data: s[0].data,
                     name: "Holdings History"
                 }]} type="area" />
@@ -186,7 +186,7 @@ const HoldingsHistoryChart: React.FC = () => {
         } else {
           
         }
-      }, [user]);
+      }, [user, useDarkMode]);
       
     return chart
 }
